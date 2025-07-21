@@ -9,6 +9,8 @@
       jq
       zellij
       direnv
+      zsh-autosuggestions
+      zsh-syntax-highlighting
     ];
 
     programs.home-manager.enable = true;
@@ -19,7 +21,14 @@
       oh-my-zsh = {
         enable = true;
         theme = "ys";
-        plugins = lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
+        plugins = [
+          "fzf"
+          "git"
+          "docker"
+          "kubectl"
+          "direnv"
+          "history-substring-search"
+        ] ++ lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
       };
 
       shellAliases = {

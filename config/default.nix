@@ -4,7 +4,9 @@ let
   inherit (lib) mkDefault;
 in
 {
-  imports = [ ./options.nix ];
+  imports = [ ./options.nix ]
+    # Conditionally import machine-local overrides if the file exists.
+    ++ (lib.optional (builtins.pathExists ./machine.local.nix) ./machine.local.nix);
 
   # actual defaults – every field can still be overridden later
   config.jacks-nix = {
@@ -18,6 +20,7 @@ in
 
     enableGit      = mkDefault true;
     enableZsh      = mkDefault true;
+    zshTheme       = mkDefault "ys";
     enableNvim     = mkDefault true;
     enableHomebrew = mkDefault pkgs.stdenv.isDarwin;
 

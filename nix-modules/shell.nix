@@ -40,7 +40,7 @@
 
       oh-my-zsh = {
         enable = true;
-        theme = "ys";
+        theme = config.jacks-nix.zshTheme;
         plugins = [
           "git"
           "docker"

@@ -2,3 +2,6 @@ result*
 .idea
 test-flake.log
 .latest-update-check
+
+# Local machine-specific overrides
+config/machine.local.nix

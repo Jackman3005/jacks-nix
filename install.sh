@@ -81,6 +81,62 @@ ensure_nix_experimental_features() {
   fi
 }
 
+ensure_user_config() {
+  info "Checking for local machine configuration..."
+  local local_config_file="$CLONE_DIR/config/machine.local.nix"
+
+  if [ -f "$local_config_file" ]; then
+    info "✅ Found existing local configuration at '$local_config_file'."
+    info "   This will be used to override default settings."
+    return
+  fi
+
+  info "⚠️ No local configuration found. Let's create one."
+
+  # --- Prompt for user details ---
+  local default_username
+  default_username=$(whoami)
+  local default_git_name
+  default_git_name=$(git config --global user.name || echo "")
+  local default_git_email
+  default_git_email=$(git config --global user.email || echo "")
+
+  local user_username
+  local user_name
+  local user_email
+
+  read -r -p "Enter your system username [default: $default_username]: " user_username
+  user_username=${user_username:-$default_username}
+
+  read -r -p "Enter your full name for Git [default: '$default_git_name']: " user_name
+  user_name=${user_name:-$default_git_name}
+  if [ -z "$user_name" ]; then
+      error "Full name cannot be empty."
+  fi
+
+  read -r -p "Enter your email for Git [default: '$default_git_email']: " user_email
+  user_email=${user_email:-$default_git_email}
+  if [ -z "$user_email" ]; then
+      error "Email cannot be empty."
+  fi
+
+  info "Writing user configuration to '$local_config_file'..."
+
+  # Create the config file
+  cat > "$local_config_file" <<EOF
+{
+  jacks-nix = {
+    user = {
+      username = "$user_username";
+      name = "$user_name";
+      email = "$user_email";
+    };
+  };
+}
+EOF
+  info "✅ Local configuration created."
+}
+
 # --- Main Execution ---
 main() {
   # Ensure the log file exists and has a start marker
@@ -133,7 +189,10 @@ main() {
   info "Pull URL set to: $(git remote get-url origin)"
   info "Push URL set to: $(git remote get-url --push origin)"
 
-  # 4. Activate Nix Configuration
+  # 4. Setup local configuration
+  ensure_user_config
+
+  # 5. Activate Nix Configuration
   info "Activating Nix configuration for this system..."
   case "$(uname -s)" in
     Darwin)

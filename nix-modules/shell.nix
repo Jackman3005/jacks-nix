@@ -35,9 +35,9 @@
                    if pkgs.stdenv.isDarwin then "ipconfig getifaddr $(route get default | grep interface | cut -d' ' -f4)"
                    else "ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if ($i==\"src\") print $(i+1)}'";
                  update =
-                   if pkgs.stdenv.isDarwin then "cd ${config.jacks-nix.configRepoPath} && git pull && sudo darwin-rebuild switch --flake ${config.jacks-nix.configRepoPath}#mac-arm64 && exec zsh"
-                   else "cd ${config.jacks-nix.configRepoPath} && git pull && home-manager switch --flake ${config.jacks-nix.configRepoPath}#linux-x64 && exec zsh";
-                 upgrade = "cd ${config.jacks-nix.configRepoPath} && nix flake update && if [ $? -eq 0 ]; then git add flake.lock && git commit -m \"chore: upgrade nix flake packages $(date +'%Y-%m-%d')\" && git push; else echo 'Flake update failed, no commit made'; fi";
+                   if pkgs.stdenv.isDarwin then "(cd ${config.jacks-nix.configRepoPath} && git pull && sudo darwin-rebuild switch --flake ${config.jacks-nix.configRepoPath}#mac-arm64) && exec zsh"
+                   else "(cd ${config.jacks-nix.configRepoPath} && git pull && home-manager switch --flake ${config.jacks-nix.configRepoPath}#linux-x64) && exec zsh";
+                 upgrade = "(cd ${config.jacks-nix.configRepoPath} && nix flake update && if [ $? -eq 0 ]; then git add flake.lock && git commit -m \"chore: upgrade nix flake packages $(date +'%Y-%m-%d')\" && git push; else echo 'Flake update failed, no commit made'; fi)";
                };
 
     programs.zsh = {

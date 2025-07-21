@@ -8,7 +8,7 @@
   home.homeDirectory = "/home/${config.jacks-nix.user.username}";
 
   imports = [
-    inputs.nixvim.homeManagerModules.nixvim
+    inputs.nixvim.homeManagerModules.default
     ../../nix-modules
   ];
 

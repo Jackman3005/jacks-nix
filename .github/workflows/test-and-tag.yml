@@ -72,7 +72,7 @@ jobs:
       - name: Run install script
         run: cd bin && ./install.sh
         env:
-          JACKS_NIX_CONFIG_REPO_PATH: "./"
+          JACKS_NIX_CONFIG_REPO_PATH: "${{ github.workspace }}"
 
   tag-latest:
     needs:

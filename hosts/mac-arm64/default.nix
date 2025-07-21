@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 let
   # Import the shared configuration to get username and other settings
   sharedConfig = import ../../config;
@@ -42,4 +42,46 @@ in
   home-manager.sharedModules = [
     inputs.nixvim.homeManagerModules.default
   ];
+
+  # Set primary user for homebrew and other user-specific system settings
+  system.primaryUser = lib.mkIf sharedConfig.jacks-nix.enableHomebrew username;
+
+  # Homebrew configuration (only enabled if enableHomebrew is true)
+  homebrew = let
+    sharedConfig = import ../../config;
+  in lib.mkIf sharedConfig.jacks-nix.enableHomebrew {
+    enable = true;
+
+    # Automatically update homebrew and upgrade packages
+    onActivation = {
+      autoUpdate = true;
+      upgrade = true;
+      cleanup = "none";
+    };
+
+    # Configure homebrew settings
+    global = {
+      brewfile = true;
+      lockfiles = false;
+    };
+
+    # Add homebrew taps (repositories)
+    taps = [
+      "homebrew/core"
+      "homebrew/cask"
+      "homebrew/services"
+    ];
+
+    # Install basic homebrew packages
+    brews = [
+      # Add any brew packages you want here
+      # Example: "wget"
+    ];
+
+    # Install cask applications
+    casks = [
+      # Add any cask applications you want here
+      # Example: "firefox"
+    ];
+  };
 }

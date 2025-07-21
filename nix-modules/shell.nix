@@ -14,10 +14,13 @@
 
     programs.zsh = {
       enable = true;
+
       oh-my-zsh = {
         enable = true;
         theme = "ys";
+        plugins = lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
       };
+
       shellAliases = {
         g = "git";
         vi = "nvim";
@@ -38,7 +41,9 @@
           if pkgs.stdenv.isDarwin then "sudo darwin-rebuild switch --flake ~/.config/jacks-nix#mac-arm64 && exec zsh"
           else "home-manager switch --flake ~/.config/jacks-nix#linux-x64 && exec zsh";
       };
+
       history.size = 100000;
+
       initContent = ''
         export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

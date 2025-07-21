@@ -19,5 +19,6 @@
     enableGit = lib.mkEnableOption "Git configuration";
     enableZsh = lib.mkEnableOption "Zsh and Oh My Zsh configuration";
     enableNvim = lib.mkEnableOption "Neovim configuration with nixvim";
+    enableHomebrew = lib.mkEnableOption "Homebrew configuration (macOS only)";
   };
 }

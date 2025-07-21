@@ -7,5 +7,6 @@
     ./git.nix
     ./shell.nix
     ./nvim.nix
+    ./homebrew.nix
   ];
 }

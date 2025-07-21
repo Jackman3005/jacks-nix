@@ -8,16 +8,16 @@
   ];
 
   #########################################################################
-  # Ubuntu-specific packages
+  # Linux-specific packages
   #########################################################################
   home.packages = with pkgs; [
-    # Add any Ubuntu/Linux-specific packages here
+    # Add any Linux-specific packages here
     # e.g., gnome-tweaks (if using GNOME)
   ];
 
   #########################################################################
-  # Ubuntu-specific configurations
+  # Linux-specific configurations
   #########################################################################
-  # Add any Ubuntu-specific home-manager settings here
+  # Add any Linux-specific home-manager settings here
   # For example, different shell aliases or environment variables
 }

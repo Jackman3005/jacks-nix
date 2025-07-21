@@ -29,10 +29,10 @@
 
     # Home Manager Configurations (for non-NixOS Linux)
     homeConfigurations = {
-      "ubuntu-x64" = home-manager.lib.homeManagerConfiguration {
+      "linux-x64" = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = specialArgs;
-        modules = [ ./hosts/ubuntu-x64/home.nix ];
+        modules = [ ./hosts/linux-x64/home.nix ];
       };
     };
 

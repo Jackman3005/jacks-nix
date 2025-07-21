@@ -2,15 +2,30 @@
 
 This repository contains my complete, cross-platform Nix configuration for macOS (via `nix-darwin`) and other Linux distributions (via `home-manager`). It uses Nix Flakes to manage configurations from a single source of truth.
 
-## Structure
+## Installation
 
+The installation and update processes are automated. Simply run `./install.sh` for initial setup or reinstallation.
+
+You can simply run the one-line command for it to clone this repo and perform all initial setup operations.
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/main/install.sh)"
+```
+
+## Updating
+
+To apply local changes, use the `update` alias.
+
+**TODO**
+-[ ] Pull for any changes in the nix repo before updating (handle that with any in-flight changes).
+
+## Structure
 ```
 .
 ├── flake.nix         # Main Nix flake entrypoint
 ├── install.sh        # Universal installation script
 ├── hosts/              # Host-specific configurations
 │   ├── mac-arm64/
-│   └── ubuntu-x64/
+│   └── linux-x64/
 ├── nix-modules/        # Shared, modular Home Manager configuration
 │   ├── default.nix     # Assembles all modules
 │   ├── git.nix
@@ -32,8 +47,3 @@ This setup is built around a modular core in `nix-modules/` and `config/`.
 - **`hosts/`**: Contains minimal files that add OS-specific packages or settings.
 - **`flake.nix`**: Assembles the correct configuration based on the target OS (`darwinConfigurations` for macOS, `homeConfigurations` for Linux).
 
-## Installation and Updates
-
-The installation and update processes are automated. Simply run `./install.sh` for initial setup.
-
-To apply local changes, use the `update` alias, which is now configured to work correctly on either platform.

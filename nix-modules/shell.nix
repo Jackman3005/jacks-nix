@@ -35,8 +35,8 @@
           if pkgs.stdenv.isDarwin then "ipconfig getifaddr $(route get default | grep interface | cut -d' ' -f4)"
           else "ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if ($i==\"src\") print $(i+1)}'";
         update =
-          if pkgs.stdenv.isDarwin then "sudo darwin-rebuild switch --flake ~/.config/nix-config#mac-arm64 && exec zsh"
-          else "home-manager switch --flake ~/.config/nix-config#ubuntu-x64 && exec zsh";
+          if pkgs.stdenv.isDarwin then "sudo darwin-rebuild switch --flake ~/.config/jacks-nix#mac-arm64 && exec zsh"
+          else "home-manager switch --flake ~/.config/jacks-nix#linux-x64 && exec zsh";
       };
       history.size = 100000;
       initContent = ''

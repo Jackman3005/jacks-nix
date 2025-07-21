@@ -77,7 +77,7 @@ let
   in pkgs.writeShellScriptBin "jacks-nix-update" ''
     #!${pkgs.zsh}/bin/zsh
     (
-      cd "${config.jacks-nix.configRepoPath}" && git pull && ${updateCommand}
+      cd "${config.jacks-nix.configRepoPath}" && git pull --rebase --autostash && ${updateCommand}
     ) && exec zsh
   '';
 
@@ -86,13 +86,48 @@ let
     #!${pkgs.zsh}/bin/zsh
     (
         cd "${config.jacks-nix.configRepoPath}"
+
+        echo "🔄 Running nix flake update..."
         nix flake update
+
         if [ $? -eq 0 ]; then
-          git add flake.lock
-          git commit -m "chore: upgrade nix flake packages $(date +'%Y-%m-%d')"
-          git push
+          echo "✅ Flake update completed successfully"
+
+          # Check if there are actually any changes to flake.lock
+          if git diff --quiet flake.lock; then
+            echo "ℹ️  No changes to flake.lock - packages are already up to date"
+            exit 0
+          fi
+
+          echo "📝 Changes detected in flake.lock, preparing to commit..."
+
+          # Check if we can push to the repository
+          if git push --dry-run >/dev/null 2>&1; then
+            # Commit and push the changes
+            echo "💾 Committing changes..."
+            if git commit flake.lock -m "chore: upgrade nix flake packages $(date +'%Y-%m-%d')"; then
+              echo "📤 Pushing changes to remote repository..."
+              if git push; then
+                echo "🎉 Successfully updated and pushed flake.lock!"
+              else
+                echo "❌ Failed to push changes to remote repository"
+                echo "   The commit was made locally but could not be pushed"
+                exit 1
+              fi
+            else
+              echo "❌ Failed to commit changes"
+              exit 1
+            fi
+          else
+            echo
+            echo "⚠️  No push permissions detected!"
+            echo "    Skipping committing and pushing. You have unstaged changes!"
+            echo "    Repo dir: $(cd \"${config.jacks-nix.configRepoPath}\" && pwd)"
+
+          fi
         else
-          echo 'Flake update failed, no commit made'
+          echo "❌ Flake update failed, no changes made"
+          exit 1
         fi
     )
   '';

@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  checks:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,9 +23,6 @@ jobs:
       run: |
         echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
 
-    - name: Make test script executable
-      run: chmod +x test-flake.sh
-
     - name: Run tests
       run: ./test-flake.sh
 
@@ -36,8 +33,36 @@ jobs:
         name: test-logs
         path: test-flake.log
 
+  installs:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v23
+        with:
+          nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Enable Nix flakes and restart daemon
+        run: |
+          echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
+          if [[ "${{ runner.os }}" == "macOS" ]]; then
+            sudo launchctl kickstart -k system/org.nixos.nix-daemon
+          else
+            sudo systemctl restart nix-daemon.service
+          fi
+
+      - name: Run install script
+        run: ./install.sh
+
   tag-latest:
-    needs: test
+    needs:
+      - checks
+      - installs
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:

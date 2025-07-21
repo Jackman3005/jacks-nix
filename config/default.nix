@@ -1,27 +1,29 @@
-{ lib, ... }:
+{ lib, config, pkgs, ... }:
+
+let
+  inherit (lib) mkDefault;
+in
 {
   imports = [ ./options.nix ];
 
-  jacks-nix = {
-    # Set your personal details here
+  # actual defaults – every field can still be overridden later
+  config.jacks-nix = {
     user = {
-      name = "Jack Coy";
-      email = "jackman3000@gmail.com";
-      username = "jack";
+      name     = mkDefault "Jack Coy";
+      email    = mkDefault "jackman3000@gmail.com";
+      username = mkDefault "jack";
     };
 
-    # Toggle features on or off
-    enableGit = lib.mkDefault true;
-    enableZsh = lib.mkDefault true;
-    enableNvim = lib.mkDefault true;
-    enableHomebrew = lib.mkDefault true;
+    enableGit      = mkDefault true;
+    enableZsh      = mkDefault true;
+    enableNvim     = mkDefault false;
+    enableHomebrew = mkDefault pkgs.stdenv.isDarwin;
 
-    # Disable programming language tools by default on Linux
-    enablePython = lib.mkDefault false;
-    enableNode = lib.mkDefault false;
-    enableJava = lib.mkDefault false;
-    enableRuby = lib.mkDefault false;
-    enableBun = lib.mkDefault false;
-    enableAsdf = lib.mkDefault false;
+    enablePython = mkDefault false;
+    enableNode   = mkDefault false;
+    enableJava   = mkDefault false;
+    enableRuby   = mkDefault false;
+    enableBun    = mkDefault false;
+    enableAsdf   = mkDefault false;
   };
 }

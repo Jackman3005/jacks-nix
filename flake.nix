@@ -22,15 +22,16 @@
     specialArgs = { inherit inputs; };
   in
   {
-    # Expose your custom options and default values as a reusable library
-    lib = import ./config;
-
     # Home Manager Configurations (for non-NixOS Linux)
     homeConfigurations = {
       "linux-x64" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        pkgs = import nixpkgs { system = "x86_64-linux"; };
         extraSpecialArgs = specialArgs;
-        modules = [ ./hosts/linux-x64/home.nix ];
+        modules = [
+          ./config
+          ./nix-modules
+          ./hosts/linux-x64
+         ];
       };
     };
 
@@ -39,7 +40,11 @@
       "mac-arm64" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = specialArgs;
-        modules = [ ./hosts/mac-arm64/default.nix ];
+        modules = [
+            ./config
+            ./nix-modules
+            ./hosts/mac-arm64
+         ];
       };
     };
   };

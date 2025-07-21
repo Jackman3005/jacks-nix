@@ -24,14 +24,14 @@ jobs:
         echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
 
     - name: Run tests
-      run: ./test-flake.sh
+      run: cd bin && ./test-flake.sh
 
     - name: Upload test logs
       uses: actions/upload-artifact@v4
       if: always()
       with:
         name: test-logs
-        path: test-flake.log
+        path: bin/test-flake.log
 
   installs:
     strategy:
@@ -57,7 +57,7 @@ jobs:
           fi
 
       - name: Run install script
-        run: ./install.sh
+        run: cd bin && ./install.sh
 
   tag-latest:
     needs:

@@ -16,7 +16,7 @@ in
 
     enableGit      = mkDefault true;
     enableZsh      = mkDefault true;
-    enableNvim     = mkDefault false;
+    enableNvim     = mkDefault true;
     enableHomebrew = mkDefault pkgs.stdenv.isDarwin;
 
     enablePython = mkDefault false;

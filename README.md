@@ -42,7 +42,7 @@ Use the `upgrade` alias to update all packages in the nix flake.
 │   ├── machine.local.nix                 # Place to add any configuration overrides for `default.nix`
 │   └── last-update-check-timestamp.txt   # Helper that keeps track of last update check to avoid checking too often. Safe to delete.
 └── assets/                               # Extra files/folders to be symlinked or copied.
-    └── nvim/
+    └── nvim/                             # Lazy NeoVIM configuration files.
 ```
 
 ## How It Works

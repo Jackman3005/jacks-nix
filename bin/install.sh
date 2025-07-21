@@ -124,6 +124,9 @@ ensure_user_config() {
 
   info "Writing user configuration to '$local_config_file'..."
 
+  # Ensure the local directory exists
+  mkdir -p "$(dirname "$local_config_file")"
+
   # Create the config file
   cat > "$local_config_file" <<EOF
 {

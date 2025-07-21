@@ -3,7 +3,11 @@
 # Test script for jacks-nix flake
 # This script performs dry runs to ensure the flake works on both Mac and Linux
 
-set -e
+set -euo pipefail
+
+# Initialize log file (overwrite if exists)
+LOG_FILE="test-flake.log"
+> "$LOG_FILE"
 
 echo "🧪 Testing jacks-nix flake configurations..."
 echo "============================================="
@@ -34,7 +38,7 @@ run_test() {
 
     print_status "INFO" "Testing: $test_name"
 
-    if eval "$command" > /dev/null 2>&1; then
+    if eval "$command" >> "$LOG_FILE" 2>&1; then
         print_status "SUCCESS" "$test_name passed"
         return 0
     else
@@ -44,7 +48,7 @@ run_test() {
 }
 
 # Check if nix is available
-if ! command -v nix &> /dev/null; then
+if ! command -v nix >> "$LOG_FILE" 2>&1; then
     print_status "ERROR" "Nix is not installed or not in PATH"
     exit 1
 fi

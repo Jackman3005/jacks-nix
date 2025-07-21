@@ -13,6 +13,5 @@
     enableGit = true;
     enableZsh = true;
     enableNvim = true;
-    enableHomebrew = true;
   };
 }

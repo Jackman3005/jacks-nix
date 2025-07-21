@@ -27,8 +27,10 @@ in
   #########################################################################
   # Mac-specific configurations
   #########################################################################
-  # Enable programming language tools by default on macOS
   jacks-nix = {
+    enableHomebrew = true;
+
+    # Enable programming language tools by default on macOS
     enablePython = true;
     enableNode = true;
     enableJava = true;

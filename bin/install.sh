@@ -210,11 +210,11 @@ main() {
     Darwin)
       info "Detected macOS. Applying nix-darwin configuration..."
       info "This may require your password to modify system-wide symlinks."
-      sudo nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake ".#mac-arm64"
+      sudo nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake ".#mac-arm64" --impure
       ;;
     Linux)
       info "Detected Linux. Applying home-manager configuration..."
-      nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes home-manager -- switch --flake ".#linux-x64"
+      nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes home-manager -- switch --impure --flake ".#linux-x64"
       ;;
     *)
       error "Unsupported Operating System: $(uname -s)"

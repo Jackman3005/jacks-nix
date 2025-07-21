@@ -1,4 +1,4 @@
-{ inputs, config, lib, ... }:
+{ inputs, config, lib, pkgs, ... }:
 let
   username = config.jacks-nix.user.username;
 in
@@ -21,6 +21,7 @@ in
   users.users.${username} = {
     name = username;
     home = "/Users/${username}";
+    shell = pkgs.zsh;
   };
 
   # Home Manager configuration

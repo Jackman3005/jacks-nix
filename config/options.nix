@@ -1,6 +1,11 @@
 { lib, ... }:
 {
   options.jacks-nix = {
+    configRepoPath = lib.mkOption {
+      type = lib.types.str;
+      description = "Path to where this (jacks-nix) git repository will be stored.";
+    };
+
     user = {
       name = lib.mkOption {
         type = lib.types.str;

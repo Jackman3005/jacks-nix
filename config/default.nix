@@ -8,6 +8,8 @@ in
 
   # actual defaults – every field can still be overridden later
   config.jacks-nix = {
+    configRepoPath = mkDefault "~/.config/jacks-nix";
+
     user = {
       name     = mkDefault "Jack Coy";
       email    = mkDefault "jackman3000@gmail.com";

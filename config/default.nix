@@ -10,7 +10,7 @@ in
 
   # actual defaults – every field can still be overridden later
   config.jacks-nix = {
-    configRepoPath = mkDefault "~/.config/jacks-nix";
+    configRepoPath = mkDefault "$HOME/.config/jacks-nix";
 
     user = {
       name     = mkDefault "Jack Coy";

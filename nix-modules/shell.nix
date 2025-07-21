@@ -54,6 +54,8 @@
       history.size = 100000;
 
       initContent = ''
+        export EDITOR=vi
+
         export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
         export FZF_PREVIEW_COMMAND='bat --style=numbers --color=always --line-range :500 {}'

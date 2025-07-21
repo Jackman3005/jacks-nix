@@ -210,7 +210,13 @@ main() {
     Darwin)
       info "Detected macOS. Applying nix-darwin configuration..."
       info "This may require your password to modify system-wide symlinks."
-      sudo nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake ".#mac-arm64" --impure
+      #      sudo nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake ".#mac-arm64" --impure
+
+      # First build the system
+      nix build --impure --extra-experimental-features nix-command --extra-experimental-features flakes ".#darwinConfigurations.mac-arm64.system"
+      # Then switch using the built darwin-rebuild
+      sudo ./result/sw/bin/darwin-rebuild switch --impure --flake ".#mac-arm64"
+
       ;;
     Linux)
       info "Detected Linux. Applying home-manager configuration..."

@@ -15,7 +15,7 @@
     ];
 
     programs.home-manager.enable = true;
-    programs.fzf.enable = true;
+#    programs.fzf.enable = true;
 
     home.shell.enableZshIntegration = true;
     home.shellAliases = {
@@ -50,6 +50,7 @@
           "docker"
           "kubectl"
           "direnv"
+          "fzf"
         ] ++ lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
       };
 
@@ -58,13 +59,11 @@
       initContent = ''
         export EDITOR=vi
 
+        export FZF_BASE_DIR="${pkgs.fzf}/share/fzf"
         export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
         export FZF_PREVIEW_COMMAND='bat --style=numbers --color=always --line-range :500 {}'
         export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-
-        # Enable direnv
-        eval "$(direnv hook zsh)"
 
         ${lib.optionalString config.jacks-nix.enablePython ''
           # Setup pyenv configuration

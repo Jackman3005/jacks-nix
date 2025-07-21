@@ -1,10 +1,10 @@
-{ pkgs, nixvim, ... }:
+{ pkgs, inputs, ... }:
 {
   # Set the state version for Home Manager
   home.stateVersion = "23.11";
 
   imports = [
-    nixvim.homeManagerModules.nixvim
+    inputs.nixvim.homeManagerModules.nixvim
     ../../nix-modules
   ];
 

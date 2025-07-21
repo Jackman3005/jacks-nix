@@ -5,14 +5,14 @@ let
   updateChecker = pkgs.writeShellScriptBin "jacks-nix-update-check" ''
     #!${pkgs.zsh}/bin/zsh
 
-    local config_repo="${config.jacks-nix.configRepoPath}"
-    local check_file="$config_repo/local/last-update-check-timestamp.txt"
-    local current_time=$(date +%s)
+    config_repo="${config.jacks-nix.configRepoPath}"
+    check_file="$config_repo/local/last-update-check-timestamp.txt"
+    current_time=$(date +%s)
 
     # Check if we should run the update check (once per day max)
     if [[ -f "$check_file" ]]; then
-      local last_check=$(cat "$check_file" 2>/dev/null || echo "0")
-      local time_diff=$((current_time - last_check))
+      last_check=$(cat "$check_file" 2>/dev/null || echo "0")
+      time_diff=$((current_time - last_check))
       # 86400 seconds = 24 hours
       if [[ $time_diff -lt 86400 ]]; then
         exit 0
@@ -27,44 +27,46 @@ let
       exit 0
     fi
 
-    cd "$config_repo" || exit 0
+    (
+        cd "$config_repo" || exit 0
 
-    # Fetch remote changes without merging
-    git fetch origin >/dev/null 2>&1 || exit 0
+        # Fetch remote changes without merging
+        git fetch origin >/dev/null 2>&1 || exit 0
 
-    # Get current branch
-    local current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+        # Get current branch
+        current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
 
-    # Check if there are updates available
-    local local_commit=$(git rev-parse HEAD 2>/dev/null)
-    local remote_commit=$(git rev-parse "origin/$current_branch" 2>/dev/null)
+        # Check if there are updates available
+        local_commit=$(git rev-parse HEAD 2>/dev/null)
+        remote_commit=$(git rev-parse "origin/$current_branch" 2>/dev/null)
 
-    if [[ "$local_commit" != "$remote_commit" ]] && [[ -n "$remote_commit" ]]; then
-      echo ""
-      echo "🔄 Updates available for your Nix configuration!"
-      echo ""
+        if [[ "$local_commit" != "$remote_commit" ]] && [[ -n "$remote_commit" ]]; then
+          echo ""
+          echo "🔄 Updates available for your Nix configuration!"
+          echo ""
 
-      # Show current local commit info
-      echo "📍 Current local commit:"
-      git log -1 --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD 2>/dev/null
-      echo ""
+          # Show current local commit info
+          echo "📍 Current local commit:"
+          git log -1 --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD 2>/dev/null
+          echo ""
 
-      # Show commits that will be pulled
-      echo "📥 New commits available:"
-      git log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD..origin/$current_branch 2>/dev/null
-      echo ""
+          # Show commits that will be pulled
+          echo "📥 New commits available:"
+          git log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD..origin/$current_branch 2>/dev/null
+          echo ""
 
-      # Prompt user
-      echo -n "Would you like to update now? (y/N): "
-      read -n 1 -r response
-      if [[ "$response" =~ ^[Yy]$ ]]; then
-        echo "🚀 Updating configuration..."
-        jacks-nix-update
-      else
-        echo "⏭️  Update skipped. Run 'update' manually when ready."
-      fi
-      echo ""
-    fi
+          # Prompt user
+          echo -n "Would you like to update now? (y/N): "
+          read -n 1 -r response
+          if [[ "$response" =~ ^[Yy]$ ]]; then
+            echo "🚀 Updating configuration..."
+            jacks-nix-update
+          else
+            echo "⏭️  Update skipped. Run 'update' manually when ready."
+          fi
+          echo ""
+        fi
+    )
   '';
 
   # A script to pull changes and apply the Nix configuration.

@@ -93,7 +93,9 @@ ensure_user_config() {
     return
   fi
 
+  echo
   info "⚠️ No local configuration found. Let's create one."
+  echo
 
   # --- Prompt for user details ---
   local default_username
@@ -122,6 +124,7 @@ ensure_user_config() {
       error "Email cannot be empty."
   fi
 
+  echo
   info "Writing user configuration to '$local_config_file'..."
 
   # Ensure the local directory exists

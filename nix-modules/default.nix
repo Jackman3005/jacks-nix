@@ -8,5 +8,6 @@
     ./shell.nix
     ./nvim.nix
     ./homebrew.nix
+    ./updates.nix
   ];
 }

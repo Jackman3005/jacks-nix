@@ -107,6 +107,149 @@ run_test "Configuration options evaluation" \
 
 echo ""
 
+# Test environment variables
+echo "🌍 Testing environment variable overrides..."
+echo "-------------------------------------------"
+
+# Function to run environment variable test
+run_env_test() {
+    local test_name=$1
+    local env_vars=$2
+    local config_path=$3
+    local expected_value=$4
+
+    print_status "INFO" "Testing: $test_name"
+
+    local command="$env_vars nix eval --impure --no-write-lock-file .#homeConfigurations.linux-x64.config.jacks-nix.$config_path"
+    local result
+    result=$(eval "$command" 2>>"$LOG_FILE")
+
+    if [ "$result" = "$expected_value" ]; then
+        print_status "SUCCESS" "$test_name passed (got: $result)"
+        return 0
+    else
+        print_status "ERROR" "$test_name failed (expected: $expected_value, got: $result)"
+        echo "$command" >> "$LOG_FILE"
+        echo "Expected: $expected_value" >> "$LOG_FILE"
+        echo "Got: $result" >> "$LOG_FILE"
+        return 1
+    fi
+}
+
+# Test string environment variables with non-default values
+run_env_test "JACKS_NIX_CONFIG_REPO_PATH override" \
+    'JACKS_NIX_CONFIG_REPO_PATH="/custom/path"' \
+    "configRepoPath" \
+    '"/custom/path"'
+
+run_env_test "JACKS_NIX_USER_NAME override" \
+    'JACKS_NIX_USER_NAME="Test User"' \
+    "user.name" \
+    '"Test User"'
+
+run_env_test "JACKS_NIX_USER_EMAIL override" \
+    'JACKS_NIX_USER_EMAIL="test@example.com"' \
+    "user.email" \
+    '"test@example.com"'
+
+run_env_test "JACKS_NIX_USER_USERNAME override" \
+    'JACKS_NIX_USER_USERNAME="testuser"' \
+    "user.username" \
+    '"testuser"'
+
+run_env_test "JACKS_NIX_ZSH_THEME override" \
+    'JACKS_NIX_ZSH_THEME="robbyrussell"' \
+    "zshTheme" \
+    '"robbyrussell"'
+
+# Test boolean environment variables - test both true and false for variables with different defaults
+run_env_test "JACKS_NIX_ENABLE_GIT=false (default true)" \
+    'JACKS_NIX_ENABLE_GIT="false"' \
+    "enableGit" \
+    'false'
+
+run_env_test "JACKS_NIX_ENABLE_ZSH=false (default true)" \
+    'JACKS_NIX_ENABLE_ZSH="false"' \
+    "enableZsh" \
+    'false'
+
+run_env_test "JACKS_NIX_ENABLE_NVIM=false (default true)" \
+    'JACKS_NIX_ENABLE_NVIM="false"' \
+    "enableNvim" \
+    'false'
+
+run_env_test "JACKS_NIX_ENABLE_PYTHON=true (default false)" \
+    'JACKS_NIX_ENABLE_PYTHON="true"' \
+    "enablePython" \
+    'true'
+
+run_env_test "JACKS_NIX_ENABLE_NODE=true (default false)" \
+    'JACKS_NIX_ENABLE_NODE="true"' \
+    "enableNode" \
+    'true'
+
+run_env_test "JACKS_NIX_ENABLE_JAVA=true (default false)" \
+    'JACKS_NIX_ENABLE_JAVA="true"' \
+    "enableJava" \
+    'true'
+
+run_env_test "JACKS_NIX_ENABLE_RUBY=true (default false)" \
+    'JACKS_NIX_ENABLE_RUBY="true"' \
+    "enableRuby" \
+    'true'
+
+run_env_test "JACKS_NIX_ENABLE_BUN=true (default false)" \
+    'JACKS_NIX_ENABLE_BUN="true"' \
+    "enableBun" \
+    'true'
+
+run_env_test "JACKS_NIX_ENABLE_ASDF=true (default false)" \
+    'JACKS_NIX_ENABLE_ASDF="true"' \
+    "enableAsdf" \
+    'true'
+
+# Test boolean value variations (1, yes should also work as true)
+run_env_test "JACKS_NIX_ENABLE_PYTHON=1 (alternative true)" \
+    'JACKS_NIX_ENABLE_PYTHON="1"' \
+    "enablePython" \
+    'true'
+
+run_env_test "JACKS_NIX_ENABLE_NODE=yes (alternative true)" \
+    'JACKS_NIX_ENABLE_NODE="yes"' \
+    "enableNode" \
+    'true'
+
+# Comprehensive test - multiple environment variables at once
+print_status "INFO" "Testing: Multiple environment variables simultaneously"
+multi_env_command='JACKS_NIX_USER_NAME="Multi Test" JACKS_NIX_USER_EMAIL="multi@test.com" JACKS_NIX_ENABLE_PYTHON="true" JACKS_NIX_ENABLE_BUN="true" JACKS_NIX_ENABLE_GIT="false" nix eval --impure --no-write-lock-file --expr '"'"'
+let
+  flake = builtins.getFlake (toString ./.);
+  config = flake.homeConfigurations.linux-x64.config.jacks-nix;
+in {
+  userName = config.user.name;
+  userEmail = config.user.email;
+  enablePython = config.enablePython;
+  enableBun = config.enableBun;
+  enableGit = config.enableGit;
+}'"'"''
+
+if multi_result=$(eval "$multi_env_command" 2>>"$LOG_FILE"); then
+    expected_multi='{ enableBun = true; enableGit = false; enablePython = true; userEmail = "multi@test.com"; userName = "Multi Test"; }'
+    if [ "$multi_result" = "$expected_multi" ]; then
+        print_status "SUCCESS" "Multiple environment variables test passed"
+    else
+        print_status "ERROR" "Multiple environment variables test failed"
+        echo "Multi-env command: $multi_env_command" >> "$LOG_FILE"
+        echo "Expected: $expected_multi" >> "$LOG_FILE"
+        echo "Got: $multi_result" >> "$LOG_FILE"
+    fi
+else
+    print_status "ERROR" "Multiple environment variables test failed to execute"
+    echo "$multi_env_command" >> "$LOG_FILE"
+fi
+
+echo ""
+
 # Summary
 echo "📋 Test Summary"
 echo "==============="

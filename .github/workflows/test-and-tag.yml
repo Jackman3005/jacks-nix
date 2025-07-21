@@ -55,29 +55,18 @@ jobs:
           else
             sudo systemctl restart nix-daemon.service
           fi
-      - name: Set local machine config to avoid being prompted
-        run: |
-          mkdir -p ./local
-          cat <<CONFIG > ./local/machine.local.nix
-          {
-            jacks-nix = {
-              user = {
-                username = "runner";
-                name = "GitHub Action Runner";
-                email = "gh-action-runner@example.com";
-              };
-            };
-          }
-          CONFIG
       - name: Run install script
         run: cd bin && ./install.sh
         env:
           JACKS_NIX_CONFIG_REPO_PATH: "${{ github.workspace }}"
+          JACKS_NIX_USER_USERNAME: "runner"
+          JACKS_NIX_USER_NAME: "GitHub Action Runner"
+          JACKS_NIX_USER_EMAIL: "gh-action-runner@example.com"
 
   tag-latest:
     needs:
       - checks
-      #      - installs # Re-enable when we can get them passing
+      - installs
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:

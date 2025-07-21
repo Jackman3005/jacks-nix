@@ -22,12 +22,9 @@
     lib = nixpkgs.lib;
     specialArgs = { inherit inputs; };
 
-    localMachineOverrides = self + "/local/machine.local.nix";
-
     sharedModules = [
       ./config
-    ]
-    ++ (lib.optional (builtins.pathExists localMachineOverrides) localMachineOverrides);
+    ];
   in
   {
     # Home Manager Configurations (for non-NixOS Linux)

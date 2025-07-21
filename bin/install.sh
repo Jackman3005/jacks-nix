@@ -82,19 +82,20 @@ ensure_nix_experimental_features() {
 }
 
 ensure_user_config() {
-  info "Checking for local machine configuration..."
-  local local_config_file="$CLONE_DIR/local/machine.local.nix"
+  info "Checking user configuration environment variables..."
 
-  if [ -f "$local_config_file" ]; then
-    info "✅ Found existing local configuration at '$local_config_file'."
-    info "   The following local configuration contents will be used to override default settings."
-    cat "$local_config_file"
-    echo
+  # Check if user configuration environment variables are already set
+  if [ -n "${JACKS_NIX_USER_USERNAME:-}" ] && [ -n "${JACKS_NIX_USER_NAME:-}" ] && [ -n "${JACKS_NIX_USER_EMAIL:-}" ]; then
+    info "✅ User configuration found in environment variables:"
+    info "   Username: $JACKS_NIX_USER_USERNAME"
+    info "   Name: $JACKS_NIX_USER_NAME"
+    info "   Email: $JACKS_NIX_USER_EMAIL"
     return
   fi
 
   echo
-  info "⚠️ No local configuration found. Let's create one."
+  info "⚠️ User configuration environment variables not found. Let's set them up."
+  info "   These will be exported to your shell profile for future use."
   echo
 
   # --- Prompt for user details ---
@@ -124,25 +125,19 @@ ensure_user_config() {
       error "Email cannot be empty."
   fi
 
+  # Export environment variables for current session
+  export JACKS_NIX_USER_USERNAME="$user_username"
+  export JACKS_NIX_USER_NAME="$user_name"
+  export JACKS_NIX_USER_EMAIL="$user_email"
+
   echo
-  info "Writing user configuration to '$local_config_file'..."
-
-  # Ensure the local directory exists
-  mkdir -p "$(dirname "$local_config_file")"
-
-  # Create the config file
-  cat > "$local_config_file" <<EOF
-{
-  jacks-nix = {
-    user = {
-      username = "$user_username";
-      name = "$user_name";
-      email = "$user_email";
-    };
-  };
-}
-EOF
-  info "✅ Local configuration created."
+  info "✅ User configuration environment variables set for current session."
+  info "   To make these permanent, add the following to your shell profile or `~/.zshrc.local`:"
+  echo
+  echo "export JACKS_NIX_USER_USERNAME=\"$user_username\""
+  echo "export JACKS_NIX_USER_NAME=\"$user_name\""
+  echo "export JACKS_NIX_USER_EMAIL=\"$user_email\""
+  echo
 }
 
 # --- Main Execution ---
@@ -215,11 +210,11 @@ main() {
     Darwin)
       info "Detected macOS. Applying nix-darwin configuration..."
       info "This may require your password to modify system-wide symlinks."
-      sudo nix run --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake ".#mac-arm64"
+      sudo nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --flake ".#mac-arm64"
       ;;
     Linux)
       info "Detected Linux. Applying home-manager configuration..."
-      nix run --extra-experimental-features nix-command --extra-experimental-features flakes home-manager -- switch --flake ".#linux-x64"
+      nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes home-manager -- switch --flake ".#linux-x64"
       ;;
     *)
       error "Unsupported Operating System: $(uname -s)"

@@ -27,6 +27,13 @@ in
   #########################################################################
   # Mac-specific configurations
   #########################################################################
-  # Add any Mac-specific home-manager settings here
-  # For example, different shell aliases or environment variables
+  # Enable programming language tools by default on macOS
+  jacks-nix = {
+    enablePython = true;
+    enableNode = true;
+    enableJava = true;
+    enableRuby = true;
+    enableBun = true;
+    enableAsdf = true;
+  };
 }

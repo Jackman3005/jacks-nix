@@ -27,6 +27,14 @@ in
   #########################################################################
   # Linux-specific configurations
   #########################################################################
-  # Add any Linux-specific home-manager settings here
-  # For example, different shell aliases or environment variables
+  # Disable programming language tools by default on Linux
+  jacks-nix = {
+    enablePython = false;
+    enableNode = false;
+    enableJava = false;
+    enableRuby = false;
+    enableBun = false;
+    enableAsdf = false;
+    enableHomebrew = false;
+  };
 }

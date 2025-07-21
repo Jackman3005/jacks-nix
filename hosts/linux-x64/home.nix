@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, nixvim, ... }:
 {
   # Set the state version for Home Manager
   home.stateVersion = "23.11";

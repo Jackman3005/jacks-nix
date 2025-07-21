@@ -54,7 +54,11 @@
         ] ++ lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
       };
 
-      history.size = 100000;
+      history = {
+        size = 100000;
+        append = true;
+        extended = true;
+      };
 
       initContent = ''
         export EDITOR=vi

@@ -29,7 +29,6 @@
         extraSpecialArgs = specialArgs;
         modules = [
           ./config
-          ./nix-modules
           ./hosts/linux-x64
          ];
       };
@@ -42,7 +41,6 @@
         specialArgs = specialArgs;
         modules = [
             ./config
-            ./nix-modules
             ./hosts/mac-arm64
          ];
       };

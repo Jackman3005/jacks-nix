@@ -3,7 +3,6 @@ let
   username = config.jacks-nix.user.username;
 in
 {
-  # Import Home Manager configuration
   imports = [
     inputs.home-manager.darwinModules.home-manager
   ];
@@ -17,11 +16,9 @@ in
   # Fix GID mismatch for nixbld group
   ids.gids.nixbld = 350;
 
-  # Create the user account
   users.users.${username} = {
     name = username;
     home = "/Users/${username}";
-    shell = pkgs.zsh;
   };
 
   # Home Manager configuration

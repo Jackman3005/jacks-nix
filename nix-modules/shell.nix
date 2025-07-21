@@ -26,7 +26,6 @@
           "docker"
           "kubectl"
           "direnv"
-          "history-substring-search"
         ] ++ lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
       };
 

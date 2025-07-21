@@ -67,8 +67,6 @@ in
 
     # Add homebrew taps (repositories)
     taps = [
-      "homebrew/core"
-      "homebrew/cask"
       "homebrew/services"
     ];
 

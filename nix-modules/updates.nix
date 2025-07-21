@@ -6,7 +6,7 @@ let
     #!${pkgs.zsh}/bin/zsh
 
     local config_repo="${config.jacks-nix.configRepoPath}"
-    local check_file="$config_repo/.latest-update-check"
+    local check_file="$config_repo/local/last-update-check-timestamp.txt"
     local current_time=$(date +%s)
 
     # Check if we should run the update check (once per day max)

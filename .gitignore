@@ -1,7 +1,6 @@
 result*
 .idea
-test-flake.log
-.latest-update-check
+bin/test-flake.log
 
-# Local machine-specific overrides
-config/machine.local.nix
+# Local machine-specific files
+local/

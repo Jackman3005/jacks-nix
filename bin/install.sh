@@ -83,11 +83,13 @@ ensure_nix_experimental_features() {
 
 ensure_user_config() {
   info "Checking for local machine configuration..."
-  local local_config_file="$CLONE_DIR/config/machine.local.nix"
+  local local_config_file="$CLONE_DIR/local/machine.local.nix"
 
   if [ -f "$local_config_file" ]; then
     info "✅ Found existing local configuration at '$local_config_file'."
-    info "   This will be used to override default settings."
+    info "   The following local configuration contents will be used to override default settings."
+    cat "$local_config_file"
+    echo
     return
   fi
 

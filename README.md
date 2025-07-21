@@ -4,11 +4,11 @@ This repository contains my complete, cross-platform Nix configuration for macOS
 
 ## Installation
 
-The installation and update processes are automated. Simply run `./install.sh` for initial setup or reinstallation.
+The installation and update processes are automated. Simply run `./bin/install.sh` for initial setup or reinstallation.
 
 You can simply run the one-line command for it to clone this repo and perform all initial setup operations.
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/latest/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/latest/bin/install.sh)"
 ```
 
 ## Updating
@@ -22,21 +22,26 @@ Use the `upgrade` alias to update all packages in the nix flake.
 ## Structure
 ```
 .
-├── flake.nix         # Main Nix flake entrypoint
-├── install.sh        # Universal installation script
-├── hosts/              # Host-specific configurations
+├── flake.nix                             # Main Nix flake entrypoint
+├── bin/                                  # Scripts and executables
+│   ├── install.sh                        # Universal installation script
+├── hosts/                                # Host-specific configurations
 │   ├── mac-arm64/
 │   └── linux-x64/
-├── nix-modules/        # Shared, modular Home Manager configuration
-│   ├── default.nix     # Assembles all modules
+├── nix-modules/                          # Shared, modular Home Manager configuration
+│   ├── default.nix                       # Assembles all modules
 │   ├── git.nix
 │   ├── homebrew.nix
 │   ├── nvim.nix
+│   ├── updates.nix
 │   └── shell.nix
-├── config/             # Your personal configuration values and options
-│   ├── default.nix     # <-- SET YOUR PERSONAL VALUES HERE
+├── config/                               # Where configuration options and defaults are specified
+│   ├── default.nix
 │   └── options.nix
-└── dotfiles/           # Dotfiles/folders to be symlinked
+├── local/                                # Ignored by git. Specifies local machine-specific information.
+│   ├── machine.local.nix                 # Place to add any configuration overrides for `default.nix`
+│   └── last-update-check-timestamp.txt   # Helper that keeps track of last update check to avoid checking too often. Safe to delete.
+└── assets/                               # Extra files/folders to be symlinked or copied.
     └── nvim/
 ```
 

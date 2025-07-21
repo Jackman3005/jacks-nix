@@ -25,7 +25,7 @@
     };
 
 
-    # Symlink your existing LazyVim config from the dotfiles directory
-    home.file.".config/nvim".source = ../dotfiles/nvim;
+    # Symlink your existing LazyVim config from the assets directory
+    home.file.".config/nvim".source = ../assets/nvim;
   };
 }

@@ -6,7 +6,7 @@ in
 {
   imports = [ ./options.nix ]
     # Conditionally import machine-local overrides if the file exists.
-    ++ (lib.optional (builtins.pathExists ./machine.local.nix) ./machine.local.nix);
+    ++ (lib.optional (builtins.pathExists ../local/machine.local.nix) ../local/machine.local.nix);
 
   # actual defaults – every field can still be overridden later
   config.jacks-nix = {

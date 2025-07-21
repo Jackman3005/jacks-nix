@@ -22,7 +22,6 @@
         enable = true;
         theme = "ys";
         plugins = [
-          "fzf"
           "git"
           "docker"
           "kubectl"

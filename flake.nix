@@ -15,21 +15,19 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # Include the `local` directory, which is not tracked by Git
-    self-local = {
-      url = "path:./local";
-      flake = false;
-    };
   };
 
   outputs = { self, nixpkgs, home-manager, nixvim, nix-darwin, ... }@inputs:
   let
+    lib = nixpkgs.lib;
     specialArgs = { inherit inputs; };
+
+    localMachineOverrides = self + "/local/machine.local.nix";
 
     sharedModules = [
       ./config
-    ];
+    ]
+    ++ (lib.optional (builtins.pathExists localMachineOverrides) localMachineOverrides);
   in
   {
     # Home Manager Configurations (for non-NixOS Linux)

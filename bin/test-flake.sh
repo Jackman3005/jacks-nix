@@ -10,8 +10,10 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
 # Initialize log file (overwrite if exists)
-LOG_FILE="test-flake.log"
+LOG_FILE="$(pwd)/test-flake.log"
 > "$LOG_FILE"
+
+cd ../
 
 echo "🧪 Testing jacks-nix flake configurations..."
 echo "============================================="

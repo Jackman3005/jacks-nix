@@ -13,7 +13,7 @@
 set -euo pipefail
 
 # --- Configuration ---
-readonly CLONE_DIR="$HOME/.config/jacks-nix"
+readonly CLONE_DIR="${JACKS_NIX_CONFIG_REPO_PATH:-$HOME/.config/jacks-nix}"
 readonly GIT_PULL_URL="https://github.com/Jackman3005/jacks-nix.git"
 readonly GIT_PUSH_URL="git@github.com:Jackman3005/jacks-nix.git"
 readonly LOG_FILE="/tmp/jacks-nix-setup.log"
@@ -180,7 +180,12 @@ main() {
   ensure_nix_experimental_features
 
   # 2. Clone or Update Repository
-  if [ -d "$CLONE_DIR" ]; then
+  if [ -n "${JACKS_NIX_CONFIG_REPO_PATH:-}" ]; then
+    info "Using existing directory at '$CLONE_DIR' (JACKS_NIX_CONFIG_REPO_PATH is set)..."
+    if [ ! -d "$CLONE_DIR" ]; then
+      error "JACKS_NIX_CONFIG_REPO_PATH is set to '$JACKS_NIX_CONFIG_REPO_PATH' but directory does not exist."
+    fi
+  elif [ -d "$CLONE_DIR" ]; then
     info "Directory '$CLONE_DIR' already exists. Updating repository..."
     cd "$CLONE_DIR"
     git pull --rebase --autostash
@@ -191,11 +196,15 @@ main() {
 
   # 3. Configure Git Remotes
   cd "$CLONE_DIR"
-  info "Setting git remotes to ensure correct pull/push configuration..."
-  git remote set-url origin "$GIT_PULL_URL"
-  git remote set-url --push origin "$GIT_PUSH_URL"
-  info "Pull URL set to: $(git remote get-url origin)"
-  info "Push URL set to: $(git remote get-url --push origin)"
+  if [ -z "${JACKS_NIX_CONFIG_REPO_PATH:-}" ]; then
+    info "Setting git remotes to ensure correct pull/push configuration..."
+    git remote set-url origin "$GIT_PULL_URL"
+    git remote set-url --push origin "$GIT_PUSH_URL"
+    info "Pull URL set to: $(git remote get-url origin)"
+    info "Push URL set to: $(git remote get-url --push origin)"
+  else
+    info "Skipping git remote configuration (using existing repository from JACKS_NIX_CONFIG_REPO_PATH)..."
+  fi
 
   # 4. Setup local configuration
   ensure_user_config

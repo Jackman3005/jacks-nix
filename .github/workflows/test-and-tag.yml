@@ -71,6 +71,8 @@ jobs:
           CONFIG
       - name: Run install script
         run: cd bin && ./install.sh
+        env:
+          JACKS_NIX_CONFIG_REPO_PATH: "./"
 
   tag-latest:
     needs:

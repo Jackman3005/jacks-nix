@@ -17,6 +17,9 @@ readonly CLONE_DIR="$HOME/.config/jacks-nix"
 readonly GIT_PULL_URL="https://github.com/Jackman3005/jacks-nix.git"
 readonly GIT_PUSH_URL="git@github.com:Jackman3005/jacks-nix.git"
 readonly LOG_FILE="/tmp/jacks-nix-setup.log"
+readonly NIX_CONFIG_DIR="$HOME/.config/nix"
+readonly NIX_CONFIG_FILE="$NIX_CONFIG_DIR/nix.conf"
+
 
 # --- Helper Functions ---
 _log() {
@@ -58,6 +61,26 @@ ensure_dependency() {
   fi
 }
 
+
+ensure_nix_experimental_features() {
+  info "Ensuring Nix experimental features are enabled..."
+  local required_line="experimental-features = nix-command flakes"
+
+  # Create config directory and file if they don't exist
+  mkdir -p "$NIX_CONFIG_DIR"
+  touch "$NIX_CONFIG_FILE"
+
+  if grep -q "experimental-features" "$NIX_CONFIG_FILE"; then
+    info "Nix 'experimental-features' already configured."
+  else
+    info "Adding 'experimental-features' to $NIX_CONFIG_FILE..."
+    # Add a newline before the line to ensure it's not appended to an existing line
+    printf "\n%s\n" "$required_line" >> "$NIX_CONFIG_FILE"
+    info "✅ Configuration updated."
+    info "You might need to restart the nix-daemon: 'sudo systemctl restart nix-daemon.service'"
+  fi
+}
+
 # --- Main Execution ---
 main() {
   # Ensure the log file exists and has a start marker
@@ -88,6 +111,9 @@ main() {
     info "✅ Nix is already installed."
   fi
 
+
+  # Ensure Nix config is set up for flakes
+  ensure_nix_experimental_features
 
   # 2. Clone or Update Repository
   if [ -d "$CLONE_DIR" ]; then

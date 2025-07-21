@@ -12,11 +12,12 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/la
 ```
 
 ## Updating
+To pull the latest changes and apply the nix flake, use the `update` alias.
 
-To apply local changes, use the `update` alias.
+## Upgrading
+Use the `upgrade` alias to update all packages in the nix flake.
 
-**TODO**
--[ ] Pull for any changes in the nix repo before updating (handle that with any in-flight changes).
+> Note: This command will perform the upgrade for everyone, but the automatic commit part will only work for contributors.
 
 ## Structure
 ```
@@ -29,6 +30,7 @@ To apply local changes, use the `update` alias.
 ├── nix-modules/        # Shared, modular Home Manager configuration
 │   ├── default.nix     # Assembles all modules
 │   ├── git.nix
+│   ├── homebrew.nix
 │   ├── nvim.nix
 │   └── shell.nix
 ├── config/             # Your personal configuration values and options

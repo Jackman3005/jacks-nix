@@ -1,0 +1,56 @@
+name: Test and Tag
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v23
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+
+    - name: Enable Nix flakes
+      run: |
+        echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
+
+    - name: Make test script executable
+      run: chmod +x test-flake.sh
+
+    - name: Run tests
+      run: ./test-flake.sh
+
+  tag-latest:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Configure Git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+
+    - name: Delete existing latest tag
+      run: |
+        git tag -d latest || true
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git :refs/tags/latest || true
+
+    - name: Create and push latest tag
+      run: |
+        git tag latest
+        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git latest

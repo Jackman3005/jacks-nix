@@ -8,7 +8,7 @@ The installation and update processes are automated. Simply run `./install.sh` f
 
 You can simply run the one-line command for it to clone this repo and perform all initial setup operations.
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/latest/install.sh)"
 ```
 
 ## Updating
@@ -46,4 +46,3 @@ This setup is built around a modular core in `nix-modules/` and `config/`.
 - **`nix-modules/`**: Each file manages a specific piece of software (Git, Zsh, etc.), pulling values from your central config.
 - **`hosts/`**: Contains minimal files that add OS-specific packages or settings.
 - **`flake.nix`**: Assembles the correct configuration based on the target OS (`darwinConfigurations` for macOS, `homeConfigurations` for Linux).
-

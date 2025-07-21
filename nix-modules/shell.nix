@@ -1,6 +1,7 @@
 { config, pkgs, lib, ... }:
 {
   config = lib.mkIf config.jacks-nix.enableZsh {
+
     home.packages = with pkgs; [
       bat
       tree
@@ -14,6 +15,29 @@
     ];
 
     programs.home-manager.enable = true;
+    programs.fzf.enable = true;
+
+    home.shell.enableZshIntegration = true;
+    home.shellAliases = {
+                 g = "git";
+                 vi = "nvim";
+                 cat = "bat";
+                 ll = "eza --long --octal-permissions --header --no-permissions --no-user --all --time-style '+%y-%b-%d %l:%M%P' --color-scale=age --group-directories-first --hyperlink";
+                 d = "docker";
+                 dc = "docker-compose";
+                 dcr = "docker-compose down && docker-compose up -d";
+                 dcu = "docker-compose down && docker-compose pull && docker-compose up -d";
+                 k = "kubectl";
+                 z = "zellij";
+                 scripts=''cat package.json | jq ".scripts"'';
+                 sshpw="ssh -o PubkeyAuthentication=no";
+                 myip =
+                   if pkgs.stdenv.isDarwin then "ipconfig getifaddr $(route get default | grep interface | cut -d' ' -f4)"
+                   else "ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if ($i==\"src\") print $(i+1)}'";
+                 update =
+                   if pkgs.stdenv.isDarwin then "sudo darwin-rebuild switch --flake ~/.config/jacks-nix#mac-arm64 && exec zsh"
+                   else "home-manager switch --flake ~/.config/jacks-nix#linux-x64 && exec zsh";
+               };
 
     programs.zsh = {
       enable = true;
@@ -27,27 +51,6 @@
           "kubectl"
           "direnv"
         ] ++ lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
-      };
-
-      shellAliases = {
-        g = "git";
-        vi = "nvim";
-        cat = "bat";
-        ll = "eza --long --octal-permissions --header --no-permissions --no-user --all --time-style '+%y-%b-%d %l:%M%P' --color-scale=age --group-directories-first --hyperlink";
-        d = "docker";
-        dc = "docker-compose";
-        dcr = "docker-compose down && docker-compose up -d";
-        dcu = "docker-compose down && docker-compose pull && docker-compose up -d";
-        k = "kubectl";
-        z = "zellij";
-        scripts=''cat package.json | jq ".scripts"'';
-        sshpw="ssh -o PubkeyAuthentication=no";
-        myip =
-          if pkgs.stdenv.isDarwin then "ipconfig getifaddr $(route get default | grep interface | cut -d' ' -f4)"
-          else "ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if ($i==\"src\") print $(i+1)}'";
-        update =
-          if pkgs.stdenv.isDarwin then "sudo darwin-rebuild switch --flake ~/.config/jacks-nix#mac-arm64 && exec zsh"
-          else "home-manager switch --flake ~/.config/jacks-nix#linux-x64 && exec zsh";
       };
 
       history.size = 100000;
@@ -125,10 +128,6 @@
           source "$HOME/.zshrc.local"
         fi
       '';
-    };
-
-    programs.fzf = {
-      enable = true;
     };
   };
 }

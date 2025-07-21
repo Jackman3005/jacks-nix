@@ -30,7 +30,7 @@ in
   jacks-nix = {
     enableHomebrew = true;
 
-    # Enable programming language tools by default on macOS
+    # Enable programming language tools by default on macOS development machines
     enablePython = true;
     enableNode = true;
     enableJava = true;

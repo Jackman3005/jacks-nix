@@ -29,13 +29,5 @@ in
   #########################################################################
   jacks-nix = {
     enableHomebrew = false;
-
-    # Disable programming language tools by default on Linux
-    enablePython = false;
-    enableNode = false;
-    enableJava = false;
-    enableRuby = false;
-    enableBun = false;
-    enableAsdf = false;
   };
 }

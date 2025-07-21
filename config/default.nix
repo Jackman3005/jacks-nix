@@ -1,3 +1,4 @@
+{ lib, ... }:
 {
   imports = [ ./options.nix ];
 
@@ -10,9 +11,17 @@
     };
 
     # Toggle features on or off
-    enableGit = true;
-    enableZsh = true;
-    enableNvim = true;
-    enableHomebrew = true;
+    enableGit = lib.mkDefault true;
+    enableZsh = lib.mkDefault true;
+    enableNvim = lib.mkDefault true;
+    enableHomebrew = lib.mkDefault true;
+
+    # Disable programming language tools by default on Linux
+    enablePython = lib.mkDefault false;
+    enableNode = lib.mkDefault false;
+    enableJava = lib.mkDefault false;
+    enableRuby = lib.mkDefault false;
+    enableBun = lib.mkDefault false;
+    enableAsdf = lib.mkDefault false;
   };
 }

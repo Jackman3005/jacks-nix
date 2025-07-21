@@ -1,7 +1,7 @@
 { pkgs, inputs, ... }:
 let
   # Import the shared configuration to get username and other settings
-  sharedConfig = import ../../config;
+  sharedConfig = import ../../config { lib = pkgs.lib; };
 in
 {
   # Set the state version for Home Manager

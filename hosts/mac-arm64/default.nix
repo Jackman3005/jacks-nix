@@ -1,7 +1,7 @@
 { inputs, lib, ... }:
 let
   # Import the shared configuration to get username and other settings
-  sharedConfig = import ../../config;
+  sharedConfig = import ../../config { lib = lib; };
   username = sharedConfig.jacks-nix.user.username;
 in
 {
@@ -47,9 +47,7 @@ in
   system.primaryUser = lib.mkIf sharedConfig.jacks-nix.enableHomebrew username;
 
   # Homebrew configuration (only enabled if enableHomebrew is true)
-  homebrew = let
-    sharedConfig = import ../../config;
-  in lib.mkIf sharedConfig.jacks-nix.enableHomebrew {
+  homebrew = lib.mkIf sharedConfig.jacks-nix.enableHomebrew {
     enable = true;
 
     # Automatically update homebrew and upgrade packages

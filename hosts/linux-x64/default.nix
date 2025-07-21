@@ -1,4 +1,7 @@
-{ inputs, ... }:
+{ pkgs, inputs, ... }:
+let
+  sharedConfig = import ../../config { lib = pkgs.lib; };
+in
 {
   imports = [
     # Import home-manager module for NixOS

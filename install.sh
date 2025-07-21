@@ -119,7 +119,7 @@ main() {
   if [ -d "$CLONE_DIR" ]; then
     info "Directory '$CLONE_DIR' already exists. Updating repository..."
     cd "$CLONE_DIR"
-    git pull
+    git pull --rebase --autostash
   else
     info "Cloning jacks-nix repository to '$CLONE_DIR'..."
     git clone "$GIT_PULL_URL" "$CLONE_DIR"

@@ -1,12 +1,14 @@
-{ lib, config, pkgs, ... }:
+{ lib, config, pkgs, inputs, ... }:
 
 let
   inherit (lib) mkDefault;
+  # Use the path to the local-machine config from the flake input
+  localConfig = "${inputs.self-local}/machine.local.nix";
 in
 {
   imports = [ ./options.nix ]
     # Conditionally import machine-local overrides if the file exists.
-    ++ (lib.optional (builtins.pathExists ../local/machine.local.nix) ../local/machine.local.nix);
+    ++ (lib.optional (builtins.pathExists localConfig) localConfig);
 
   # actual defaults – every field can still be overridden later
   config.jacks-nix = {

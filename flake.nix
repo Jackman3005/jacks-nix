@@ -15,11 +15,21 @@
       url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Include the `local` directory, which is not tracked by Git
+    self-local = {
+      url = "path:./local";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, home-manager, nixvim, nix-darwin, ... }@inputs:
   let
     specialArgs = { inherit inputs; };
+
+    sharedModules = [
+      ./config
+    ];
   in
   {
     # Home Manager Configurations (for non-NixOS Linux)
@@ -27,10 +37,7 @@
       "linux-x64" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs { system = "x86_64-linux"; };
         extraSpecialArgs = specialArgs;
-        modules = [
-          ./config
-          ./hosts/linux-x64
-         ];
+        modules = sharedModules ++ [ ./hosts/linux-x64 ];
       };
     };
 
@@ -39,10 +46,7 @@
       "mac-arm64" = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         specialArgs = specialArgs;
-        modules = [
-            ./config
-            ./hosts/mac-arm64
-         ];
+        modules = sharedModules ++ [ ./hosts/mac-arm64 ];
       };
     };
   };

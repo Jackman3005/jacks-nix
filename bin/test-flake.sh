@@ -5,6 +5,10 @@
 
 set -euo pipefail
 
+# Get the directory where the script is located
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$SCRIPT_DIR"
+
 # Initialize log file (overwrite if exists)
 LOG_FILE="test-flake.log"
 > "$LOG_FILE"

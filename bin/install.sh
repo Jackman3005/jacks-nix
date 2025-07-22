@@ -139,15 +139,6 @@ ensure_user_config() {
   echo
 }
 
-# Helper function to collect all JACKS_NIX_* environment variables
-collect_jacks_nix_env() {
-  local -a env_vars=()
-  while IFS='=' read -r key val; do
-    env_vars+=("$key=$val")
-  done < <(env | grep -E '^JACKS_NIX_')
-  printf '%s\n' "${env_vars[@]}"
-}
-
 # --- Main Execution ---
 main() {
   # Ensure the log file exists and has a start marker
@@ -222,12 +213,12 @@ main() {
       info "Building system configuration..."
       nix build --impure --extra-experimental-features nix-command --extra-experimental-features flakes ".#darwinConfigurations.mac-arm64.system"
 
-      local -a jacks_nix_env_vars
-      readarray -t jacks_nix_env_vars < <(collect_jacks_nix_env)
-      info "jacks_nix_env_vars: ${jacks_nix_env_vars[@]}"
+      local jacks_nix_env_vars
+      jacks_nix_env_vars=$(env | grep -E '^JACKS_NIX_' || true)
+      info "jacks_nix_env_vars: ${jacks_nix_env_vars}"
 
       info "Switching to new configuration..."
-      sudo env "${jacks_nix_env_vars[@]}" ./result/sw/bin/darwin-rebuild switch --impure --flake ".#mac-arm64"
+      sudo env ${jacks_nix_env_vars} ./result/sw/bin/darwin-rebuild switch --impure --flake ".#mac-arm64"
       ;;
     Linux)
       info "Detected Linux. Applying home-manager configuration..."

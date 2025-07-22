@@ -80,65 +80,6 @@ ensure_nix_experimental_features() {
   fi
 }
 
-ensure_user_config() {
-  info "Checking user configuration environment variables..."
-
-  # Check if user configuration environment variables are already set
-  if [ -n "${JACKS_NIX_USER_USERNAME:-}" ] && [ -n "${JACKS_NIX_USER_NAME:-}" ] && [ -n "${JACKS_NIX_USER_EMAIL:-}" ]; then
-    info "✅ User configuration found in environment variables:"
-    info "   Username: $JACKS_NIX_USER_USERNAME"
-    info "   Name: $JACKS_NIX_USER_NAME"
-    info "   Email: $JACKS_NIX_USER_EMAIL"
-    return
-  fi
-
-  echo
-  info "⚠️ User configuration environment variables not found. Let's set them up."
-  info "   These will be exported to your shell profile for future use."
-  echo
-
-  # --- Prompt for user details ---
-  local default_username
-  default_username=$(whoami)
-  local default_git_name
-  default_git_name=$(git config --global user.name || echo "")
-  local default_git_email
-  default_git_email=$(git config --global user.email || echo "")
-
-  local user_username
-  local user_name
-  local user_email
-
-  read -r -p "Enter your system username [default: $default_username]: " user_username
-  user_username=${user_username:-$default_username}
-
-  read -r -p "Enter your full name for Git [default: '$default_git_name']: " user_name
-  user_name=${user_name:-$default_git_name}
-  if [ -z "$user_name" ]; then
-      error "Full name cannot be empty."
-  fi
-
-  read -r -p "Enter your email for Git [default: '$default_git_email']: " user_email
-  user_email=${user_email:-$default_git_email}
-  if [ -z "$user_email" ]; then
-      error "Email cannot be empty."
-  fi
-
-  # Export environment variables for current session
-  export JACKS_NIX_USER_USERNAME="$user_username"
-  export JACKS_NIX_USER_NAME="$user_name"
-  export JACKS_NIX_USER_EMAIL="$user_email"
-
-  echo
-  info "✅ User configuration environment variables set for current session."
-  info "   To make these permanent, add the following to your shell profile or `~/.zshrc.local`:"
-  echo
-  echo "export JACKS_NIX_USER_USERNAME=\"$user_username\""
-  echo "export JACKS_NIX_USER_NAME=\"$user_name\""
-  echo "export JACKS_NIX_USER_EMAIL=\"$user_email\""
-  echo
-}
-
 # --- Main Execution ---
 main() {
   # Ensure the log file exists and has a start marker
@@ -199,10 +140,7 @@ main() {
     info "Skipping git remote configuration (using existing repository from JACKS_NIX_CONFIG_REPO_PATH)..."
   fi
 
-  # 4. Setup local configuration
-  ensure_user_config
-
-  # 5. Activate Nix Configuration
+  # 4. Activate Nix Configuration
   info "Activating Nix configuration for this system..."
   case "$(uname -s)" in
     Darwin)

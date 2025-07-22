@@ -57,6 +57,9 @@
       };
 
       initContent = ''
+        # Check for updates and prompt user if present. Limited to once per 24 hours.
+        jacks-nix-update-check
+
         export EDITOR=vi
 
         export FZF_BASE_DIR="${pkgs.fzf}/share/fzf"
@@ -64,9 +67,6 @@
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
         export FZF_PREVIEW_COMMAND='bat --style=numbers --color=always --line-range :500 {}'
         export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-
-        # Run update check in background to avoid blocking shell startup
-        (jacks-nix-update-check &)
 
         ${lib.optionalString config.jacks-nix.enablePython ''
           # Setup pyenv configuration

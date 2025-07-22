@@ -20,6 +20,7 @@ let
     fi
 
     # Update the check timestamp
+    mkdir -p $(dirname "$check_file") # Ensure `local` dir is present.
     echo "$current_time" > "$check_file"
 
     # Change to config repo directory
@@ -59,6 +60,7 @@ let
               # Prompt user
               echo -n "Would you like to update now? (y/N): "
               read -n 1 -r response
+              echo
               if [[ "$response" =~ ^[Yy]$ ]]; then
                 echo "🚀 Updating configuration..."
                 jacks-nix-update

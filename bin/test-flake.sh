@@ -219,6 +219,16 @@ run_env_test "JACKS_NIX_ENABLE_NODE=yes (alternative true)" \
     "enableNode" \
     'true'
 
+run_env_test "JACKS_NIX_MAC_NIXBLD_USER_ID=5123 (default 300)" \
+    'JACKS_NIX_MAC_NIXBLD_USER_ID="5123"' \
+    "mac.nixbldUserId" \
+    5123
+
+run_env_test "JACKS_NIX_MAC_NIXBLD_GROUP_ID=5123 (default 350)" \
+    'JACKS_NIX_MAC_NIXBLD_GROUP_ID="5123"' \
+    "mac.nixbldGroupId" \
+    5123
+
 # Comprehensive test - multiple environment variables at once
 print_status "INFO" "Testing: Multiple environment variables simultaneously"
 multi_env_command='JACKS_NIX_USER_NAME="Multi Test" JACKS_NIX_USER_EMAIL="multi@test.com" JACKS_NIX_ENABLE_PYTHON="true" JACKS_NIX_ENABLE_BUN="true" JACKS_NIX_ENABLE_GIT="false" nix eval --impure --no-write-lock-file --expr '"'"'

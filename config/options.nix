@@ -20,6 +20,16 @@
         description = "Your system username.";
       };
     };
+    mac = {
+      nixbldUserId = lib.mkOption {
+        type = lib.types.int;
+        description = "Unix user ID for nixbld";
+      };
+      nixbldGroupId = lib.mkOption {
+        type = lib.types.int;
+        description = "Unix group ID for nixbld";
+      };
+    };
 
     enableGit = lib.mkEnableOption "Git configuration";
     enableZsh = lib.mkEnableOption "Zsh and Oh My Zsh configuration";

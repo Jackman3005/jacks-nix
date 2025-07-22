@@ -1,7 +1,7 @@
 { lib, config, pkgs, ... }:
 
 let
-  inherit (lib) mkDefault mkIf;
+  inherit (lib) mkDefault mkIf strings;
 
   # Helper function to read environment variables with fallback
   envOr = envVar: fallback:
@@ -29,9 +29,8 @@ in
     };
 
     mac = {
-      nixbldUserId     = mkDefault (envOr "JACKS_NIX_MAC_NIXBLD_USER_ID" "300");
-      nixbldGroupId    = mkDefault (envOr "JACKS_NIX_MAC_NIXBLD_GROUP_ID" "350");
-      username = mkDefault (envOr "JACKS_NIX_USER_USERNAME" "jack");
+      nixbldUserId     = mkDefault (strings.toInt (envOr "JACKS_NIX_MAC_NIXBLD_USER_ID" "300"));
+      nixbldGroupId    = mkDefault (strings.toInt (envOr "JACKS_NIX_MAC_NIXBLD_GROUP_ID" "350"));
     };
 
     enableGit      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_GIT" true);

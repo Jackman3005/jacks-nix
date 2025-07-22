@@ -143,7 +143,7 @@ ensure_user_config() {
 main() {
   # Ensure the log file exists and has a start marker
   printf "\n\n--- Starting Jack's Nix Setup: %s ---\n" "$(date)" >> "$LOG_FILE"
-  info "Starting setup. For detailed logs, run: tail -f ${LOG_FILE}"
+  info "Starting setup. For detailed logs, run: less +F ${LOG_FILE}"
 
   # 1. Prerequisite Checks
   if [[ "$(uname -s)" == "Darwin" ]]; then
@@ -213,12 +213,15 @@ main() {
       info "Building system configuration..."
       nix build --impure --extra-experimental-features nix-command --extra-experimental-features flakes ".#darwinConfigurations.mac-arm64.system"
 
-      local jacks_nix_env_vars
-      jacks_nix_env_vars=$(env | grep -E '^JACKS_NIX_' || true)
-      info "jacks_nix_env_vars: ${jacks_nix_env_vars}"
+      local jacks_nix_env_vars=()
+      while IFS= read -r line; do
+        [[ -n "$line" ]] && jacks_nix_env_vars+=("$line")
+      done < <(env | grep -E '^JACKS_NIX_' || true)
+
+      info "jacks_nix_env_vars: ${jacks_nix_env_vars[@]}"
 
       info "Switching to new configuration..."
-      sudo env ${jacks_nix_env_vars} ./result/sw/bin/darwin-rebuild switch --impure --flake ".#mac-arm64"
+      sudo env "${jacks_nix_env_vars[@]}" ./result/sw/bin/darwin-rebuild switch --impure --flake ".#mac-arm64"
       ;;
     Linux)
       info "Detected Linux. Applying home-manager configuration..."

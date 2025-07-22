@@ -18,6 +18,8 @@
       shellcheck
       shfmt
       python3Packages.flake8
+      go
+      ruby
     ];
 
     home.sessionVariables = {

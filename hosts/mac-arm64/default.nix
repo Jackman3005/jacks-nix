@@ -14,9 +14,9 @@ in
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Fix GID mismatch for nixbld group (unknown if needed)
-  ids.gids.nixbld = 350;
+  #  ids.gids.nixbld = 350;
   # Fix UID mismatch for nixbld group (needed on CI)
-  ids.uids.nixbld = 300;
+  #  ids.uids.nixbld = 300;
 
   users.users.${username} = {
     name = username;

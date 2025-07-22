@@ -148,18 +148,9 @@ main() {
       info "Detected macOS. Applying nix-darwin configuration..."
       info "This may require your password to modify system-wide symlinks."
 
-      # Extract JACKS_NIX_* vars to explicitly pass along to `sudo` command.
-      local jacks_nix_env_vars=()
-      while IFS= read -r line; do
-        [[ -n "$line" ]] && jacks_nix_env_vars+=("$line")
-      done < <(env | grep -E '^JACKS_NIX_' || true)
+      # --preserve-env passes current shell environment into sudo environment.
+      sudo --preserve-env nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --impure --flake ".#mac-arm64"
 
-      # Ensure JACKS_NIX_* env vars are present in the sudo context
-      sudo env "${jacks_nix_env_vars[@]}" nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --impure --flake ".#mac-arm64"
-
-#      info "Building system configuration..."
-#      nix build --impure --extra-experimental-features nix-command --extra-experimental-features flakes ".#darwinConfigurations.mac-arm64.system"
-#      sudo env "${jacks_nix_env_vars[@]}" ./result/sw/bin/darwin-rebuild switch --impure --flake ".#mac-arm64"
       ;;
     Linux)
       info "Detected Linux. Applying home-manager configuration..."

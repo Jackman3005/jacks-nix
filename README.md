@@ -1,4 +1,20 @@
 # Jack's Nix Configuration
+![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=white)
+![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)
+![Nix](https://img.shields.io/badge/Nix-5277C3?logo=nixos&logoColor=white)
+![Neovim](https://img.shields.io/badge/Neovim-57A143?logo=neovim&logoColor=white)
+![Zsh](https://img.shields.io/badge/Zsh-F15A24?logo=zsh&logoColor=white)
+![Homebrew](https://img.shields.io/badge/Homebrew-FBB040?logo=homebrew&logoColor=black)
+![Git](https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/Jackman3005/jacks-nix)
+![Works on my machine](https://img.shields.io/badge/Works%20on-My%20Machine-success)
+![Dotfiles managed](https://img.shields.io/badge/Dotfiles-Managed-success)
+![GitHub repo size](https://img.shields.io/github/repo-size/Jackman3005/jacks-nix)
+![License](https://img.shields.io/github/license/Jackman3005/jacks-nix)
+
+![Test and Tag](https://github.com/Jackman3005/jacks-nix/workflows/Test%20and%20Tag/badge.svg)
+![Auto Flake Update](https://github.com/Jackman3005/jacks-nix/workflows/Auto%20Flake%20Update/badge.svg)
 
 This repository contains my complete, cross-platform Nix configuration for macOS (via `nix-darwin`) and other Linux distributions (via `home-manager`). It uses Nix Flakes to manage configurations from a single source of truth.
 

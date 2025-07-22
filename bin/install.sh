@@ -218,7 +218,7 @@ main() {
         [[ -n "$line" ]] && jacks_nix_env_vars+=("$line")
       done < <(env | grep -E '^JACKS_NIX_' || true)
 
-      info "jacks_nix_env_vars: ${jacks_nix_env_vars[@]}"
+      info "jacks_nix_env_vars: ${jacks_nix_env_vars}"
 
       info "Switching to new configuration..."
       sudo env "${jacks_nix_env_vars[@]}" ./result/sw/bin/darwin-rebuild switch --impure --flake ".#mac-arm64"

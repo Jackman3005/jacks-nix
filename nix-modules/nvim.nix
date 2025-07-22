@@ -18,6 +18,11 @@
       shellcheck
       shfmt
       python3Packages.flake8
+
+      # Mason dependencies
+      unzip
+      cargo
+      rustc
       go
       ruby
     ];

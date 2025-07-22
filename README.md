@@ -7,6 +7,8 @@ This repository contains my complete, cross-platform Nix configuration for macOS
 The installation and update processes are automated. Simply run `./bin/install.sh` for initial setup or reinstallation.
 
 You can simply run the one-line command for it to clone this repo and perform all initial setup operations.
+
+**One Line Installation**
 ```bash
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/latest/bin/install.sh)"
 ```
@@ -15,9 +17,10 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/Jackman3005/jacks-nix/la
 To pull the latest changes and apply the nix flake, use the `update` alias.
 
 ## Upgrading
-Use the `upgrade` alias to update all packages in the nix flake.
+Use the `upgrade` alias to run `nix flake update` and subsequently attempt to update all packages in the nix flake.
+If there are changes and git repo authorization is available, it will commit and push the updates.
 
-> Note: This command will perform the upgrade for everyone, but the automatic commit part will only work for contributors.
+> Note: An auto-updater runs regularly on GH to check for any updates and publish them to the repo.
 
 ## Structure
 ```
@@ -46,7 +49,7 @@ Use the `upgrade` alias to update all packages in the nix flake.
 
 ## Configuration
 
-You can customize the configuration using environment variables. The install script will prompt you for basic user information and set up the necessary environment variables.
+You can customize the configuration using environment variables. See `config/default.nix` for available env var overrides.
 
 ### Environment Variables
 
@@ -70,8 +73,10 @@ All configuration options can be overridden using environment variables with the
 - `JACKS_NIX_ENABLE_ASDF` - Enable ASDF version manager (true/false)
 
 **Other Options:**
-- `JACKS_NIX_CONFIG_REPO_PATH` - Path where the repository is stored
+- `JACKS_NIX_CONFIG_REPO_PATH` - Path where this repository is stored
 - `JACKS_NIX_ZSH_THEME` - Oh My Zsh theme to use
+- `JACKS_NIX_MAC_NIXBLD_USER_ID` - Override for nix-darwin `nixbld` UID
+- `JACKS_NIX_MAC_NIXBLD_GROUP_ID` - Override for nix-darwin `nixbld` GID
 
 ### Example
 

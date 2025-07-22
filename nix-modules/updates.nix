@@ -3,7 +3,7 @@
 let
   # A script that will be run on shell startup to check for updates.
   updateChecker = pkgs.writeShellScriptBin "jacks-nix-update-check" ''
-    #!${pkgs.zsh}/bin/zsh
+    set -euo pipefail
 
     config_repo="${config.jacks-nix.configRepoPath}"
     check_file="$config_repo/local/last-update-check-timestamp.txt"
@@ -79,15 +79,23 @@ let
       then "sudo darwin-rebuild switch --flake \"${config.jacks-nix.configRepoPath}#mac-arm64\""
       else "home-manager switch --flake \"${config.jacks-nix.configRepoPath}#linux-x64\"";
   in pkgs.writeShellScriptBin "jacks-nix-update" ''
-    #!${pkgs.zsh}/bin/zsh
+    set -euo pipefail
+
     (
-      cd "${config.jacks-nix.configRepoPath}" && git fetch origin tag latest && git checkout tags/latest && ${updateCommand}
+      cd "${config.jacks-nix.configRepoPath}";
+      echo "Fetching and checking out the `latest` tag from origin"
+      git fetch origin tag latest
+      git -c advice.detachedHead=false checkout tags/latest
+
+      echo "Switching to latest nix flake configuration"
+      ${updateCommand}
     ) && exec zsh
   '';
 
   # A script to update the flake lock file and commit the changes.
   upgrader = pkgs.writeShellScriptBin "jacks-nix-upgrade" ''
-    #!${pkgs.zsh}/bin/zsh
+    set -euo pipefail
+
     (
         cd "${config.jacks-nix.configRepoPath}"
 

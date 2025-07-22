@@ -46,10 +46,16 @@ jobs:
         uses: cachix/install-nix-action@v23
         with:
           nix_path: nixpkgs=channel:nixos-unstable
-      - name: Delete system nix.conf
+      - name: Remove system nix.conf
         # Fix for nix-darwin wanting to override the system nix.conf, but it is present already.
         if: matrix.os == 'macos-latest'
         run: sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
+
+      - name: Add GH Token to user nix.conf
+        # This is done to reduce frequency of rate limiting when pulling in `nix-darwin` from GH.
+        run: |
+          mkdir -p "$HOME/.config/nix/"
+          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> "$HOME/.config/nix/nix.conf"
 
       - name: Run install script
         run: cd bin && ./install.sh

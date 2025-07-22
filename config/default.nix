@@ -29,7 +29,7 @@ in
     };
 
     mac = {
-      nixbldUserId     = mkDefault (strings.toInt (envOr "JACKS_NIX_MAC_NIXBLD_USER_ID" "300"));
+      nixbldUserId     = mkDefault (strings.toInt (envOr "JACKS_NIX_MAC_NIXBLD_USER_ID" "350"));
       nixbldGroupId    = mkDefault (strings.toInt (envOr "JACKS_NIX_MAC_NIXBLD_GROUP_ID" "350"));
     };
 

@@ -13,7 +13,7 @@ in
   system.stateVersion = 4;
 
   # Enable declarative nix.conf
-  #  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   # Fix UID/GID mismatch issues for nixbld
   ids.uids.nixbld = nixbldUserId;

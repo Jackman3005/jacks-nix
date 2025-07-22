@@ -46,6 +46,10 @@ jobs:
         uses: cachix/install-nix-action@v23
         with:
           nix_path: nixpkgs=channel:nixos-unstable
+      - name: Delete system nix.conf
+        # Fix for nix-darwin wanting to override the system nix.conf, but it is present already.
+        if: matrix.os == 'macos-latest'
+        run: sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
 
       - name: Run install script
         run: cd bin && ./install.sh

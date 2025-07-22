@@ -122,10 +122,11 @@ main() {
   elif [ -d "$CLONE_DIR" ]; then
     info "Directory '$CLONE_DIR' already exists. Updating repository..."
     cd "$CLONE_DIR"
-    git pull --rebase --autostash
+    git fetch origin tag latest
+    git checkout tags/latest
   else
     info "Cloning jacks-nix repository to '$CLONE_DIR'..."
-    git clone "$GIT_PULL_URL" "$CLONE_DIR"
+    git clone --branch latest "$GIT_PULL_URL" "$CLONE_DIR"
   fi
 
   # 3. Configure Git Remotes

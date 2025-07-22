@@ -30,41 +30,43 @@ let
     (
         cd "$config_repo" || exit 0
 
-        # Fetch remote changes without merging
-        git fetch origin >/dev/null 2>&1 || exit 0
-
-        # Get current branch
-        current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "main")
+        # Fetch the `latest` tag from origin without merging
+        git fetch origin tag latest >/dev/null 2>&1 || exit 0
 
         # Check if there are updates available
         local_commit=$(git rev-parse HEAD 2>/dev/null)
-        remote_commit=$(git rev-parse "origin/$current_branch" 2>/dev/null)
+        remote_commit=$(git rev-parse "tags/latest" 2>/dev/null)
 
-        if [[ "$local_commit" != "$remote_commit" ]] && [[ -n "$remote_commit" ]]; then
-          echo ""
-          echo "🔄 Updates available for your Nix configuration!"
-          echo ""
+        if [[ -n "$remote_commit" ]]; then
+          export GIT_PAGER=/bin/cat
+          commits_to_pull=$(git log HEAD..tags/latest 2>/dev/null)
 
-          # Show current local commit info
-          echo "📍 Current local commit:"
-          git log -1 --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD 2>/dev/null
-          echo ""
+          if [[ -n "$commits_to_pull" ]]; then
+              echo ""
+              echo "🔄 Updates available for your Nix configuration!"
+              echo ""
 
-          # Show commits that will be pulled
-          echo "📥 New commits available:"
-          git log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD..origin/$current_branch 2>/dev/null
-          echo ""
+              # Show current local commit info
+              echo "📍 Current local commit:"
+              git log -1 --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD 2>/dev/null
+              echo ""
 
-          # Prompt user
-          echo -n "Would you like to update now? (y/N): "
-          read -n 1 -r response
-          if [[ "$response" =~ ^[Yy]$ ]]; then
-            echo "🚀 Updating configuration..."
-            jacks-nix-update
-          else
-            echo "⏭️  Update skipped. Run 'update' manually when ready."
+              # Show commits that will be pulled
+              echo "📥 New commits available:"
+              git log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD..tags/latest 2>/dev/null
+              echo ""
+
+              # Prompt user
+              echo -n "Would you like to update now? (y/N): "
+              read -n 1 -r response
+              if [[ "$response" =~ ^[Yy]$ ]]; then
+                echo "🚀 Updating configuration..."
+                jacks-nix-update
+              else
+                echo "⏭️  Update skipped. Run 'update' manually when ready."
+              fi
+              echo ""
           fi
-          echo ""
         fi
     )
   '';
@@ -77,7 +79,7 @@ let
   in pkgs.writeShellScriptBin "jacks-nix-update" ''
     #!${pkgs.zsh}/bin/zsh
     (
-      cd "${config.jacks-nix.configRepoPath}" && git pull --rebase --autostash && ${updateCommand}
+      cd "${config.jacks-nix.configRepoPath}" && git fetch origin tag latest && git checkout tags/latest && ${updateCommand}
     ) && exec zsh
   '';
 

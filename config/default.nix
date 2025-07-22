@@ -28,6 +28,12 @@ in
       username = mkDefault (envOr "JACKS_NIX_USER_USERNAME" "jack");
     };
 
+    mac = {
+      nixbldUserId     = mkDefault (envOr "JACKS_NIX_MAC_NIXBLD_USER_ID" "300");
+      nixbldGroupId    = mkDefault (envOr "JACKS_NIX_MAC_NIXBLD_GROUP_ID" "350");
+      username = mkDefault (envOr "JACKS_NIX_USER_USERNAME" "jack");
+    };
+
     enableGit      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_GIT" true);
     enableZsh      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_ZSH" true);
     zshTheme       = mkDefault (envOr "JACKS_NIX_ZSH_THEME" "ys");

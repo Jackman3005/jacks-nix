@@ -1,6 +1,8 @@
 { inputs, config, lib, pkgs, ... }:
 let
   username = config.jacks-nix.user.username;
+  nixbldGroupId = config.jacks-nix.mac.nixbldGroupId;
+  nixbldUserId = config.jacks-nix.mac.nixbldUserId;
 in
 {
   imports = [
@@ -13,10 +15,9 @@ in
   # Enable declarative nix.conf
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Fix GID mismatch for nixbld group (unknown if needed)
-  #  ids.gids.nixbld = 350;
-  # Fix UID mismatch for nixbld group (needed on CI)
-  #  ids.uids.nixbld = 300;
+  # Fix UID/GID mismatch issues for nixbld
+  ids.uids.nixbld = nixbldUserId;
+  ids.gids.nixbld = nixbldGroupId;
 
   users.users.${username} = {
     name = username;

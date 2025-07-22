@@ -51,12 +51,6 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: sudo mv /etc/nix/nix.conf /etc/nix/nix.conf.before-nix-darwin
 
-      - name: Add GH Token to user nix.conf
-        # This is done to reduce frequency of rate limiting when pulling in `nix-darwin` from GH.
-        run: |
-          mkdir -p "$HOME/.config/nix/"
-          echo "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}" >> "$HOME/.config/nix/nix.conf"
-
       - name: Run install script
         run: cd bin && ./install.sh
         env:
@@ -66,6 +60,7 @@ jobs:
           JACKS_NIX_USER_EMAIL: "gh-action-runner@example.com"
           JACKS_NIX_MAC_NIXBLD_GROUP_ID: "30000"
           JACKS_NIX_ENABLE_HOMEBREW: "false" # Would be great to enable, but `system.primaryUser` is not working
+          NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
 
   tag-latest:
     needs:

@@ -122,8 +122,8 @@ main() {
   elif [ -d "$CLONE_DIR" ]; then
     info "Directory '$CLONE_DIR' already exists. Updating repository..."
     cd "$CLONE_DIR"
-    git fetch origin tag latest
-    git checkout tags/latest
+    git fetch origin tag latest --force
+    git -c advice.detachedHead=false checkout tags/latest
   else
     info "Cloning jacks-nix repository to '$CLONE_DIR'..."
     git clone --branch latest "$GIT_PULL_URL" "$CLONE_DIR"

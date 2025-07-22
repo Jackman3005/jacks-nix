@@ -32,7 +32,7 @@ let
         cd "$config_repo" || exit 0
 
         # Fetch the `latest` tag from origin without merging
-        git fetch origin tag latest >/dev/null 2>&1 || exit 0
+        git fetch origin tag latest --force >/dev/null 2>&1 || exit 0
 
         # Check if there are updates available
         local_commit=$(git rev-parse HEAD 2>/dev/null)
@@ -84,7 +84,7 @@ let
     (
       cd "${config.jacks-nix.configRepoPath}";
       echo "Fetching and checking out the `latest` tag from origin"
-      git fetch origin tag latest
+      git fetch origin tag latest --force
       git -c advice.detachedHead=false checkout tags/latest
 
       echo "Switching to latest nix flake configuration"

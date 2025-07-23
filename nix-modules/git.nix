@@ -13,6 +13,7 @@ in
             {
               init.defaultBranch = "main";
               rebase.autoStash   = true;
+              core.editor        = "vi";
             }
             (lib.mkIf signingEnabled {
               user.signingkey = "key::${config.jacks-nix.git.signingKey}";

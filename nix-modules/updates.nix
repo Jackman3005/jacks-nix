@@ -152,6 +152,7 @@ in
       updateChecker
       updater
       upgrader
+      nvd
     ];
 
     home.shellAliases = {

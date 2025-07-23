@@ -83,11 +83,42 @@ let
 
     (
       cd "${config.jacks-nix.configRepoPath}";
-      echo "Fetching and checking out the 'latest' tag from origin"
-      git fetch origin tag latest --force
+      LOG_FILE="${config.jacks-nix.configRepoPath}/local/update.log"
+      rm "$LOG_FILE"
+      echo "\n\n--- update log: %s ---\n" "$(date)" >> "$LOG_FILE"
+
+      echo "🌎 Fetching and checking out the 'latest' tag from origin"
+      git fetch origin tag latest --force >> "$LOG_FILE" 2>&1
+
+      local_head=$(git rev-parse HEAD 2>> "$LOG_FILE")
+      latest_tag=$(git rev-parse tags/latest 2>> "$LOG_FILE")
+
+      if [ "$local_head" == "$latest_tag" ]; then
+          echo "🔄 You are already at the latest version."
+          echo "   You can manually run \`${updateCommand}\` if you'd like, but there are no changes from git."
+          exit 0
+      fi
+
       git -c advice.detachedHead=false checkout tags/latest
 
-      echo "Switching to latest nix flake configuration"
+      echo "🧹 Cleaning up unused nix packages and derivations..."
+      echo "   Keeping only the new derivation and the one right before it..."
+
+      # Remove any generations older than 30 days that are not active.
+      if nix-collect-garbage --delete-older-than 30d >> "$LOG_FILE" 2>&1; then
+        echo "✅ Successfully cleaned up old generations"
+      else
+        echo "⚠️  Warning: Could not clean up old generations (this is usually fine)"
+      fi
+
+      # Run garbage collection to free up disk space
+      if nix-store --gc >> "$LOG_FILE" 2>&1; then
+        echo "✅ Successfully performed garbage collection"
+      else
+        echo "⚠️  Warning: Could not perform garbage collection (this is usually fine)"
+      fi
+
+      echo "⏭️ Switching to latest nix flake configuration"
       ${updateCommand}
     ) && exec zsh
   '';

@@ -1,17 +1,34 @@
 { config, pkgs, lib, ... }:
+let
+  signingEnabled = config.jacks-nix.git.signingKey != "";
+in
 {
+
   config = lib.mkIf config.jacks-nix.enableGit {
     programs.git = {
       enable = true;
       userName = config.jacks-nix.git.name;
       userEmail = config.jacks-nix.git.email;
-      extraConfig = {
-        init.defaultBranch = "main";
-        rebase.autoStash = true;
-        user.signingkey = lib.mkIf (config.jacks-nix.git.signingKey != "") config.jacks-nix.git.signingKey;
-        gpg.format = lib.mkIf (config.jacks-nix.git.signingKey != "") "ssh"; 
-        commit.gpgsign = lib.mkIf (config.jacks-nix.git.signingKey != "") true;
-      };
+      extraConfig = lib.mkMerge [
+            {
+              init.defaultBranch = "main";
+              rebase.autoStash   = true;
+            }
+            (lib.mkIf signingEnabled {
+              user.signingkey = "key::${config.jacks-nix.git.signingKey}";
+              gpg.format      = "ssh";
+              commit.gpgsign  = true;
+            })
+            (lib.mkIf (signingEnabled && pkgs.stdenv.isDarwin) {
+              gpg."ssh".program =
+                "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+            })
+            (lib.mkIf (signingEnabled && !pkgs.stdenv.isDarwin) {
+              # you may omit this entire block if you are happy with Git’s default
+              gpg."ssh".program = "ssh-keygen";
+            })
+          ];
+
       aliases = {
         bl = ''!list_recent_branches() { local lines=$1; git branch --sort=committerdate --format=\"%(align:width=20)%(committerdate:relative)%(end)%(align:width=20)%(committername)%(end)%(if)%(refname:rstrip=3)%(then)%(color:dim)%(else)%(end)%(align:width=50)%(HEAD)%(refname:short)%(color:reset)%(if)%(upstream:track)%(then)%(color:bold yellow) %(upstream:track)%(else)%(end)%(end)%(color:reset)\" --color --all | tail -\"''${lines:-25}\"; }; list_recent_branches'';
         c = "commit";

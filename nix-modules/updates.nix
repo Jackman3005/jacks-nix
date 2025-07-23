@@ -54,7 +54,7 @@ let
 
               # Show commits that will be pulled
               echo "📥 New commits available:"
-              git log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD..tags/latest 2>/dev/null
+              git log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s%n%b" --date=format:'%Y-%m-%d %H:%M' HEAD..tags/latest 2>/dev/null
               echo ""
 
               # Prompt user

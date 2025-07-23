@@ -55,9 +55,7 @@ jobs:
         run: cd bin && ./install.sh
         env:
           JACKS_NIX_CONFIG_REPO_PATH: "${{ github.workspace }}"
-          JACKS_NIX_USER_USERNAME: "runner"
-          JACKS_NIX_USER_NAME: "GitHub Action Runner"
-          JACKS_NIX_USER_EMAIL: "gh-action-runner@example.com"
+          JACKS_NIX_USERNAME: "runner"
           JACKS_NIX_MAC_NIXBLD_GROUP_ID: "30000"
           JACKS_NIX_MAC_NIXBLD_USER_ID: "300"
           JACKS_NIX_ENABLE_HOMEBREW: "false" # Would be great to enable, but `system.primaryUser` is not working

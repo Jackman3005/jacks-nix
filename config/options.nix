@@ -6,7 +6,12 @@
       description = "Path to where this (jacks-nix) git repository will be stored.";
     };
 
-    user = {
+    username = lib.mkOption {
+      type = lib.types.str;
+      description = "Your system username.";
+    };
+
+    git = {
       name = lib.mkOption {
         type = lib.types.str;
         description = "Your full name for Git configuration.";
@@ -15,9 +20,9 @@
         type = lib.types.str;
         description = "Your email address for Git configuration.";
       };
-      username = lib.mkOption {
+      signingKey = lib.mkOption {
         type = lib.types.str;
-        description = "Your system username.";
+        description = "Your SSH signing key for Git commits. Set to empty string to disable configuring the git signing key.";
       };
     };
     mac = {

@@ -3,11 +3,14 @@
   config = lib.mkIf config.jacks-nix.enableGit {
     programs.git = {
       enable = true;
-      userName = config.jacks-nix.user.name;
-      userEmail = config.jacks-nix.user.email;
+      userName = config.jacks-nix.git.name;
+      userEmail = config.jacks-nix.git.email;
       extraConfig = {
         init.defaultBranch = "main";
         rebase.autoStash = true;
+        user.signingkey = lib.mkIf (config.jacks-nix.git.signingKey != "") config.jacks-nix.git.signingKey;
+        gpg.format = lib.mkIf (config.jacks-nix.git.signingKey != "") "ssh"; 
+        commit.gpgsign = lib.mkIf (config.jacks-nix.git.signingKey != "") true;
       };
       aliases = {
         bl = ''!list_recent_branches() { local lines=$1; git branch --sort=committerdate --format=\"%(align:width=20)%(committerdate:relative)%(end)%(align:width=20)%(committername)%(end)%(if)%(refname:rstrip=3)%(then)%(color:dim)%(else)%(end)%(align:width=50)%(HEAD)%(refname:short)%(color:reset)%(if)%(upstream:track)%(then)%(color:bold yellow) %(upstream:track)%(else)%(end)%(end)%(color:reset)\" --color --all | tail -\"''${lines:-25}\"; }; list_recent_branches'';
@@ -44,6 +47,5 @@
         ri = "rebase --interactive origin/development";
       };
     };
-
   };
 }

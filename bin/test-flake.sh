@@ -103,7 +103,7 @@ echo "⚙️  Testing configuration options..."
 echo "----------------------------------"
 
 run_test "Configuration options evaluation" \
-    "nix eval --no-write-lock-file .#homeConfigurations.linux-x64.options.jacks-nix.user.name.type --apply 'x: \"evaluation-success\"'"
+    "nix eval --no-write-lock-file .#homeConfigurations.linux-x64.options.jacks-nix.git.name.type --apply 'x: \"evaluation-success\"'"
 
 echo ""
 
@@ -142,19 +142,19 @@ run_env_test "JACKS_NIX_CONFIG_REPO_PATH override" \
     "configRepoPath" \
     '"/custom/path"'
 
-run_env_test "JACKS_NIX_USER_NAME override" \
-    'JACKS_NIX_USER_NAME="Test User"' \
-    "user.name" \
+run_env_test "JACKS_NIX_GIT_NAME override" \
+    'JACKS_NIX_GIT_NAME="Test User"' \
+    "git.name" \
     '"Test User"'
 
-run_env_test "JACKS_NIX_USER_EMAIL override" \
-    'JACKS_NIX_USER_EMAIL="test@example.com"' \
-    "user.email" \
+run_env_test "JACKS_NIX_GIT_EMAIL override" \
+    'JACKS_NIX_GIT_EMAIL="test@example.com"' \
+    "git.email" \
     '"test@example.com"'
 
-run_env_test "JACKS_NIX_USER_USERNAME override" \
-    'JACKS_NIX_USER_USERNAME="testuser"' \
-    "user.username" \
+run_env_test "JACKS_NIX_USERNAME override" \
+    'JACKS_NIX_USERNAME="testuser"' \
+    "username" \
     '"testuser"'
 
 run_env_test "JACKS_NIX_ZSH_THEME override" \
@@ -231,20 +231,20 @@ run_env_test "JACKS_NIX_MAC_NIXBLD_GROUP_ID=5123 (default 350)" \
 
 # Comprehensive test - multiple environment variables at once
 print_status "INFO" "Testing: Multiple environment variables simultaneously"
-multi_env_command='JACKS_NIX_USER_NAME="Multi Test" JACKS_NIX_USER_EMAIL="multi@test.com" JACKS_NIX_ENABLE_PYTHON="true" JACKS_NIX_ENABLE_BUN="true" JACKS_NIX_ENABLE_GIT="false" nix eval --impure --no-write-lock-file --expr '"'"'
+multi_env_command='JACKS_NIX_GIT_NAME="Multi Test" JACKS_NIX_GIT_EMAIL="multi@test.com" JACKS_NIX_ENABLE_PYTHON="true" JACKS_NIX_ENABLE_BUN="true" JACKS_NIX_ENABLE_GIT="false" nix eval --impure --no-write-lock-file --expr '"'"'
 let
   flake = builtins.getFlake (toString ./.);
   config = flake.homeConfigurations.linux-x64.config.jacks-nix;
 in {
-  userName = config.user.name;
-  userEmail = config.user.email;
+  gitName = config.git.name;
+  gitEmail = config.git.email;
   enablePython = config.enablePython;
   enableBun = config.enableBun;
   enableGit = config.enableGit;
 }'"'"''
 
 if multi_result=$(eval "$multi_env_command" 2>>"$LOG_FILE"); then
-    expected_multi='{ enableBun = true; enableGit = false; enablePython = true; userEmail = "multi@test.com"; userName = "Multi Test"; }'
+    expected_multi='{ enableBun = true; enableGit = false; enablePython = true; gitEmail = "multi@test.com"; gitName = "Multi Test"; }'
     if [ "$multi_result" = "$expected_multi" ]; then
         print_status "SUCCESS" "Multiple environment variables test passed"
     else

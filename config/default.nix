@@ -22,10 +22,12 @@ in
   config.jacks-nix = {
     configRepoPath = mkDefault (envOr "JACKS_NIX_CONFIG_REPO_PATH" "$HOME/.config/jacks-nix");
 
-    user = {
-      name     = mkDefault (envOr "JACKS_NIX_USER_NAME" "Jack Coy");
-      email    = mkDefault (envOr "JACKS_NIX_USER_EMAIL" "jackman3000@gmail.com");
-      username = mkDefault (envOr "JACKS_NIX_USER_USERNAME" "jack");
+    username = mkDefault (envOr "JACKS_NIX_USERNAME" "jack");
+
+    git = {
+      name       = mkDefault (envOr "JACKS_NIX_GIT_NAME" "Jack Coy");
+      email      = mkDefault (envOr "JACKS_NIX_GIT_EMAIL" "jackman3000@gmail.com");
+      signingKey = mkDefault (envOr "JACKS_NIX_GIT_SIGNING_KEY" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOEcs5x2/oZFdR9kamMj1FDjR5xN99UMen3PcSxHrYhL");
     };
 
     mac = {

@@ -5,8 +5,8 @@
   home.stateVersion = "23.11";
 
   # Set the username from shared config
-  home.username = config.jacks-nix.user.username;
-  home.homeDirectory = "/Users/${config.jacks-nix.user.username}";
+  home.username = config.jacks-nix.username;
+  home.homeDirectory = "/Users/${config.jacks-nix.username}";
 
   imports = [
     ../../nix-modules

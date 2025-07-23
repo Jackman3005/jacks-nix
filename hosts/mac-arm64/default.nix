@@ -1,6 +1,6 @@
 { inputs, config, lib, pkgs, ... }:
 let
-  username = config.jacks-nix.user.username;
+  username = config.jacks-nix.username;
   nixbldGroupId = config.jacks-nix.mac.nixbldGroupId;
   nixbldUserId = config.jacks-nix.mac.nixbldUserId;
 in

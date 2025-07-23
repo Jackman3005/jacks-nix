@@ -4,8 +4,8 @@
   home.stateVersion = "23.11";
 
   # Set the username from shared config
-  home.username = config.jacks-nix.user.username;
-  home.homeDirectory = "/home/${config.jacks-nix.user.username}";
+  home.username = config.jacks-nix.username;
+  home.homeDirectory = "/home/${config.jacks-nix.username}";
 
   imports = [
     inputs.nixvim.homeManagerModules.default

@@ -83,7 +83,7 @@ let
 
     (
       cd "${config.jacks-nix.configRepoPath}";
-      echo "Fetching and checking out the `latest` tag from origin"
+      echo "Fetching and checking out the 'latest' tag from origin"
       git fetch origin tag latest --force
       git -c advice.detachedHead=false checkout tags/latest
 

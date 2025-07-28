@@ -25,9 +25,11 @@
       go
       ruby
       python3
-      python3Packages.flake8
       python3Packages.pip
-
+      python3Packages.setuptools
+      python3Packages.wheel
+      python3Packages.virtualenv
+      python3Packages.flake8
 
       # C compiler and build tools
       clang

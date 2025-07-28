@@ -39,8 +39,7 @@ let
         remote_commit=$(git rev-parse "tags/latest" 2>/dev/null)
 
         if [[ -n "$remote_commit" ]]; then
-          export GIT_PAGER=/bin/cat
-          commits_to_pull=$(git log HEAD..tags/latest 2>/dev/null)
+          commits_to_pull=$(git --no-pager log HEAD..tags/latest 2>/dev/null)
 
           if [[ -n "$commits_to_pull" ]]; then
               echo ""
@@ -49,12 +48,12 @@ let
 
               # Show current local commit info
               echo "📍 Current local commit:"
-              git log -1 --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD 2>/dev/null
+              git --no-pager log -1 --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD 2>/dev/null
               echo ""
 
               # Show commits that will be pulled
               echo "📥 New commits available:"
-              git log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s%n%b" --date=format:'%Y-%m-%d %H:%M' HEAD..tags/latest 2>/dev/null
+              git --no-pager log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s%n%b" --date=format:'%Y-%m-%d %H:%M' HEAD..tags/latest 2>/dev/null
               echo ""
 
               # Prompt user

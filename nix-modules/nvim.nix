@@ -25,6 +25,10 @@
       rustc
       go
       ruby
+      # C compiler and build tools
+      clang
+      gnumake
+      pkg-config
     ];
 
     home.sessionVariables = {

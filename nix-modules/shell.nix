@@ -12,6 +12,9 @@
       direnv
       zsh-autosuggestions
       zsh-syntax-highlighting
+      curl
+      wget
+      git
     ];
 
     programs.home-manager.enable = true;

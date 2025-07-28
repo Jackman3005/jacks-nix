@@ -17,7 +17,6 @@
       stylua
       shellcheck
       shfmt
-      python3Packages.flake8
 
       # Mason dependencies
       unzip
@@ -25,8 +24,14 @@
       rustc
       go
       ruby
+      python3
+      python3Packages.flake8
+      python3Packages.pip
+
+
       # C compiler and build tools
       clang
+      cmake
       gnumake
       pkg-config
     ];

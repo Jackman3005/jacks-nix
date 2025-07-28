@@ -83,7 +83,7 @@ let
     (
       cd "${config.jacks-nix.configRepoPath}";
       LOG_FILE="${config.jacks-nix.configRepoPath}/local/update.log"
-      rm "$LOG_FILE"
+      rm "$LOG_FILE" 2> /dev/null || true
       echo "\n\n--- update log: %s ---\n" "$(date)" >> "$LOG_FILE"
 
       echo "🌎 Fetching and checking out the 'latest' tag from origin"

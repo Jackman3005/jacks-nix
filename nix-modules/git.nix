@@ -55,7 +55,7 @@ in
                 commit_path_segment="commit"; \
             fi; \
             commit_url_prefix="$base_url/$commit_path_segment"; \
-            git --no-pager log origin/''${1:-$(get_default_branch)}..HEAD --pretty="format:[%s]($commit_url_prefix/%H)%n%b"; \
+            git --no-pager log --no-merges origin/''${1:-$(get_default_branch)}..HEAD --pretty="format:[%s]($commit_url_prefix/%H)%n%b"; \
         }; f'';
         co = "checkout";
         s = "status";

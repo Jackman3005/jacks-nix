@@ -31,7 +31,7 @@ in
           ];
 
       aliases = {
-        bl = ''!list_recent_branches() { local lines=$1; git branch --sort=committerdate --format=\"%(align:width=20)%(committerdate:relative)%(end)%(align:width=20)%(committername)%(end)%(if)%(refname:rstrip=3)%(then)%(color:dim)%(else)%(end)%(align:width=50)%(HEAD)%(refname:short)%(color:reset)%(if)%(upstream:track)%(then)%(color:bold yellow) %(upstream:track)%(else)%(end)%(end)%(color:reset)\" --color --all | tail -\"''${lines:-25}\"; }; list_recent_branches'';
+        bl = ''!list_recent_branches() { local lines=$1; git branch --sort=committerdate --format="%(align:width=20)%(committerdate:relative)%(end)%(align:width=20)%(committername)%(end)%(if)%(refname:rstrip=3)%(then)%(color:dim)%(else)%(end)%(align:width=50)%(HEAD)%(refname:short)%(color:reset)%(if)%(upstream:track)%(then)%(color:bold yellow) %(upstream:track)%(else)%(end)%(end)%(color:reset)" --color --all | tail -"''${lines:-25}"; }; list_recent_branches'';
         c = "commit";
         ca = "commit --amend --no-edit";
         cp = "cherry-pick";

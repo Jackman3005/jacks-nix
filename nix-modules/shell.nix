@@ -61,7 +61,7 @@
 
       initContent = ''
         # Skip user-blocking script when parent process does not have the ability to respond.
-        if [ -z "$INTELLIJ_ENVIRONMENT_READER" ]; then
+        if [ -z "$INTELLIJ_ENVIRONMENT_READER" ] && [ -t 0 ] && [ -t 1 ]; then
             # Check for updates and prompt user if present. Limited to once per 24 hours.
             jacks-nix-update-check
         fi

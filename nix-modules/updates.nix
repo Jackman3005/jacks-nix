@@ -58,7 +58,7 @@ let
 
               # Prompt user
               echo -n "Would you like to update now? (y/N): "
-              read -n 1 -r response
+              read -n 1 -r response < /dev/tty
               echo
               if [[ "$response" =~ ^[Yy]$ ]]; then
                 echo "🚀 Updating configuration..."

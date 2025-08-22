@@ -56,8 +56,8 @@ jobs:
         env:
           JACKS_NIX_CONFIG_REPO_PATH: "${{ github.workspace }}"
           JACKS_NIX_USERNAME: "runner"
-          JACKS_NIX_MAC_NIXBLD_GROUP_ID: "30000"
-          JACKS_NIX_MAC_NIXBLD_USER_ID: "300"
+#          JACKS_NIX_MAC_NIXBLD_GROUP_ID: "30000"
+#          JACKS_NIX_MAC_NIXBLD_USER_ID: "300"
           JACKS_NIX_ENABLE_HOMEBREW: "false" # Would be great to enable, but `system.primaryUser` is not working
           NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
 

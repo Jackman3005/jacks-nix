@@ -1,4 +1,4 @@
-{ pkgs, config, inputs, ... }:
+{ pkgs, config, ... }:
 {
   # Set the state version for Home Manager
   home.stateVersion = "23.11";
@@ -8,7 +8,6 @@
   home.homeDirectory = "/home/${config.jacks-nix.username}";
 
   imports = [
-    inputs.nixvim.homeManagerModules.default
     ../../nix-modules
   ];
 

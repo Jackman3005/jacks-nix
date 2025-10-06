@@ -1,14 +1,10 @@
 { config, pkgs, lib, ... }:
 {
   config = lib.mkIf config.jacks-nix.enableNvim {
-    programs.nixvim = {
-      enable = true;
-      package = pkgs.neovim-unwrapped;
-    };
-
     # These packages are dependencies for nvim plugins and will only be installed
     # when nvim is enabled.
     home.packages = with pkgs; [
+      neovim
       ripgrep
       fd
       nodejs_20

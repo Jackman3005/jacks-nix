@@ -16,8 +16,7 @@
 
       # Mason dependencies
       unzip
-      cargo
-      rustc
+      rustup
       go
       ruby
       python3

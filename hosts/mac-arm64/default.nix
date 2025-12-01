@@ -39,7 +39,7 @@ in
 
   # Import nixvim module for home-manager
   home-manager.sharedModules = [
-    inputs.nixvim.homeManagerModules.default
+    inputs.nixvim.homeModules.default
   ];
 
   # Set primary user for homebrew and other user-specific system settings

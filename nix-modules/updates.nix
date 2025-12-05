@@ -80,6 +80,11 @@ let
   in pkgs.writeShellScriptBin "jacks-nix-update" ''
     set -euo pipefail
 
+    ${lib.optionalString pkgs.stdenv.isDarwin ''
+    sudo -v
+    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+    ''}
+
     (
       cd "${config.jacks-nix.configRepoPath}";
       LOG_FILE="${config.jacks-nix.configRepoPath}/local/update.log"

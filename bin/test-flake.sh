@@ -178,11 +178,6 @@ run_env_test "JACKS_NIX_ENABLE_NVIM=false (default true)" \
     "enableNvim" \
     'false'
 
-run_env_test "JACKS_NIX_ENABLE_PYTHON=true (default false)" \
-    'JACKS_NIX_ENABLE_PYTHON="true"' \
-    "enablePython" \
-    'true'
-
 run_env_test "JACKS_NIX_ENABLE_NODE=true (default false)" \
     'JACKS_NIX_ENABLE_NODE="true"' \
     "enableNode" \
@@ -209,11 +204,6 @@ run_env_test "JACKS_NIX_ENABLE_ASDF=true (default false)" \
     'true'
 
 # Test boolean value variations (1, yes should also work as true)
-run_env_test "JACKS_NIX_ENABLE_PYTHON=1 (alternative true)" \
-    'JACKS_NIX_ENABLE_PYTHON="1"' \
-    "enablePython" \
-    'true'
-
 run_env_test "JACKS_NIX_ENABLE_NODE=yes (alternative true)" \
     'JACKS_NIX_ENABLE_NODE="yes"' \
     "enableNode" \
@@ -231,20 +221,20 @@ run_env_test "JACKS_NIX_MAC_NIXBLD_GROUP_ID=5123 (default 350)" \
 
 # Comprehensive test - multiple environment variables at once
 print_status "INFO" "Testing: Multiple environment variables simultaneously"
-multi_env_command='JACKS_NIX_GIT_NAME="Multi Test" JACKS_NIX_GIT_EMAIL="multi@test.com" JACKS_NIX_ENABLE_PYTHON="true" JACKS_NIX_ENABLE_BUN="true" JACKS_NIX_ENABLE_GIT="false" nix eval --impure --no-write-lock-file --expr '"'"'
+multi_env_command='JACKS_NIX_GIT_NAME="Multi Test" JACKS_NIX_GIT_EMAIL="multi@test.com" JACKS_NIX_ENABLE_NODE="true" JACKS_NIX_ENABLE_BUN="true" JACKS_NIX_ENABLE_GIT="false" nix eval --impure --no-write-lock-file --expr '"'"'
 let
   flake = builtins.getFlake (toString ./.);
   config = flake.homeConfigurations.linux-x64.config.jacks-nix;
 in {
   gitName = config.git.name;
   gitEmail = config.git.email;
-  enablePython = config.enablePython;
+  enableNode = config.enableNode;
   enableBun = config.enableBun;
   enableGit = config.enableGit;
 }'"'"''
 
 if multi_result=$(eval "$multi_env_command" 2>>"$LOG_FILE"); then
-    expected_multi='{ enableBun = true; enableGit = false; enablePython = true; gitEmail = "multi@test.com"; gitName = "Multi Test"; }'
+    expected_multi='{ enableBun = true; enableGit = false; enableNode = true; gitEmail = "multi@test.com"; gitName = "Multi Test"; }'
     if [ "$multi_result" = "$expected_multi" ]; then
         print_status "SUCCESS" "Multiple environment variables test passed"
     else

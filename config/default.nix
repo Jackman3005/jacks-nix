@@ -41,7 +41,6 @@ in
     enableNvim     = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NVIM" true);
     enableHomebrew = mkDefault (envBoolOr "JACKS_NIX_ENABLE_HOMEBREW" pkgs.stdenv.isDarwin);
 
-    enablePython = mkDefault (envBoolOr "JACKS_NIX_ENABLE_PYTHON" false);
     enableNode   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NODE" false);
     enableJava   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_JAVA" false);
     enableRuby   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_RUBY" false);

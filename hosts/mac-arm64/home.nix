@@ -27,7 +27,6 @@
     enableHomebrew = true;
 
     # Enable programming language tools by default on macOS development machines
-    enablePython = true;
     enableNode = true;
     enableJava = true;
     enableRuby = true;

@@ -15,6 +15,7 @@
       curl
       wget
       git
+      uv
     ];
 
     programs.home-manager.enable = true;
@@ -74,15 +75,6 @@
         export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
         export FZF_PREVIEW_COMMAND='bat --style=numbers --color=always --line-range :500 {}'
         export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
-
-        ${lib.optionalString config.jacks-nix.enablePython ''
-          # Setup pyenv configuration
-          export PYENV_ROOT="$HOME/.pyenv"
-          [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-          if command -v pyenv >/dev/null 2>&1; then
-            eval "$(pyenv init - zsh)"
-          fi
-        ''}
 
         ${lib.optionalString config.jacks-nix.enableNode ''
           # NVM manages installed node versions

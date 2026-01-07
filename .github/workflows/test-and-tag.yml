@@ -46,6 +46,10 @@ jobs:
         uses: cachix/install-nix-action@v31.5.2
         with:
           nix_path: nixpkgs=channel:nixos-unstable
+
+      - name: Setup Nix cache
+        uses: DeterminateSystems/magic-nix-cache-action@v8
+
       - name: Remove system nix.conf
         # Fix for nix-darwin wanting to override the system nix.conf, but it is present already.
         if: matrix.os == 'macos-latest'
@@ -61,7 +65,7 @@ jobs:
           JACKS_NIX_ENABLE_HOMEBREW: "false" # Would be great to enable, but `system.primaryUser` is not working
           NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
 
-  tag-latest:
+  changelog-and-tag:
     needs:
       - checks
       - installs
@@ -76,18 +80,38 @@ jobs:
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        token: ${{ secrets.JACKS_NIX_GH_PAT }}
+
+    - name: Install Nix
+      uses: cachix/install-nix-action@v31.5.2
+      with:
+        nix_path: nixpkgs=channel:nixos-unstable
+
+    - name: Enable Nix flakes
+      run: |
+        echo "experimental-features = nix-command flakes" | sudo tee -a /etc/nix/nix.conf
+
+    - name: Setup Nix cache
+      uses: DeterminateSystems/magic-nix-cache-action@v8
 
     - name: Configure Git
       run: |
         git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --local user.name "GitHub Action - Changelog"
 
-    - name: Delete existing latest tag
-      run: |
-        git tag -d latest || true
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git :refs/tags/latest || true
+    - name: Generate changelog
+      env:
+        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
+      run: ./bin/generate-changelog.sh
 
-    - name: Create and push latest tag
+    - name: Commit changelog and tag
       run: |
+        git add VERSION changelogs/
+        git diff --staged --quiet || git commit -m "v$(cat VERSION): changelog"
+
+        git tag -d latest 2>/dev/null || true
+        git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git :refs/tags/latest || true
+
         git tag latest
-        git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git latest
+        git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main --follow-tags

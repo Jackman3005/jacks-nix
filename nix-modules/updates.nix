@@ -19,8 +19,7 @@ let
       fi
     fi
 
-    # Update the check timestamp
-    mkdir -p $(dirname "$check_file") # Ensure `local` dir is present.
+    mkdir -p "$(dirname "$check_file")"
     echo "$current_time" > "$check_file"
 
     # Change to config repo directory
@@ -31,44 +30,186 @@ let
     (
         cd "$config_repo" || exit 0
 
-        # Fetch the `latest` tag from origin without merging
         git fetch origin tag latest --force >/dev/null 2>&1 || exit 0
 
-        # Check if there are updates available
         local_commit=$(git rev-parse HEAD 2>/dev/null)
         remote_commit=$(git rev-parse "tags/latest" 2>/dev/null)
 
-        if [[ -n "$remote_commit" ]]; then
-          commits_to_pull=$(git --no-pager log HEAD..tags/latest 2>/dev/null)
-
-          if [[ -n "$commits_to_pull" ]]; then
-              echo ""
-              echo "🔄 Updates available for your Nix configuration!"
-              echo ""
-
-              # Show current local commit info
-              echo "📍 Current local commit:"
-              git --no-pager log -1 --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s %C(dim)(%an)%C(reset)" --date=format:'%Y-%m-%d %H:%M' HEAD 2>/dev/null
-              echo ""
-
-              # Show commits that will be pulled
-              echo "📥 New commits available:"
-              git --no-pager log --format="   %C(yellow)%h%C(reset) - %C(green)%ad%C(reset) - %s%n%b" --date=format:'%Y-%m-%d %H:%M' HEAD..tags/latest 2>/dev/null
-              echo ""
-
-              # Prompt user
-              echo -n "Would you like to update now? (y/N): "
-              read -n 1 -r response < /dev/tty
-              echo
-              if [[ "$response" =~ ^[Yy]$ ]]; then
-                echo "🚀 Updating configuration..."
-                jacks-nix-update
-              else
-                echo "⏭️  Update skipped. Run 'update' manually when ready."
-              fi
-              echo ""
-          fi
+        if [[ "$local_commit" == "$remote_commit" ]]; then
+          exit 0
         fi
+
+        local_version=$(cat "$config_repo/VERSION" 2>/dev/null || echo "0")
+        remote_version=$(git show tags/latest:VERSION 2>/dev/null || echo "0")
+
+        if [[ "$local_version" == "$remote_version" ]]; then
+          exit 0
+        fi
+
+        local_date=$(git log -1 --format="%ad" --date=short HEAD 2>/dev/null || echo "unknown")
+        remote_date=$(git log -1 --format="%ad" --date=short tags/latest 2>/dev/null || echo "unknown")
+
+        highest_importance="minor"
+        importance_order="minor fix feature breaking security"
+        all_package_upgrades=""
+        all_package_added=""
+        all_package_removed=""
+        all_manual_commits=""
+        all_security_notes=""
+        all_breaking_changes=""
+        all_summaries=""
+
+        for v in $(seq $((local_version + 1)) $remote_version); do
+          changelog=$(git show "tags/latest:changelogs/''${v}.json" 2>/dev/null) || continue
+
+          importance=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.importance // "minor"')
+          for imp in $importance_order; do
+            if [[ "$imp" == "$importance" ]]; then
+              highest_importance="$importance"
+            fi
+            if [[ "$imp" == "$highest_importance" ]]; then
+              break
+            fi
+          done
+
+          upgrades=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.upgraded[]? | "\(.name): \(.from) → \(.to)"' 2>/dev/null || true)
+          if [[ -n "$upgrades" ]]; then
+            all_package_upgrades="$all_package_upgrades$upgrades"$'\n'
+          fi
+
+          added=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.added[]?' 2>/dev/null || true)
+          if [[ -n "$added" ]]; then
+            all_package_added="$all_package_added$added"$'\n'
+          fi
+
+          removed=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.removed[]?' 2>/dev/null || true)
+          if [[ -n "$removed" ]]; then
+            all_package_removed="$all_package_removed$removed"$'\n'
+          fi
+
+          manual=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.manual_commits[]? | "• \(.message)"' 2>/dev/null || true)
+          if [[ -n "$manual" ]]; then
+            all_manual_commits="$all_manual_commits$manual"$'\n'
+          fi
+
+          security=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.security_notes[]?' 2>/dev/null || true)
+          if [[ -n "$security" ]]; then
+            all_security_notes="$all_security_notes$security"$'\n'
+          fi
+
+          breaking=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.breaking_changes[]?' 2>/dev/null || true)
+          if [[ -n "$breaking" ]]; then
+            all_breaking_changes="$all_breaking_changes$breaking"$'\n'
+          fi
+
+          summary=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.ai_summary // empty' 2>/dev/null || true)
+          if [[ -n "$summary" ]]; then
+            all_summaries="$all_summaries  v$v: $summary"$'\n'
+          fi
+        done
+
+        echo ""
+        echo "🔄 Updates available for jacks-nix!"
+        echo ""
+        echo "   Current: v$local_version ($local_date)"
+        echo "   Latest:  v$remote_version ($remote_date)"
+        echo ""
+
+        case "$highest_importance" in
+          security)
+            echo "┌──────────────────────────────────────────────────────────────┐"
+            echo "│  🚨 SECURITY UPDATE                                          │"
+            echo "└──────────────────────────────────────────────────────────────┘"
+            ;;
+          breaking)
+            echo "┌──────────────────────────────────────────────────────────────┐"
+            echo "│  ⚠️  BREAKING CHANGES                                         │"
+            echo "└──────────────────────────────────────────────────────────────┘"
+            ;;
+          feature)
+            echo "┌──────────────────────────────────────────────────────────────┐"
+            echo "│  ✨ NEW FEATURES                                              │"
+            echo "└──────────────────────────────────────────────────────────────┘"
+            ;;
+          fix)
+            echo "┌──────────────────────────────────────────────────────────────┐"
+            echo "│  🔧 BUG FIXES                                                 │"
+            echo "└──────────────────────────────────────────────────────────────┘"
+            ;;
+          *)
+            echo "┌──────────────────────────────────────────────────────────────┐"
+            echo "│  📦 MINOR UPDATES                                             │"
+            echo "└──────────────────────────────────────────────────────────────┘"
+            ;;
+        esac
+        echo ""
+
+        if [[ -n "$all_security_notes" || -n "$all_breaking_changes" ]]; then
+          echo "🚨 Important Changes:"
+          if [[ -n "$all_security_notes" ]]; then
+            echo "$all_security_notes" | while read -r line; do
+              [[ -n "$line" ]] && echo "   [SECURITY] $line"
+            done
+          fi
+          if [[ -n "$all_breaking_changes" ]]; then
+            echo "$all_breaking_changes" | while read -r line; do
+              [[ -n "$line" ]] && echo "   [BREAKING] $line"
+            done
+          fi
+          echo ""
+        fi
+
+        if [[ -n "$all_summaries" ]]; then
+          echo "📋 Update Summaries:"
+          echo "$all_summaries"
+          echo ""
+        fi
+
+        all_package_upgrades=$(echo "$all_package_upgrades" | sort -u | grep -v '^$' || true)
+        upgrade_count=$(echo "$all_package_upgrades" | grep -c . || echo "0")
+
+        if [[ -n "$all_package_upgrades" ]]; then
+          echo "📦 Package Changes ($upgrade_count upgrades):"
+          echo "$all_package_upgrades" | while read -r line; do
+            [[ -n "$line" ]] && echo "   $line"
+          done
+          echo ""
+        fi
+
+        if [[ -n "$all_package_added" ]]; then
+          echo "➕ Packages Added:"
+          echo "$all_package_added" | sort -u | while read -r line; do
+            [[ -n "$line" ]] && echo "   $line"
+          done
+          echo ""
+        fi
+
+        if [[ -n "$all_package_removed" ]]; then
+          echo "➖ Packages Removed:"
+          echo "$all_package_removed" | sort -u | while read -r line; do
+            [[ -n "$line" ]] && echo "   $line"
+          done
+          echo ""
+        fi
+
+        if [[ -n "$all_manual_commits" ]]; then
+          echo "🔧 Config Changes:"
+          echo "$all_manual_commits" | sort -u | while read -r line; do
+            [[ -n "$line" ]] && echo "   $line"
+          done
+          echo ""
+        fi
+
+        echo -n "Would you like to update now? (y/N): "
+        read -n 1 -r response < /dev/tty
+        echo
+        if [[ "$response" =~ ^[Yy]$ ]]; then
+          echo "🚀 Updating configuration..."
+          jacks-nix-update
+        else
+          echo "⏭️  Update skipped. Run 'update' manually when ready."
+        fi
+        echo ""
     )
   '';
 

@@ -1,0 +1,32 @@
+{
+  "version": 299,
+  "timestamp": "2026-01-07T22:30:58Z",
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [
+      {
+        "name": "jacks-nix-changelog",
+        "version": "<none>"
+      },
+      {
+        "name": "jacks-nix-declared-packages",
+        "version": "<none>"
+      }
+    ],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "2f444f6",
+      "message": "Simplify changelog viewing and remove AI",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "85b8b4a",
+      "message": "Show change log on `update`",
+      "author": "Jack Coy"
+    }
+  ]
+}

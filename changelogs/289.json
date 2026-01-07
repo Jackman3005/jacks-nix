@@ -1,0 +1,67 @@
+{
+  "version": 289,
+  "timestamp": "2026-01-07T02:23:24Z",
+  "importance": "minor",
+  "package_changes": {
+    "nvd_available": false,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "6a7871a",
+      "message": "v288: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "778595d",
+      "message": "v287: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "34268c4",
+      "message": "v286: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "302361e",
+      "message": "v285: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "2b7fdc6",
+      "message": "v284: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "9596b16",
+      "message": "v283: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "d994618",
+      "message": "v282: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "0112892",
+      "message": "v281: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "81d2950",
+      "message": "v280: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "118475d",
+      "message": "v279: changelog",
+      "author": "GitHub Action - Changelog"
+    }
+  ],
+  "ai_summary": "Automated changelog updates for multiple version increments from v279 to v288",
+  "security_notes": [],
+  "breaking_changes": []
+}

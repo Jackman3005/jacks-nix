@@ -1,0 +1,28 @@
+{
+  "version": 297,
+  "timestamp": "2026-01-07T03:28:16Z",
+  "importance": "minor",
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "38e187fd2f9efac197e03be0c25f3ee215974144",
+      "to_rev": "4e8b7bef66c60735982369f3151b93e62fe37da7",
+      "commit_count": 4
+    }
+  },
+  "manual_commits": [
+    {
+      "sha": "e137599",
+      "message": "chore: update home-manager flake input",
+      "author": "Jack Coy"
+    }
+  ],
+  "ai_summary": "Routine update of home-manager flake input with 4 upstream commits.",
+  "security_notes": [],
+  "breaking_changes": []
+}

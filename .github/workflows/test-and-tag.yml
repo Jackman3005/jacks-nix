@@ -111,10 +111,16 @@ jobs:
     - name: Commit changelog and tag
       run: |
         git add VERSION changelogs/
-        git diff --staged --quiet || git commit -m "v$(cat VERSION): changelog"
 
+        # Only commit if there are staged changes, use [skip ci] to prevent circular triggers
+        if ! git diff --staged --quiet; then
+          git commit -m "v$(cat VERSION): changelog [skip ci]"
+          git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main
+        fi
+
+        # Always update the latest tag
         git tag -d latest 2>/dev/null || true
         git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git :refs/tags/latest || true
 
         git tag latest
-        git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main --follow-tags
+        git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git latest

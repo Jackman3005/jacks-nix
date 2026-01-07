@@ -161,6 +161,15 @@ main() {
       ;;
   esac
 
+  # Record the applied version so update-check doesn't show stale changelog
+  local version_file="$CLONE_DIR/VERSION"
+  local applied_version_file="$CLONE_DIR/local/applied-version.txt"
+  if [[ -f "$version_file" ]]; then
+    mkdir -p "$(dirname "$applied_version_file")"
+    cp "$version_file" "$applied_version_file"
+    info "Recorded applied version: $(cat "$applied_version_file")"
+  fi
+
   echo
   info "✅ Jack's Nix setup is complete!"
   info "Please restart your shell for all changes to take effect."

@@ -6,8 +6,8 @@ REPO_DIR="$(dirname "$SCRIPT_DIR")"
 
 OLD_TAG="${OLD_TAG:-latest}"
 DRY_RUN="${DRY_RUN:-false}"
-ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
 BUILD_TIMEOUT="${BUILD_TIMEOUT:-300}"
+VERSION_OVERRIDE="${VERSION_OVERRIDE:-}"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     FLAKE_OUTPUT="${FLAKE_OUTPUT:-.#darwinConfigurations.mac-arm64.system}"
@@ -136,17 +136,21 @@ parse_nvd_output() {
     while IFS= read -r line; do
         [[ -z "$line" ]] && continue
 
-        if [[ "$line" =~ ^([a-zA-Z0-9_-]+):\ +([0-9][^\ ]*)\ *→\ *([0-9][^\ ,]*) ]]; then
+        # nvd output format: [U.] #01 package-name 1.0.0 -> 2.0.0
+        # [U.] = Upgraded, [D.] = Downgraded, [A.] = Added, [R.] = Removed, [C.] = Changed
+        if [[ "$line" =~ ^\[U.*\].*#[0-9]+[[:space:]]+([a-zA-Z0-9_-]+)[[:space:]]+([^[:space:]]+)[[:space:]]+-\>[[:space:]]+([^[:space:],]+) ]]; then
             local name="${BASH_REMATCH[1]}"
             local from="${BASH_REMATCH[2]}"
             local to="${BASH_REMATCH[3]}"
             upgraded+=("{\"name\":\"$name\",\"from\":\"$from\",\"to\":\"$to\"}")
-        elif [[ "$line" =~ ^([a-zA-Z0-9_-]+):\ +∅\ *→ ]]; then
+        elif [[ "$line" =~ ^\[A.*\].*#[0-9]+[[:space:]]+([a-zA-Z0-9_-]+)[[:space:]]+([^[:space:],]+) ]]; then
             local name="${BASH_REMATCH[1]}"
-            added+=("\"$name\"")
-        elif [[ "$line" =~ ^([a-zA-Z0-9_-]+):.*→\ *∅ ]]; then
+            local version="${BASH_REMATCH[2]}"
+            added+=("{\"name\":\"$name\",\"version\":\"$version\"}")
+        elif [[ "$line" =~ ^\[R.*\].*#[0-9]+[[:space:]]+([a-zA-Z0-9_-]+)[[:space:]]+([^[:space:],]+) ]]; then
             local name="${BASH_REMATCH[1]}"
-            removed+=("\"$name\"")
+            local version="${BASH_REMATCH[2]}"
+            removed+=("{\"name\":\"$name\",\"version\":\"$version\"}")
         fi
     done <<< "$nvd_output"
 
@@ -169,89 +173,6 @@ parse_nvd_output() {
         --argjson added "$added_json" \
         --argjson removed "$removed_json" \
         '{nvd_available: true, upgraded: $upgraded, added: $added, removed: $removed}'
-}
-
-call_claude_api() {
-    local commits="$1"
-    local flake_changes="$2"
-    local package_changes="$3"
-
-    if [[ -z "$ANTHROPIC_API_KEY" ]]; then
-        warn "No ANTHROPIC_API_KEY set, using default classification"
-        echo '{"importance":"minor","summary":"Package and configuration updates.","security_notes":[],"breaking_changes":[]}'
-        return
-    fi
-
-    local nvd_section
-    if [[ $(echo "$package_changes" | jq '.nvd_available') == "true" ]]; then
-        nvd_section="Package version changes (from nvd diff):
-Upgraded: $(echo "$package_changes" | jq -c '.upgraded')
-Added: $(echo "$package_changes" | jq -c '.added')
-Removed: $(echo "$package_changes" | jq -c '.removed')"
-    else
-        nvd_section="Package version changes: unavailable - analyze from commits only"
-    fi
-
-    local prompt
-    prompt="Analyze these changes to a Nix home-manager/nix-darwin configuration repository.
-
-## Commits
-$commits
-
-## Flake Input Changes
-$flake_changes
-
-## $nvd_section
-
-Classify these changes and respond with ONLY valid JSON (no markdown, no explanation):
-{
-  \"importance\": \"security|breaking|feature|fix|minor\",
-  \"summary\": \"1-2 sentence human-readable summary\",
-  \"security_notes\": [\"array of security-related items, empty if none\"],
-  \"breaking_changes\": [\"array of breaking changes requiring user action, empty if none\"]
-}
-
-Guidelines:
-- importance: security (CVE/vulnerability fixes), breaking (requires user action), feature (new capabilities), fix (bug fixes), minor (routine updates)
-- Look for CVE mentions, security keywords, breaking change indicators
-- Be concise in summary"
-
-    local response
-    local max_retries=3
-    local retry_delay=2
-
-    for attempt in $(seq 1 $max_retries); do
-        response=$(curl -s --max-time 30 -X POST "https://api.anthropic.com/v1/messages" \
-            -H "Content-Type: application/json" \
-            -H "x-api-key: $ANTHROPIC_API_KEY" \
-            -H "anthropic-version: 2023-06-01" \
-            -d "$(jq -n \
-                --arg prompt "$prompt" \
-                '{
-                    model: "claude-3-5-haiku-latest",
-                    max_tokens: 512,
-                    messages: [{role: "user", content: $prompt}]
-                }')" 2>/dev/null) || true
-
-        if [[ -n "$response" ]]; then
-            local content
-            content=$(echo "$response" | jq -r '.content[0].text // empty' 2>/dev/null) || true
-
-            if [[ -n "$content" ]] && echo "$content" | jq . &>/dev/null; then
-                echo "$content"
-                return
-            fi
-        fi
-
-        if [[ $attempt -lt $max_retries ]]; then
-            warn "API call failed (attempt $attempt/$max_retries), retrying in ${retry_delay}s..."
-            sleep $retry_delay
-            retry_delay=$((retry_delay * 2))
-        fi
-    done
-
-    warn "All API attempts failed, using default classification"
-    echo '{"importance":"minor","summary":"Package and configuration updates.","security_notes":[],"breaking_changes":[]}'
 }
 
 main() {
@@ -294,17 +215,12 @@ main() {
     local package_changes
     package_changes=$(try_nvd_diff "$new_store_path")
 
-    log "Calling Claude API for classification..."
-    local ai_response
-    if [[ "$DRY_RUN" == "true" ]]; then
-        log "DRY_RUN mode, using mock AI response"
-        ai_response='{"importance":"minor","summary":"Mock changelog for testing.","security_notes":[],"breaking_changes":[]}'
-    else
-        ai_response=$(call_claude_api "$commits" "$flake_changes" "$package_changes")
-    fi
-
     local current_version new_version
-    current_version=$(cat "$REPO_DIR/VERSION" 2>/dev/null || echo "0")
+    if [[ -n "$VERSION_OVERRIDE" ]]; then
+        current_version="$VERSION_OVERRIDE"
+    else
+        current_version=$(cat "$REPO_DIR/VERSION" 2>/dev/null || echo "0")
+    fi
     new_version=$((current_version + 1))
 
     local timestamp
@@ -314,23 +230,15 @@ main() {
     changelog=$(jq -n \
         --argjson version "$new_version" \
         --arg timestamp "$timestamp" \
-        --arg importance "$(echo "$ai_response" | jq -r '.importance')" \
         --argjson package_changes "$package_changes" \
         --argjson inputs_changed "$flake_changes" \
         --argjson manual_commits "$manual_commits" \
-        --arg ai_summary "$(echo "$ai_response" | jq -r '.summary')" \
-        --argjson security_notes "$(echo "$ai_response" | jq '.security_notes')" \
-        --argjson breaking_changes "$(echo "$ai_response" | jq '.breaking_changes')" \
         '{
             version: $version,
             timestamp: $timestamp,
-            importance: $importance,
             package_changes: $package_changes,
             inputs_changed: $inputs_changed,
-            manual_commits: $manual_commits,
-            ai_summary: $ai_summary,
-            security_notes: $security_notes,
-            breaking_changes: $breaking_changes
+            manual_commits: $manual_commits
         }')
 
     if [[ "$DRY_RUN" == "true" ]]; then
@@ -341,7 +249,9 @@ main() {
 
     log "Writing changelog v$new_version..."
     echo "$changelog" | jq . > "$REPO_DIR/changelogs/${new_version}.json"
-    echo "$new_version" > "$REPO_DIR/VERSION"
+    if [[ -z "$VERSION_OVERRIDE" ]]; then
+        echo "$new_version" > "$REPO_DIR/VERSION"
+    fi
 
     log "Changelog v$new_version generated successfully!"
     echo "$changelog" | jq .

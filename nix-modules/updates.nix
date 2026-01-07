@@ -3,200 +3,340 @@
 let
   configRepoPath = config.jacks-nix.configRepoPath;
 
-  # Shared script to display changelog between two versions
-  # Usage: jacks-nix-changelog-show <from_version> <to_version> [--from-remote]
-  # --from-remote: fetch changelogs from tags/latest instead of local files
-  changelogDisplay = pkgs.writeShellScriptBin "jacks-nix-changelog-show" ''
+  # ANSI color codes
+  colors = ''
+    RED='\033[0;31m'
+    GREEN='\033[0;32m'
+    YELLOW='\033[0;33m'
+    BLUE='\033[0;34m'
+    CYAN='\033[0;36m'
+    BOLD='\033[1m'
+    DIM='\033[2m'
+    NC='\033[0m' # No Color
+  '';
+
+  # Helper to get explicitly declared packages (for highlighting "interesting" upgrades)
+  declaredPackagesHelper = pkgs.writeShellScriptBin "jacks-nix-declared-packages" ''
     set -euo pipefail
 
     config_repo="${configRepoPath}"
-    from_version="''${1:-0}"
-    to_version="''${2:-0}"
-    from_remote="''${3:-}"
+    cache_dir="$HOME/.cache/jacks-nix"
+    cache_file="$cache_dir/declared-packages.txt"
+
+    # Check if cache exists and is less than 24 hours old
+    if [[ -f "$cache_file" ]]; then
+      cache_age=$(($(date +%s) - $(stat -f %m "$cache_file" 2>/dev/null || stat -c %Y "$cache_file" 2>/dev/null || echo 0)))
+      if [[ $cache_age -lt 86400 ]]; then
+        cat "$cache_file"
+        exit 0
+      fi
+    fi
+
+    mkdir -p "$cache_dir"
+
+    # Determine the flake output based on OS
+    if [[ "$(uname -s)" == "Darwin" ]]; then
+      flake_attr="darwinConfigurations.mac-arm64.config.home-manager.users.$(whoami).home.packages"
+    else
+      flake_attr="homeConfigurations.linux-x64.config.home.packages"
+    fi
+
+    # Get explicitly declared packages via nix eval
+    packages=$(cd "$config_repo" && nix eval --json ".#$flake_attr" \
+      --apply 'pkgs: map (p: p.pname or p.name or "unknown") pkgs' 2>/dev/null || echo "[]")
+
+    # Filter out internal packages and write to cache
+    echo "$packages" | ${pkgs.jq}/bin/jq -r '.[]' 2>/dev/null | \
+      grep -v -E '^(hm-|home-configuration|session-vars|jacks-nix-|man-db|nix-zsh)' | \
+      sort -u > "$cache_file"
+
+    cat "$cache_file"
+  '';
+
+  # Main changelog display script
+  # Usage:
+  #   changelog [--full]           Compare applied version to latest
+  #   changelog 297 [--full]       Compare applied version to v297
+  #   changelog 290:297 [--full]   Compare v290 to v297
+  changelogDisplay = pkgs.writeShellScriptBin "jacks-nix-changelog" ''
+    set -euo pipefail
+
+    ${colors}
+
+    config_repo="${configRepoPath}"
+    full_mode="false"
+    from_version=""
+    to_version=""
+
+    # Parse arguments
+    for arg in "$@"; do
+      case $arg in
+        --full)
+          full_mode="true"
+          ;;
+        *:*)
+          # Colon-separated range (e.g., 290:297)
+          from_version="''${arg%%:*}"
+          to_version="''${arg##*:}"
+          ;;
+        *)
+          # Single version number
+          if [[ -z "$to_version" ]]; then
+            to_version="$arg"
+          fi
+          ;;
+      esac
+    done
+
+    # Resolve defaults
+    applied_version=$(cat "$config_repo/local/applied-version.txt" 2>/dev/null || cat "$config_repo/VERSION" 2>/dev/null || echo "0")
+
+    # If no from_version, use applied version
+    from_version="''${from_version:-$applied_version}"
+
+    # If no to_version, fetch and use latest
+    if [[ -z "$to_version" ]]; then
+      git -C "$config_repo" fetch origin tag latest --force >/dev/null 2>&1 || true
+      to_version=$(git -C "$config_repo" show tags/latest:VERSION 2>/dev/null || cat "$config_repo/VERSION" 2>/dev/null || echo "0")
+    fi
 
     if [[ "$from_version" -ge "$to_version" ]]; then
+      echo -e "''${GREEN}✅ You are up to date (v$from_version)''${NC}"
       exit 0
     fi
 
-    from_date=$(git -C "$config_repo" log -1 --format="%ad" --date=short HEAD 2>/dev/null || echo "unknown")
-    to_date=$(git -C "$config_repo" log -1 --format="%ad" --date=short tags/latest 2>/dev/null || echo "unknown")
+    # Get dates from changelog timestamps
+    get_changelog_date() {
+      local ver="$1"
+      local ts=""
+      if [[ -f "$config_repo/changelogs/''${ver}.json" ]]; then
+        ts=$(${pkgs.jq}/bin/jq -r '.timestamp // empty' "$config_repo/changelogs/''${ver}.json" 2>/dev/null)
+      else
+        ts=$(git -C "$config_repo" show "tags/latest:changelogs/''${ver}.json" 2>/dev/null | ${pkgs.jq}/bin/jq -r '.timestamp // empty' 2>/dev/null)
+      fi
+      # Extract just the date part (YYYY-MM-DD) from ISO timestamp
+      echo "''${ts:0:10}"
+    }
 
-    highest_importance="minor"
-    importance_order="minor fix feature breaking security"
+    from_date=$(get_changelog_date "$from_version")
+    to_date=$(get_changelog_date "$to_version")
+    from_date="''${from_date:-unknown}"
+    to_date="''${to_date:-unknown}"
+
+    # Calculate days difference
+    days_diff=0
+    if [[ "$from_date" != "unknown" && "$to_date" != "unknown" && "$from_date" != "" && "$to_date" != "" ]]; then
+      from_epoch=$(date -j -f "%Y-%m-%d" "$from_date" "+%s" 2>/dev/null || date -d "$from_date" "+%s" 2>/dev/null || echo "0")
+      to_epoch=$(date -j -f "%Y-%m-%d" "$to_date" "+%s" 2>/dev/null || date -d "$to_date" "+%s" 2>/dev/null || echo "0")
+      if [[ "$from_epoch" -gt 0 && "$to_epoch" -gt 0 ]]; then
+        days_diff=$(( (to_epoch - from_epoch) / 86400 ))
+      fi
+    fi
+
+    # Load declared packages for highlighting
+    declared_packages=""
+    if [[ -x "$(command -v jacks-nix-declared-packages)" ]]; then
+      declared_packages=$(jacks-nix-declared-packages 2>/dev/null || true)
+    fi
+
     all_package_upgrades=""
     all_package_added=""
     all_package_removed=""
     all_manual_commits=""
-    all_security_notes=""
-    all_breaking_changes=""
-    all_summaries=""
 
     for v in $(seq $((from_version + 1)) $to_version); do
-      if [[ "$from_remote" == "--from-remote" ]]; then
-        changelog=$(git -C "$config_repo" show "tags/latest:changelogs/''${v}.json" 2>/dev/null) || continue
-      else
+      # Try local file first, fall back to remote tag (handles gaps gracefully)
+      if [[ -f "$config_repo/changelogs/''${v}.json" ]]; then
         changelog=$(cat "$config_repo/changelogs/''${v}.json" 2>/dev/null) || continue
+      else
+        changelog=$(git -C "$config_repo" show "tags/latest:changelogs/''${v}.json" 2>/dev/null) || continue
       fi
 
-      importance=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.importance // "minor"')
-      for imp in $importance_order; do
-        if [[ "$imp" == "$importance" ]]; then
-          highest_importance="$importance"
-        fi
-        if [[ "$imp" == "$highest_importance" ]]; then
-          break
-        fi
-      done
-
-      # Use tab-separated format for reliable parsing: name\tfrom\tto
       upgrades=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.upgraded[]? | "\(.name)\t\(.from)\t\(.to)"' 2>/dev/null || true)
       if [[ -n "$upgrades" ]]; then
         all_package_upgrades="$all_package_upgrades$upgrades"$'\n'
       fi
 
-      added=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.added[]?' 2>/dev/null || true)
+      # Handle both old format (strings) and new format ({name, version} objects)
+      added=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.added[]? | if type == "object" then "\(.name)\t\(.version)" else . end' 2>/dev/null || true)
       if [[ -n "$added" ]]; then
         all_package_added="$all_package_added$added"$'\n'
       fi
 
-      removed=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.removed[]?' 2>/dev/null || true)
+      removed=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.package_changes.removed[]? | if type == "object" then "\(.name)\t\(.version)" else . end' 2>/dev/null || true)
       if [[ -n "$removed" ]]; then
         all_package_removed="$all_package_removed$removed"$'\n'
       fi
 
-      manual=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.manual_commits[]? | "• \(.message)"' 2>/dev/null || true)
+      manual=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.manual_commits[]? | "\(.message)"' 2>/dev/null || true)
       if [[ -n "$manual" ]]; then
         all_manual_commits="$all_manual_commits$manual"$'\n'
       fi
-
-      security=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.security_notes[]?' 2>/dev/null || true)
-      if [[ -n "$security" ]]; then
-        all_security_notes="$all_security_notes$security"$'\n'
-      fi
-
-      breaking=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.breaking_changes[]?' 2>/dev/null || true)
-      if [[ -n "$breaking" ]]; then
-        all_breaking_changes="$all_breaking_changes$breaking"$'\n'
-      fi
-
-      summary=$(echo "$changelog" | ${pkgs.jq}/bin/jq -r '.ai_summary // empty' 2>/dev/null || true)
-      if [[ -n "$summary" ]]; then
-        all_summaries="$all_summaries  v$v: $summary"$'\n'
-      fi
     done
 
-    echo ""
-    echo "🔄 Changes in jacks-nix"
-    echo ""
-    echo "   From: v$from_version ($from_date)"
-    echo "   To:   v$to_version ($to_date)"
-    echo ""
-
-    case "$highest_importance" in
-      security)
-        echo "┌──────────────────────────────────────────────────────────────┐"
-        echo "│  🚨 SECURITY UPDATE                                          │"
-        echo "└──────────────────────────────────────────────────────────────┘"
-        ;;
-      breaking)
-        echo "┌──────────────────────────────────────────────────────────────┐"
-        echo "│  ⚠️  BREAKING CHANGES                                         │"
-        echo "└──────────────────────────────────────────────────────────────┘"
-        ;;
-      feature)
-        echo "┌──────────────────────────────────────────────────────────────┐"
-        echo "│  ✨ NEW FEATURES                                              │"
-        echo "└──────────────────────────────────────────────────────────────┘"
-        ;;
-      fix)
-        echo "┌──────────────────────────────────────────────────────────────┐"
-        echo "│  🔧 BUG FIXES                                                 │"
-        echo "└──────────────────────────────────────────────────────────────┘"
-        ;;
-      *)
-        echo "┌──────────────────────────────────────────────────────────────┐"
-        echo "│  📦 MINOR UPDATES                                             │"
-        echo "└──────────────────────────────────────────────────────────────┘"
-        ;;
-    esac
-    echo ""
-
-    if [[ -n "$all_security_notes" || -n "$all_breaking_changes" ]]; then
-      echo "🚨 Important Changes:"
-      if [[ -n "$all_security_notes" ]]; then
-        echo "$all_security_notes" | while read -r line; do
-          [[ -n "$line" ]] && echo "   [SECURITY] $line"
-        done
-      fi
-      if [[ -n "$all_breaking_changes" ]]; then
-        echo "$all_breaking_changes" | while read -r line; do
-          [[ -n "$line" ]] && echo "   [BREAKING] $line"
-        done
-      fi
-      echo ""
-    fi
-
-    if [[ -n "$all_summaries" ]]; then
-      echo "📋 Update Summaries:"
-      echo "$all_summaries"
-      echo ""
-    fi
-
-    # Combine package upgrades: if same package upgraded multiple times,
-    # show first "from" version to last "to" version (e.g., 1.0→1.1→1.2 becomes 1.0→1.2)
-    # Input format is tab-separated: name\tfrom\tto
-    all_package_upgrades=$(echo "$all_package_upgrades" | grep -v '^$' | ${pkgs.gawk}/bin/awk -F'\t' '
+    # Aggregate package upgrades (combine multi-step version jumps)
+    all_package_upgrades=$(echo "$all_package_upgrades" | grep -v '^$' | ${pkgs.gawk}/bin/gawk -F'\t' '
       NF == 3 {
-        pkg = $1
-        from = $2
-        to = $3
+        pkg = $1; from = $2; to = $3
         if (!(pkg in first_from)) first_from[pkg] = from
         last_to[pkg] = to
       }
       END {
         for (pkg in last_to) {
           if (first_from[pkg] != last_to[pkg]) {
-            print pkg ": " first_from[pkg] " → " last_to[pkg]
+            print pkg "\t" first_from[pkg] "\t" last_to[pkg]
           }
         }
       }
     ' | sort || true)
-    upgrade_count=$(echo "$all_package_upgrades" | grep -c . || echo "0")
 
-    if [[ -n "$all_package_upgrades" && "$upgrade_count" -gt 0 ]]; then
-      echo "📦 Package Changes ($upgrade_count upgrades):"
-      echo "$all_package_upgrades" | while read -r line; do
-        [[ -n "$line" ]] && echo "   $line"
-      done
-      echo ""
+    total_upgrade_count=$(echo "$all_package_upgrades" | grep -c . || echo "0")
+
+    # Separate key upgrades (declared packages) from dependency upgrades
+    key_upgrades=""
+    dep_upgrades=""
+    if [[ -n "$declared_packages" && -n "$all_package_upgrades" ]]; then
+      while IFS=$'\t' read -r pkg from to; do
+        [[ -z "$pkg" ]] && continue
+        if echo "$declared_packages" | grep -qx "$pkg"; then
+          key_upgrades="$key_upgrades$pkg\t$from\t$to"$'\n'
+        else
+          dep_upgrades="$dep_upgrades$pkg\t$from\t$to"$'\n'
+        fi
+      done <<< "$all_package_upgrades"
+    else
+      dep_upgrades="$all_package_upgrades"
     fi
 
-    if [[ -n "$all_package_added" ]]; then
-      echo "➕ Packages Added:"
-      echo "$all_package_added" | sort -u | while read -r line; do
-        [[ -n "$line" ]] && echo "   $line"
-      done
-      echo ""
-    fi
+    key_count=$(echo "$key_upgrades" | grep -c . || echo "0")
+    dep_count=$(echo "$dep_upgrades" | grep -c . || echo "0")
 
-    if [[ -n "$all_package_removed" ]]; then
-      echo "➖ Packages Removed:"
-      echo "$all_package_removed" | sort -u | while read -r line; do
-        [[ -n "$line" ]] && echo "   $line"
-      done
-      echo ""
-    fi
+    # Deduplicate commits and count
+    unique_commits=$(echo "$all_manual_commits" | grep -v '^$' | sort -u || true)
+    commit_count=$(echo "$unique_commits" | grep -c . || echo "0")
 
-    if [[ -n "$all_manual_commits" ]]; then
-      echo "🔧 Config Changes:"
-      echo "$all_manual_commits" | sort -u | while read -r line; do
-        [[ -n "$line" ]] && echo "   $line"
-      done
+    # --- OUTPUT ---
+    output_content() {
       echo ""
+      echo -e "''${CYAN}╭─────────────────────────────────────────────────────────────╮''${NC}"
+      echo -e "''${CYAN}│''${NC}  ''${BOLD}🔄 jacks-nix updates available''${NC}                             ''${CYAN}│''${NC}"
+      echo -e "''${CYAN}╰─────────────────────────────────────────────────────────────╯''${NC}"
+      echo ""
+      echo -e "   Current: ''${DIM}v$from_version ($from_date)''${NC}"
+      if [[ "$days_diff" -gt 0 ]]; then
+        echo -e "   Latest:  ''${GREEN}v$to_version ($to_date)''${NC}  ''${YELLOW}← $days_diff days newer''${NC}"
+      else
+        echo -e "   Latest:  ''${GREEN}v$to_version ($to_date)''${NC}"
+      fi
+      echo ""
+
+      # Key upgrades (declared packages)
+      if [[ -n "$key_upgrades" && "$key_count" -gt 0 ]]; then
+        echo -e "''${GREEN}📦 Key Upgrades:''${NC}"
+        if [[ "$full_mode" == "true" ]]; then
+          echo "$key_upgrades" | grep -v '^$' | while IFS=$'\t' read -r pkg from to; do
+            echo "   $pkg $from → $to"
+          done
+        else
+          # Condensed: show up to 6, one per line for clarity
+          echo "$key_upgrades" | grep -v '^$' | head -6 | while IFS=$'\t' read -r pkg from to; do
+            printf "   %s %s → %s\n" "$pkg" "$from" "$to"
+          done
+          if [[ "$key_count" -gt 6 ]]; then
+            remaining=$((key_count - 6))
+            echo -e "   ''${DIM}... and $remaining more key packages''${NC}"
+          fi
+        fi
+        if [[ "$dep_count" -gt 0 ]]; then
+          echo -e "   ''${DIM}... and $dep_count dependency updates''${NC}"
+        fi
+        echo ""
+      elif [[ "$total_upgrade_count" -gt 0 ]]; then
+        echo -e "''${GREEN}📦 Package Upgrades:''${NC} $total_upgrade_count packages updated"
+        if [[ "$full_mode" == "true" ]]; then
+          echo "$all_package_upgrades" | grep -v '^$' | while IFS=$'\t' read -r pkg from to; do
+            echo "   $pkg $from → $to"
+          done
+        fi
+        echo ""
+      fi
+
+      # Manual commits
+      if [[ -n "$unique_commits" && "$commit_count" -gt 0 ]]; then
+        echo -e "''${BLUE}📝 Recent Changes:''${NC}"
+        if [[ "$full_mode" == "true" ]]; then
+          echo "$unique_commits" | while read -r line; do
+            [[ -n "$line" ]] && echo "   • $line"
+          done
+        else
+          # Show up to 5 commits in condensed mode
+          echo "$unique_commits" | head -5 | while read -r line; do
+            [[ -n "$line" ]] && echo "   • $line"
+          done
+          if [[ "$commit_count" -gt 5 ]]; then
+            remaining=$((commit_count - 5))
+            echo -e "   ''${DIM}... and $remaining more commits''${NC}"
+          fi
+        fi
+        echo ""
+      fi
+
+      # Full mode: show added/removed packages
+      if [[ "$full_mode" == "true" ]]; then
+        if [[ -n "$all_package_added" ]]; then
+          added_list=$(echo "$all_package_added" | grep -v '^$' | sort -u)
+          added_count=$(echo "$added_list" | grep -c . || echo "0")
+          echo -e "''${GREEN}➕ Packages Added ($added_count):''${NC}"
+          echo "$added_list" | while IFS=$'\t' read -r name version; do
+            if [[ -n "$version" ]]; then
+              echo "   $name $version"
+            elif [[ -n "$name" ]]; then
+              echo "   $name"
+            fi
+          done
+          echo ""
+        fi
+
+        if [[ -n "$all_package_removed" ]]; then
+          removed_list=$(echo "$all_package_removed" | grep -v '^$' | sort -u)
+          removed_count=$(echo "$removed_list" | grep -c . || echo "0")
+          echo -e "''${RED}➖ Packages Removed ($removed_count):''${NC}"
+          echo "$removed_list" | while IFS=$'\t' read -r name version; do
+            if [[ -n "$version" ]]; then
+              echo "   $name $version"
+            elif [[ -n "$name" ]]; then
+              echo "   $name"
+            fi
+          done
+          echo ""
+        fi
+
+      fi
+
+      # Action hints (only in condensed mode)
+      if [[ "$full_mode" != "true" ]]; then
+        echo -e "''${DIM}Run: update           Apply changes now''${NC}"
+        echo -e "''${DIM}     changelog --full View complete changelog''${NC}"
+        echo ""
+      fi
+    }
+
+    # Output: use pager for full mode, direct output for condensed
+    if [[ "$full_mode" == "true" ]]; then
+      if command -v bat &>/dev/null; then
+        output_content | bat --style=plain --paging=always
+      elif command -v less &>/dev/null; then
+        output_content | less -R
+      else
+        output_content
+      fi
+    else
+      output_content
     fi
   '';
 
   # A script that will be run on shell startup to check for updates.
+  # Now non-blocking - just shows changelog and action hints
   updateChecker = pkgs.writeShellScriptBin "jacks-nix-update-check" ''
     set -euo pipefail
 
@@ -241,19 +381,8 @@ let
           exit 0
         fi
 
-        # Display the changelog using the shared script
-        jacks-nix-changelog-show "$local_version" "$remote_version" --from-remote
-
-        echo -n "Would you like to update now? (y/N): "
-        read -n 1 -r response < /dev/tty
-        echo
-        if [[ "$response" =~ ^[Yy]$ ]]; then
-          echo "🚀 Updating configuration..."
-          jacks-nix-update --no-changelog
-        else
-          echo "⏭️  Update skipped. Run 'update' manually when ready."
-        fi
-        echo ""
+        # Display the condensed changelog (non-blocking)
+        jacks-nix-changelog "$local_version:$remote_version"
     )
   '';
 
@@ -319,7 +448,7 @@ let
       # Show changelog if there are version changes and not suppressed
       if [[ "$show_changelog" == "true" ]]; then
         if [[ "$needs_git_update" == "true" && "$local_version" -lt "$remote_version" ]]; then
-          jacks-nix-changelog-show "$local_version" "$remote_version" --from-remote
+          jacks-nix-changelog "$local_version:$remote_version"
           echo -n "Continue with update? (Y/n): "
           read -n 1 -r response < /dev/tty
           echo
@@ -334,7 +463,7 @@ let
           echo "   Applied: v$applied_version"
           echo "   Current: v$local_version"
           echo ""
-          jacks-nix-changelog-show "$applied_version" "$local_version"
+          jacks-nix-changelog "$applied_version:$local_version"
           echo -n "Apply configuration now? (Y/n): "
           read -n 1 -r response < /dev/tty
           echo
@@ -373,6 +502,11 @@ let
         current_version=$(cat "$config_repo/VERSION" 2>/dev/null || echo "0")
         echo "$current_version" > "$applied_version_file"
         echo "✅ Successfully applied configuration v$current_version"
+
+        # Refresh the declared packages cache
+        echo "📦 Refreshing package cache..."
+        rm -f "$HOME/.cache/jacks-nix/declared-packages.txt" 2>/dev/null || true
+        jacks-nix-declared-packages >/dev/null 2>&1 || true
       else
         echo "❌ Configuration switch failed"
         exit 1
@@ -437,6 +571,7 @@ in
   config = lib.mkIf config.jacks-nix.enableZsh {
     home.packages = with pkgs; [
       # Add update scripts to the user's PATH
+      declaredPackagesHelper
       changelogDisplay
       updateChecker
       updater
@@ -449,6 +584,7 @@ in
       # Create simpler aliases for our update scripts
       update = "jacks-nix-update";
       upgrade = "jacks-nix-upgrade";
+      changelog = "jacks-nix-changelog";
     };
   };
 }

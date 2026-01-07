@@ -104,7 +104,6 @@ jobs:
 
     - name: Generate changelog
       env:
-        ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
       run: ./bin/generate-changelog.sh
 
@@ -118,7 +117,13 @@ jobs:
           git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git HEAD:main
         fi
 
-        # Always update the latest tag
+        VERSION=$(cat VERSION)
+
+        # Create permanent version tag (e.g., v297)
+        git tag "v${VERSION}"
+        git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git "v${VERSION}" || true
+
+        # Update the moving 'latest' tag
         git tag -d latest 2>/dev/null || true
         git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git :refs/tags/latest || true
 

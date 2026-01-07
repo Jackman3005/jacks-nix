@@ -1,0 +1,67 @@
+{
+  "version": 296,
+  "timestamp": "2026-01-07T03:15:34Z",
+  "importance": "minor",
+  "package_changes": {
+    "nvd_available": false,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "e54f109",
+      "message": "Clear changelogs and try again",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "6c820a2",
+      "message": "Fix circular trigger by adding [skip ci] to changelog commits",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "e26f1ec",
+      "message": "v295: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "63acbbd",
+      "message": "Include nvd in action for diff and add debug logs",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "16a9654",
+      "message": "v294: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "bfed99e",
+      "message": "v293: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "025dec8",
+      "message": "v292: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "02e4cf2",
+      "message": "v291: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "cd610de",
+      "message": "v290: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "9c6ef8a",
+      "message": "v289: changelog",
+      "author": "GitHub Action - Changelog"
+    }
+  ],
+  "ai_summary": "CI and changelog management updates with attempts to resolve trigger issues and improve automation workflow.",
+  "security_notes": [],
+  "breaking_changes": []
+}

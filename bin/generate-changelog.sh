@@ -277,7 +277,13 @@ main() {
     fi
 
     local manual_commits auto_commits
-    manual_commits=$(echo "$commits" | jq '[.[] | select(.message | startswith("AutoFlakeUpdater") | not)]')
+    # Filter out automated commits:
+    # - AutoFlakeUpdater: daily flake update bot
+    # - vXXX: changelog: automated changelog commits from CI
+    manual_commits=$(echo "$commits" | jq '[.[] | select(
+        (.message | startswith("AutoFlakeUpdater") | not) and
+        (.message | test("^v[0-9]+: changelog") | not)
+    )]')
     auto_commits=$(echo "$commits" | jq '[.[] | select(.message | startswith("AutoFlakeUpdater"))]')
 
     log "Parsing flake.lock changes..."

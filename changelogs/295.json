@@ -1,0 +1,67 @@
+{
+  "version": 295,
+  "timestamp": "2026-01-07T02:59:00Z",
+  "importance": "minor",
+  "package_changes": {
+    "nvd_available": false,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "63acbbd",
+      "message": "Include nvd in action for diff and add debug logs",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "16a9654",
+      "message": "v294: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "bfed99e",
+      "message": "v293: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "025dec8",
+      "message": "v292: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "02e4cf2",
+      "message": "v291: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "cd610de",
+      "message": "v290: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "9c6ef8a",
+      "message": "v289: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "6a7871a",
+      "message": "v288: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "778595d",
+      "message": "v287: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "34268c4",
+      "message": "v286: changelog",
+      "author": "GitHub Action - Changelog"
+    }
+  ],
+  "ai_summary": "GitHub Actions changelog updates with one user-initiated configuration change for including nvd in the action with debug logging.",
+  "security_notes": [],
+  "breaking_changes": []
+}

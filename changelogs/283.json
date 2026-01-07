@@ -1,0 +1,55 @@
+{
+  "version": 283,
+  "timestamp": "2026-01-07T01:49:39Z",
+  "importance": "minor",
+  "package_changes": {
+    "nvd_available": false,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "d994618",
+      "message": "v282: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "0112892",
+      "message": "v281: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "81d2950",
+      "message": "v280: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "118475d",
+      "message": "v279: changelog",
+      "author": "GitHub Action - Changelog"
+    },
+    {
+      "sha": "a1188e7",
+      "message": "Attempt to generate some change logs automatically",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "9126b62",
+      "message": "Remove `enablePython` flag tests as this was removed",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "77e52d9",
+      "message": "Remove `pyenv` and use `uv` instead",
+      "author": "Jack Coy"
+    }
+  ],
+  "ai_summary": "Repository maintenance with Python tooling changes and automated updates. Replaced pyenv with uv for Python management and cleaned up related test configurations.",
+  "security_notes": [],
+  "breaking_changes": [
+    "Removed `pyenv` as Python management tool",
+    "Removed `enablePython` flag tests"
+  ]
+}

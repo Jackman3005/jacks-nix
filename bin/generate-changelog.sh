@@ -7,7 +7,7 @@ REPO_DIR="$(dirname "$SCRIPT_DIR")"
 OLD_TAG="${OLD_TAG:-latest}"
 DRY_RUN="${DRY_RUN:-false}"
 ANTHROPIC_API_KEY="${ANTHROPIC_API_KEY:-}"
-BUILD_TIMEOUT="${BUILD_TIMEOUT:-180}"
+BUILD_TIMEOUT="${BUILD_TIMEOUT:-300}"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     FLAKE_OUTPUT="${FLAKE_OUTPUT:-.#darwinConfigurations.mac-arm64.system}"
@@ -100,19 +100,28 @@ try_nvd_diff() {
         log "Old store path found in cache"
     else
         log "Old store path not cached, attempting build (timeout: ${BUILD_TIMEOUT}s)..."
-        if ! timeout "$BUILD_TIMEOUT" nix build --no-link "$old_flake_output" 2>/dev/null; then
-            warn "Build timed out or failed, falling back to commit-based analysis"
+        local build_output
+        if ! build_output=$(timeout "$BUILD_TIMEOUT" nix build --no-link --print-out-paths "$old_flake_output" 2>&1); then
+            warn "Build timed out or failed: $build_output"
             echo '{"nvd_available":false,"upgraded":[],"added":[],"removed":[]}'
             return
         fi
+        log "Old build completed: $build_output"
     fi
 
-    local nvd_output
-    nvd_output=$(nvd diff "$old_store_path" "$new_store_path" 2>/dev/null) || {
-        warn "nvd diff failed"
+    if ! nix path-info "$old_store_path" &>/dev/null; then
+        warn "Old store path still not available after build: $old_store_path"
         echo '{"nvd_available":false,"upgraded":[],"added":[],"removed":[]}'
         return
-    }
+    fi
+
+    log "Running nvd diff between $old_store_path and $new_store_path"
+    local nvd_output nvd_error
+    if ! nvd_output=$(nvd diff "$old_store_path" "$new_store_path" 2>&1); then
+        warn "nvd diff failed: $nvd_output"
+        echo '{"nvd_available":false,"upgraded":[],"added":[],"removed":[]}'
+        return
+    fi
 
     parse_nvd_output "$nvd_output"
 }

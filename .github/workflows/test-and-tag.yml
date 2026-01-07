@@ -99,6 +99,9 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action - Changelog"
 
+    - name: Install nvd for package diff
+      run: nix profile install nixpkgs#nvd
+
     - name: Generate changelog
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

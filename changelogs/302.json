@@ -1,0 +1,22 @@
+{
+  "version": 302,
+  "timestamp": "2026-01-08T10:35:58Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1426470304,
+    "mac_arm64_bytes": 1351147192
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "1bc1f75",
+      "message": "Fix changelog script and improve size display",
+      "author": "Jack Coy"
+    }
+  ]
+}

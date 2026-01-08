@@ -8,6 +8,8 @@ OLD_TAG="${OLD_TAG:-latest}"
 DRY_RUN="${DRY_RUN:-false}"
 BUILD_TIMEOUT="${BUILD_TIMEOUT:-300}"
 VERSION_OVERRIDE="${VERSION_OVERRIDE:-}"
+LINUX_X64_BYTES="${LINUX_X64_BYTES:-}"
+MAC_ARM64_BYTES="${MAC_ARM64_BYTES:-}"
 
 if [[ "$(uname -s)" == "Darwin" ]]; then
     FLAKE_OUTPUT="${FLAKE_OUTPUT:-.#darwinConfigurations.mac-arm64.system}"
@@ -230,12 +232,18 @@ main() {
     changelog=$(jq -n \
         --argjson version "$new_version" \
         --arg timestamp "$timestamp" \
+        --arg linux_bytes "$LINUX_X64_BYTES" \
+        --arg mac_bytes "$MAC_ARM64_BYTES" \
         --argjson package_changes "$package_changes" \
         --argjson inputs_changed "$flake_changes" \
         --argjson manual_commits "$manual_commits" \
         '{
             version: $version,
             timestamp: $timestamp,
+            closure_sizes: {
+                linux_x64_bytes: (if $linux_bytes != "" then ($linux_bytes | tonumber) else null end),
+                mac_arm64_bytes: (if $mac_bytes != "" then ($mac_bytes | tonumber) else null end)
+            },
             package_changes: $package_changes,
             inputs_changed: $inputs_changed,
             manual_commits: $manual_commits

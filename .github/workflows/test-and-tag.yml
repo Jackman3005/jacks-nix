@@ -65,6 +65,27 @@ jobs:
           JACKS_NIX_ENABLE_HOMEBREW: "false" # Would be great to enable, but `system.primaryUser` is not working
           NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
 
+      - name: Calculate closure size
+        run: |
+          if [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            FLAKE_OUTPUT=".#darwinConfigurations.mac-arm64.system"
+            SIZE_KEY="mac_arm64"
+          else
+            FLAKE_OUTPUT=".#homeConfigurations.linux-x64.activationPackage"
+            SIZE_KEY="linux_x64"
+          fi
+
+          SIZE_BYTES=$(nix path-info -S "$FLAKE_OUTPUT" 2>/dev/null | awk '{print $2}')
+          echo "${SIZE_KEY}_bytes=${SIZE_BYTES}" > closure-size.txt
+          echo "Closure size for ${SIZE_KEY}: ${SIZE_BYTES} bytes"
+
+      - name: Upload closure size
+        uses: actions/upload-artifact@v4
+        with:
+          name: closure-size-${{ matrix.os }}
+          path: closure-size.txt
+          retention-days: 1
+
   changelog-and-tag:
     needs:
       - checks
@@ -101,6 +122,25 @@ jobs:
 
     - name: Install nvd for package diff
       run: nix profile install nixpkgs#nvd
+
+    - name: Download closure size artifacts
+      uses: actions/download-artifact@v4
+      with:
+        pattern: closure-size-*
+        path: size-artifacts
+
+    - name: Set closure size environment variables
+      run: |
+        if [[ -f size-artifacts/closure-size-ubuntu-latest/closure-size.txt ]]; then
+          source size-artifacts/closure-size-ubuntu-latest/closure-size.txt
+          echo "LINUX_X64_BYTES=$linux_x64_bytes" >> $GITHUB_ENV
+          echo "Linux closure size: $linux_x64_bytes bytes"
+        fi
+        if [[ -f size-artifacts/closure-size-macos-latest/closure-size.txt ]]; then
+          source size-artifacts/closure-size-macos-latest/closure-size.txt
+          echo "MAC_ARM64_BYTES=$mac_arm64_bytes" >> $GITHUB_ENV
+          echo "macOS closure size: $mac_arm64_bytes bytes"
+        fi
 
     - name: Generate changelog
       env:

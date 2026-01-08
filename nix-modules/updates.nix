@@ -139,6 +139,34 @@ let
       declared_packages=$(jacks-nix-declared-packages 2>/dev/null || true)
     fi
 
+    # --- SIZE COMPARISON HELPERS ---
+    format_size() {
+      local bytes="$1"
+      if [[ -z "$bytes" || "$bytes" == "null" ]]; then
+        echo "unknown"
+      elif [[ "$bytes" -ge 1073741824 ]]; then
+        printf "%.1f GiB" "$(echo "$bytes / 1073741824" | ${pkgs.bc}/bin/bc -l)"
+      elif [[ "$bytes" -ge 1048576 ]]; then
+        printf "%d MiB" "$((bytes / 1048576))"
+      else
+        printf "%d KiB" "$((bytes / 1024))"
+      fi
+    }
+
+    get_changelog_sizes() {
+      local ver="$1"
+      local changelog=""
+      if [[ -f "$config_repo/changelogs/''${ver}.json" ]]; then
+        changelog=$(cat "$config_repo/changelogs/''${ver}.json" 2>/dev/null)
+      else
+        changelog=$(git -C "$config_repo" show "tags/latest:changelogs/''${ver}.json" 2>/dev/null) || true
+      fi
+
+      if [[ -n "$changelog" ]]; then
+        echo "$changelog" | ${pkgs.jq}/bin/jq -r '.closure_sizes // empty'
+      fi
+    }
+
     all_package_upgrades=""
     all_package_added=""
     all_package_removed=""
@@ -215,6 +243,49 @@ let
     unique_commits=$(echo "$all_manual_commits" | grep -v '^$' | sort -u || true)
     commit_count=$(echo "$unique_commits" | grep -c . || echo "0")
 
+    # --- SIZE COMPARISON ---
+    from_sizes=$(get_changelog_sizes "$from_version")
+    to_sizes=$(get_changelog_sizes "$to_version")
+
+    from_linux=$(echo "$from_sizes" | ${pkgs.jq}/bin/jq -r '.linux_x64_bytes // empty' 2>/dev/null || true)
+    to_linux=$(echo "$to_sizes" | ${pkgs.jq}/bin/jq -r '.linux_x64_bytes // empty' 2>/dev/null || true)
+    from_mac=$(echo "$from_sizes" | ${pkgs.jq}/bin/jq -r '.mac_arm64_bytes // empty' 2>/dev/null || true)
+    to_mac=$(echo "$to_sizes" | ${pkgs.jq}/bin/jq -r '.mac_arm64_bytes // empty' 2>/dev/null || true)
+
+    size_warning=""
+    size_info=""
+
+    check_size_increase() {
+      local from="$1" to="$2" platform="$3"
+      [[ -z "$from" || -z "$to" || "$from" == "null" || "$to" == "null" ]] && return
+
+      local diff=$((to - from))
+      local pct=0
+      [[ "$from" -gt 0 ]] && pct=$((diff * 100 / from))
+
+      local diff_mb=$((diff / 1048576))
+      local threshold_mb=300
+      local threshold_pct=15
+
+      if [[ "$diff" -gt 0 ]]; then
+        if [[ "$pct" -gt "$threshold_pct" ]] || [[ "$diff_mb" -gt "$threshold_mb" ]]; then
+          size_warning="''${size_warning}''${RED}⚠️  Warning: ''${platform} size increased by ''${pct}% (+''${diff_mb} MiB)''${NC}\n"
+        fi
+
+        local from_fmt=$(format_size "$from")
+        local to_fmt=$(format_size "$to")
+        size_info="''${size_info}   ''${platform}: ''${from_fmt} → ''${to_fmt} (+''${diff_mb} MiB)\n"
+      elif [[ "$diff" -lt 0 ]]; then
+        local saved_mb=$(( (-diff) / 1048576 ))
+        local from_fmt=$(format_size "$from")
+        local to_fmt=$(format_size "$to")
+        size_info="''${size_info}   ''${platform}: ''${from_fmt} → ''${to_fmt} (-''${saved_mb} MiB) ✨\n"
+      fi
+    }
+
+    check_size_increase "$from_linux" "$to_linux" "Linux"
+    check_size_increase "$from_mac" "$to_mac" "macOS"
+
     # --- OUTPUT ---
     output_content() {
       echo ""
@@ -259,6 +330,15 @@ let
           done
         fi
         echo ""
+      fi
+
+      # Size changes
+      if [[ -n "$size_info" ]]; then
+        echo -e "''${YELLOW}💾 Size Changes:''${NC}"
+        echo -e "$size_info"
+        if [[ -n "$size_warning" ]]; then
+          echo -e "$size_warning"
+        fi
       fi
 
       # Manual commits
@@ -578,6 +658,7 @@ in
       upgrader
       nvd
       gawk
+      bc
     ];
 
     home.shellAliases = {

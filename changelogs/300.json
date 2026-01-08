@@ -1,0 +1,172 @@
+{
+  "version": 300,
+  "timestamp": "2026-01-08T09:44:00Z",
+  "closure_sizes": {
+    "linux_x64_bytes": null,
+    "mac_arm64_bytes": null
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "nodejs",
+        "from": "20.19.6",
+        "to": "24.12.0"
+      }
+    ],
+    "added": [
+      {
+        "name": "bash-language-server",
+        "version": "5.6.0"
+      },
+      {
+        "name": "git-minimal",
+        "version": "2.52.0"
+      },
+      {
+        "name": "md-lsp",
+        "version": "0.1.1"
+      },
+      {
+        "name": "nil",
+        "version": "2025-06-13"
+      },
+      {
+        "name": "nixfmt",
+        "version": "1.1.0"
+      },
+      {
+        "name": "prettier",
+        "version": "3.6.2"
+      },
+      {
+        "name": "typescript",
+        "version": "5.9.3"
+      },
+      {
+        "name": "typescript-language-server",
+        "version": "5.1.3"
+      },
+      {
+        "name": "vscode-langservers-extracted",
+        "version": "4.10.0"
+      },
+      {
+        "name": "yaml-language-server",
+        "version": "1.19.2"
+      }
+    ],
+    "removed": [
+      {
+        "name": "binutils",
+        "version": "2.44"
+      },
+      {
+        "name": "binutils-wrapper",
+        "version": "2.44"
+      },
+      {
+        "name": "clang",
+        "version": "21.1.7"
+      },
+      {
+        "name": "clang-wrapper",
+        "version": "21.1.7"
+      },
+      {
+        "name": "cmake",
+        "version": "4.1.2"
+      },
+      {
+        "name": "compiler-rt-libc",
+        "version": "21.1.7"
+      },
+      {
+        "name": "expand-response-params",
+        "version": "<none>"
+      },
+      {
+        "name": "git",
+        "version": "2.52.0"
+      },
+      {
+        "name": "gmp",
+        "version": "6.3.0"
+      },
+      {
+        "name": "gnumake",
+        "version": "4.4.1"
+      },
+      {
+        "name": "go",
+        "version": "1.25.5"
+      },
+      {
+        "name": "isl",
+        "version": "0.20"
+      },
+      {
+        "name": "libmpc",
+        "version": "1.3.1"
+      },
+      {
+        "name": "libyaml",
+        "version": "0.2.5"
+      },
+      {
+        "name": "linux-headers",
+        "version": "6.16.7"
+      },
+      {
+        "name": "llvm",
+        "version": "21.1.7-lib"
+      },
+      {
+        "name": "mpfr",
+        "version": "4.2.2"
+      },
+      {
+        "name": "patchelf",
+        "version": "0.15.2"
+      },
+      {
+        "name": "pkg-config",
+        "version": "0.29.2"
+      },
+      {
+        "name": "pkg-config-wrapper",
+        "version": "0.29.2"
+      },
+      {
+        "name": "rhash",
+        "version": "1.4.4"
+      },
+      {
+        "name": "ruby",
+        "version": "3.3.10"
+      },
+      {
+        "name": "rustup",
+        "version": "1.28.2"
+      }
+    ]
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "8e4c728",
+      "message": "Record closure sizes in changelogs to track install size",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "3791100",
+      "message": "Use gitMinimal for linux",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "360e4d1",
+      "message": "Try including built LSPs instead of build tools",
+      "author": "Jack Coy"
+    }
+  ]
+}

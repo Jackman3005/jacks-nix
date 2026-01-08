@@ -218,7 +218,7 @@ let
       }
     ' | sort || true)
 
-    total_upgrade_count=$(echo "$all_package_upgrades" | grep -c . || echo "0")
+    total_upgrade_count=$(echo "$all_package_upgrades" | grep -c . 2>/dev/null) || true; [[ -z "$total_upgrade_count" ]] && total_upgrade_count=0
 
     # Separate key upgrades (declared packages) from dependency upgrades
     key_upgrades=""
@@ -227,21 +227,21 @@ let
       while IFS=$'\t' read -r pkg from to; do
         [[ -z "$pkg" ]] && continue
         if echo "$declared_packages" | grep -qx "$pkg"; then
-          key_upgrades="$key_upgrades$pkg\t$from\t$to"$'\n'
+          key_upgrades="''${key_upgrades}$(printf '%s\t%s\t%s\n' "$pkg" "$from" "$to")"
         else
-          dep_upgrades="$dep_upgrades$pkg\t$from\t$to"$'\n'
+          dep_upgrades="''${dep_upgrades}$(printf '%s\t%s\t%s\n' "$pkg" "$from" "$to")"
         fi
       done <<< "$all_package_upgrades"
     else
       dep_upgrades="$all_package_upgrades"
     fi
 
-    key_count=$(echo "$key_upgrades" | grep -c . || echo "0")
-    dep_count=$(echo "$dep_upgrades" | grep -c . || echo "0")
+    key_count=$(echo "$key_upgrades" | grep -c . 2>/dev/null) || true; [[ -z "$key_count" ]] && key_count=0
+    dep_count=$(echo "$dep_upgrades" | grep -c . 2>/dev/null) || true; [[ -z "$dep_count" ]] && dep_count=0
 
     # Deduplicate commits and count
     unique_commits=$(echo "$all_manual_commits" | grep -v '^$' | sort -u || true)
-    commit_count=$(echo "$unique_commits" | grep -c . || echo "0")
+    commit_count=$(echo "$unique_commits" | grep -c . 2>/dev/null) || true; [[ -z "$commit_count" ]] && commit_count=0
 
     # --- SIZE COMPARISON ---
     from_sizes=$(get_changelog_sizes "$from_version")
@@ -255,36 +255,50 @@ let
     size_warning=""
     size_info=""
 
-    check_size_increase() {
+    add_size_info() {
       local from="$1" to="$2" platform="$3"
-      [[ -z "$from" || -z "$to" || "$from" == "null" || "$to" == "null" ]] && return
+      local from_valid=true
+      local to_valid=true
 
-      local diff=$((to - from))
-      local pct=0
-      [[ "$from" -gt 0 ]] && pct=$((diff * 100 / from))
+      [[ -z "$from" || "$from" == "null" ]] && from_valid=false
+      [[ -z "$to" || "$to" == "null" ]] && to_valid=false
 
-      local diff_mb=$((diff / 1048576))
-      local threshold_mb=300
-      local threshold_pct=15
+      # Skip if neither size is known
+      [[ "$from_valid" == "false" && "$to_valid" == "false" ]] && return
 
-      if [[ "$diff" -gt 0 ]]; then
-        if [[ "$pct" -gt "$threshold_pct" ]] || [[ "$diff_mb" -gt "$threshold_mb" ]]; then
-          size_warning="''${size_warning}''${RED}⚠️  Warning: ''${platform} size increased by ''${pct}% (+''${diff_mb} MiB)''${NC}\n"
+      local from_fmt="unknown"
+      local to_fmt="unknown"
+      [[ "$from_valid" == "true" ]] && from_fmt=$(format_size "$from")
+      [[ "$to_valid" == "true" ]] && to_fmt=$(format_size "$to")
+
+      # If both are known, show diff
+      if [[ "$from_valid" == "true" && "$to_valid" == "true" ]]; then
+        local diff=$((to - from))
+        local pct=0
+        [[ "$from" -gt 0 ]] && pct=$((diff * 100 / from))
+        local diff_mb=$((diff / 1048576))
+        local threshold_mb=300
+        local threshold_pct=15
+
+        if [[ "$diff" -gt 0 ]]; then
+          if [[ "$pct" -gt "$threshold_pct" ]] || [[ "$diff_mb" -gt "$threshold_mb" ]]; then
+            size_warning="''${size_warning}''${RED}⚠️  Warning: ''${platform} size increased by ''${pct}% (+''${diff_mb} MiB)''${NC}\n"
+          fi
+          size_info="''${size_info}   ''${platform}: ''${from_fmt} → ''${to_fmt} (+''${diff_mb} MiB)\n"
+        elif [[ "$diff" -lt 0 ]]; then
+          local saved_mb=$(( (-diff) / 1048576 ))
+          size_info="''${size_info}   ''${platform}: ''${from_fmt} → ''${to_fmt} (-''${saved_mb} MiB) ✨\n"
+        else
+          size_info="''${size_info}   ''${platform}: ''${to_fmt} (no change)\n"
         fi
-
-        local from_fmt=$(format_size "$from")
-        local to_fmt=$(format_size "$to")
-        size_info="''${size_info}   ''${platform}: ''${from_fmt} → ''${to_fmt} (+''${diff_mb} MiB)\n"
-      elif [[ "$diff" -lt 0 ]]; then
-        local saved_mb=$(( (-diff) / 1048576 ))
-        local from_fmt=$(format_size "$from")
-        local to_fmt=$(format_size "$to")
-        size_info="''${size_info}   ''${platform}: ''${from_fmt} → ''${to_fmt} (-''${saved_mb} MiB) ✨\n"
+      else
+        # Show what we know
+        size_info="''${size_info}   ''${platform}: ''${from_fmt} → ''${to_fmt}\n"
       fi
     }
 
-    check_size_increase "$from_linux" "$to_linux" "Linux"
-    check_size_increase "$from_mac" "$to_mac" "macOS"
+    add_size_info "$from_linux" "$to_linux" "Linux"
+    add_size_info "$from_mac" "$to_mac" "macOS"
 
     # --- OUTPUT ---
     output_content() {
@@ -365,7 +379,7 @@ let
       if [[ "$full_mode" == "true" ]]; then
         if [[ -n "$all_package_added" ]]; then
           added_list=$(echo "$all_package_added" | grep -v '^$' | sort -u)
-          added_count=$(echo "$added_list" | grep -c . || echo "0")
+          added_count=$(echo "$added_list" | grep -c . 2>/dev/null) || true; [[ -z "$added_count" ]] && added_count=0
           echo -e "''${GREEN}➕ Packages Added ($added_count):''${NC}"
           echo "$added_list" | while IFS=$'\t' read -r name version; do
             if [[ -n "$version" ]]; then
@@ -379,7 +393,7 @@ let
 
         if [[ -n "$all_package_removed" ]]; then
           removed_list=$(echo "$all_package_removed" | grep -v '^$' | sort -u)
-          removed_count=$(echo "$removed_list" | grep -c . || echo "0")
+          removed_count=$(echo "$removed_list" | grep -c . 2>/dev/null) || true; [[ -z "$removed_count" ]] && removed_count=0
           echo -e "''${RED}➖ Packages Removed ($removed_count):''${NC}"
           echo "$removed_list" | while IFS=$'\t' read -r name version; do
             if [[ -n "$version" ]]; then

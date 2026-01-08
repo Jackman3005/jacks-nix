@@ -1,0 +1,22 @@
+{
+  "version": 301,
+  "timestamp": "2026-01-08T09:58:47Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1426469432,
+    "mac_arm64_bytes": 1351146320
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "1edc0eb",
+      "message": "Fix closure size calculation in CI",
+      "author": "Jack Coy"
+    }
+  ]
+}

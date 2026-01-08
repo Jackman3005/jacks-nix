@@ -14,7 +14,6 @@
       zsh-syntax-highlighting
       curl
       wget
-      git
       uv
     ];
 

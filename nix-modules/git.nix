@@ -7,6 +7,7 @@ in
   config = lib.mkIf config.jacks-nix.enableGit {
     programs.git = {
       enable = true;
+      package = if pkgs.stdenv.isLinux then pkgs.gitMinimal else pkgs.git;
       settings = lib.mkMerge [
             {
               user = {

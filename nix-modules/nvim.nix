@@ -7,7 +7,7 @@
       neovim
       ripgrep
       fd
-      nodejs_22
+      nodejs_24
       tree-sitter
       unzip
 

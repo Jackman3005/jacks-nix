@@ -1,0 +1,22 @@
+{
+  "version": 303,
+  "timestamp": "2026-01-08T11:12:42Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1426470256,
+    "mac_arm64_bytes": 1351147056
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "6cbf33c",
+      "message": "Use sudo for garbage collection on all platforms",
+      "author": "Jack Coy"
+    }
+  ]
+}

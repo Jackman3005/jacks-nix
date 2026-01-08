@@ -7,30 +7,28 @@
       neovim
       ripgrep
       fd
-      nodejs_20
+      nodejs_22
       tree-sitter
+      unzip
+
+      # Pre-built LSPs
       lua-language-server
+      typescript-language-server
+      vscode-langservers-extracted
+      bash-language-server
+      yaml-language-server
+      md-lsp
+      nil
+
+      # Formatters/Linters
       stylua
       shellcheck
       shfmt
+      nodePackages.prettier
 
-      # Mason dependencies
-      unzip
-      rustup
-      go
-      ruby
+      # Python (for pynvim)
       python3
-      python3Packages.pip
-      python3Packages.setuptools
-      python3Packages.wheel
-      python3Packages.virtualenv
-      python3Packages.flake8
-
-      # C compiler and build tools
-      clang
-      cmake
-      gnumake
-      pkg-config
+      python3Packages.pynvim
     ];
 
     home.sessionVariables = {

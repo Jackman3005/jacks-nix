@@ -501,10 +501,9 @@ let
       esac
     done
 
-    ${lib.optionalString pkgs.stdenv.isDarwin ''
+    # Prompt for sudo password upfront and keep credentials fresh
     sudo -v
     while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-    ''}
 
     (
       cd "$config_repo"
@@ -573,20 +572,14 @@ let
         echo "📥 Checking out latest tag..."
         git -c advice.detachedHead=false checkout tags/latest
 
-        echo "🧹 Cleaning up unused nix packages and derivations..."
+        echo "🧹 Cleaning up old generations and freeing disk space..."
 
-        # Remove any generations older than 30 days that are not active.
-        if nix-collect-garbage --delete-older-than 30d >> "$LOG_FILE" 2>&1; then
+        # Remove generations older than 30 days and garbage collect.
+        # Uses sudo to clean both system and user-level generations.
+        if sudo nix-collect-garbage --delete-older-than 30d >> "$LOG_FILE" 2>&1; then
           echo "✅ Successfully cleaned up old generations"
         else
           echo "⚠️  Warning: Could not clean up old generations (this is usually fine)"
-        fi
-
-        # Run garbage collection to free up disk space
-        if nix-store --gc >> "$LOG_FILE" 2>&1; then
-          echo "✅ Successfully performed garbage collection"
-        else
-          echo "⚠️  Warning: Could not perform garbage collection (this is usually fine)"
         fi
       fi
 

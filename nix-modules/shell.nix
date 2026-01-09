@@ -5,16 +5,13 @@
     home.packages = with pkgs; [
       bat
       tree
-      fzf
       eza
       jq
       zellij
-      direnv
-      zsh-autosuggestions
-      zsh-syntax-highlighting
       curl
       wget
       uv
+      fd
     ];
 
     programs.home-manager.enable = true;
@@ -38,20 +35,145 @@
         else "ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if ($i==\"src\") print $(i+1)}'";
     };
 
+    programs.starship = {
+      enable = true;
+      enableZshIntegration = true;
+      settings = {
+        add_newline = false;
+
+        format = lib.concatStrings [
+          "[#](bold blue) "
+          "$username"
+          "$hostname"
+          "[ in ](white)"
+          "$directory"
+          "$git_branch"
+          "$git_status"
+          "$kubernetes"
+          "$python"
+          "[ \\[](white)$time[\\]](white)"
+          "$status"
+          "\n"
+          "$character"
+        ];
+
+        profiles = {
+          transient = {
+            format = "$directory $character";
+          };
+          transient-right = {
+            format = "$status$cmd_duration $time";
+          };
+        };
+
+        username = {
+          style_user = "cyan";
+          style_root = "black bg:yellow";
+          format = "[$user]($style)";
+          show_always = true;
+        };
+
+        hostname = {
+          ssh_only = true;
+          format = "[@](white)[$hostname]($style)";
+          style = "green";
+        };
+
+        directory = {
+          style = "yellow bold";
+          format = "[$path]($style)";
+          truncation_length = 3;
+          truncation_symbol = ".../";
+        };
+
+        git_branch = {
+          symbol = "";
+          style = "purple";
+          format = "[ on ](white)[$branch]($style)";
+        };
+
+        git_status = {
+          format = "([$all_status$ahead_behind]($style))";
+          style = "yellow";
+          conflicted = "[!](bold red)";
+          untracked = "?";
+          modified = "*";
+          staged = "+";
+          ahead = "[⇡\${count}](cyan)";
+          behind = "[⇣\${count}](magenta)";
+          diverged = "[⇕⇡\${ahead_count}⇣\${behind_count}](magenta)";
+        };
+
+        kubernetes = {
+          disabled = false;
+          format = "[ on ](white)[$symbol$context( \\($namespace\\))]($style)";
+          style = "cyan";
+          symbol = "☸ ";
+          detect_folders = [];
+        };
+
+        python = {
+          symbol = "";
+          style = "green";
+          format = "[ (venv:$virtualenv)]($style)";
+          detect_extensions = [];
+          detect_files = [];
+          detect_folders = [];
+        };
+
+        time = {
+          disabled = false;
+          format = "[$time]($style)";
+          style = "white";
+          time_format = "%T";
+        };
+
+        status = {
+          disabled = false;
+          format = "[ C:$status]($style)";
+          style = "red";
+        };
+
+        cmd_duration = {
+          min_time = 2000;
+          format = "[$duration]($style) ";
+          style = "yellow";
+        };
+
+        character = {
+          success_symbol = "[\\$](bold green)";
+          error_symbol = "[\\$](bold red)";
+        };
+
+        nodejs.disabled = true;
+        rust.disabled = true;
+        golang.disabled = true;
+        package.disabled = true;
+        docker_context.disabled = true;
+        aws.disabled = true;
+        gcloud.disabled = true;
+      };
+    };
+
+    programs.fzf = {
+      enable = true;
+      enableZshIntegration = true;
+      defaultCommand = "fd --type f --hidden --follow --exclude .git";
+      fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
+      defaultOptions = [ "--height 40%" "--layout=reverse" "--border" ];
+    };
+
+    programs.direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+    };
+
     programs.zsh = {
       enable = true;
-
-      oh-my-zsh = {
-        enable = true;
-        theme = config.jacks-nix.zshTheme;
-        plugins = [
-          "git"
-          "docker"
-          "kubectl"
-          "direnv"
-          "fzf"
-        ] ++ lib.optionals (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) [ "brew" ];
-      };
+      autosuggestion.enable = true;
+      syntaxHighlighting.enable = true;
+      enableCompletion = true;
 
       history = {
         size = 100000;
@@ -66,14 +188,26 @@
             jacks-nix-update-check
         fi
 
-
         export EDITOR=vi
 
-        export FZF_BASE_DIR="${pkgs.fzf}/share/fzf"
-        export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-        export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-        export FZF_PREVIEW_COMMAND='bat --style=numbers --color=always --line-range :500 {}'
-        export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border'
+        # Tool completions
+        command -v kubectl &>/dev/null && source <(kubectl completion zsh)
+        command -v docker &>/dev/null && source <(docker completion zsh)
+
+        # Transient prompt for zsh + starship
+        autoload -Uz add-zsh-hook add-zle-hook-widget
+
+        function _transient_prompt_precmd {
+            TRAPINT() { _transient_prompt_func; return $(( 128 + $1 )) }
+        }
+        add-zsh-hook precmd _transient_prompt_precmd
+
+        function _transient_prompt_func {
+            PROMPT="$(starship prompt --profile transient)"
+            RPROMPT="$(starship prompt --profile transient-right --right)"
+            zle .reset-prompt
+        }
+        add-zle-hook-widget zle-line-finish _transient_prompt_func
 
         ${lib.optionalString config.jacks-nix.enableNode ''
           # NVM manages installed node versions

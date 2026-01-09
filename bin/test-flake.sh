@@ -157,11 +157,6 @@ run_env_test "JACKS_NIX_USERNAME override" \
     "username" \
     '"testuser"'
 
-run_env_test "JACKS_NIX_ZSH_THEME override" \
-    'JACKS_NIX_ZSH_THEME="robbyrussell"' \
-    "zshTheme" \
-    '"robbyrussell"'
-
 # Test boolean environment variables - test both true and false for variables with different defaults
 run_env_test "JACKS_NIX_ENABLE_GIT=false (default true)" \
     'JACKS_NIX_ENABLE_GIT="false"' \

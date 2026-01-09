@@ -37,7 +37,6 @@ in
 
     enableGit      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_GIT" true);
     enableZsh      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_ZSH" true);
-    zshTheme       = mkDefault (envOr "JACKS_NIX_ZSH_THEME" "ys");
     enableNvim     = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NVIM" true);
     enableHomebrew = mkDefault (envBoolOr "JACKS_NIX_ENABLE_HOMEBREW" pkgs.stdenv.isDarwin);
 

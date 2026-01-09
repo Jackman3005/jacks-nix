@@ -37,11 +37,7 @@
     };
 
     enableGit = lib.mkEnableOption "Git configuration";
-    enableZsh = lib.mkEnableOption "Zsh and Oh My Zsh configuration";
-    zshTheme = lib.mkOption {
-      type = lib.types.str;
-      description = "Oh My Zsh theme to use";
-    };
+    enableZsh = lib.mkEnableOption "Zsh shell with Starship prompt";
     enableNvim = lib.mkEnableOption "Neovim configuration with nixvim";
     enableHomebrew = lib.mkEnableOption "Homebrew configuration (macOS only)";
 

@@ -1,0 +1,40 @@
+{
+  "version": 305,
+  "timestamp": "2026-01-09T03:22:33Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1432736760,
+    "mac_arm64_bytes": 1354041656
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [
+      {
+        "name": "nix-direnv",
+        "version": "3.1.0"
+      },
+      {
+        "name": "starship",
+        "version": "1.24.2"
+      },
+      {
+        "name": "starship-config",
+        "version": "<none>"
+      }
+    ],
+    "removed": [
+      {
+        "name": "oh-my-zsh",
+        "version": "2025-11-23"
+      }
+    ]
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "4de2bbd",
+      "message": "Switch from Oh-My-Zsh to Starship",
+      "author": "Jack Coy"
+    }
+  ]
+}

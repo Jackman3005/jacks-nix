@@ -18,6 +18,12 @@
 
     home.shell.enableZshIntegration = true;
     home.shellAliases = {
+      ".." = "cd ..";
+      "..." = "cd ../..";
+      "...." = "cd ../../..";
+      "....." = "cd ../../../..";
+      "......" = "cd ../../../../..";
+      "......." = "cd ../../../../../..";
       g = "git";
       vi = "nvim";
       cat = "bat";
@@ -49,7 +55,6 @@
           "$directory"
           "$git_branch"
           "$git_status"
-          "$kubernetes"
           "$python"
           "[ \\[](white)$time[\\]](white)"
           "$status"
@@ -58,12 +63,7 @@
         ];
 
         profiles = {
-          transient = {
-            format = "$directory $character";
-          };
-          transient-right = {
-            format = "$status$cmd_duration $time";
-          };
+          transient = "$directory $character";
         };
 
         username = {
@@ -105,11 +105,7 @@
         };
 
         kubernetes = {
-          disabled = false;
-          format = "[ on ](white)[$symbol$context( \\($namespace\\))]($style)";
-          style = "cyan";
-          symbol = "☸ ";
-          detect_folders = [];
+          disabled = true;
         };
 
         python = {
@@ -195,19 +191,17 @@
         command -v docker &>/dev/null && source <(docker completion zsh)
 
         # Transient prompt for zsh + starship
-        autoload -Uz add-zsh-hook add-zle-hook-widget
+        # Based on: https://github.com/starship/starship/discussions/5950
+        function _transient_prompt_zle_line_finish {
+            # Our prompt has 2 lines (main info + $ on second line)
+            # Move cursor up 1 line, to column 0, then clear to end of screen
+            print -n '\e[1A\r\e[J'
 
-        function _transient_prompt_precmd {
-            TRAPINT() { _transient_prompt_func; return $(( 128 + $1 )) }
+            # Print transient prompt + the command that was entered
+            print -Pn "$(starship prompt --profile transient)"
+            print "$BUFFER"
         }
-        add-zsh-hook precmd _transient_prompt_precmd
-
-        function _transient_prompt_func {
-            PROMPT="$(starship prompt --profile transient)"
-            RPROMPT="$(starship prompt --profile transient-right --right)"
-            zle .reset-prompt
-        }
-        add-zle-hook-widget zle-line-finish _transient_prompt_func
+        zle -N zle-line-finish _transient_prompt_zle_line_finish
 
         ${lib.optionalString config.jacks-nix.enableNode ''
           # NVM manages installed node versions

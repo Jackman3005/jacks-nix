@@ -1,0 +1,22 @@
+{
+  "version": 308,
+  "timestamp": "2026-01-11T22:56:06Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1432794456,
+    "mac_arm64_bytes": 1354189208
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "a0fa5c3",
+      "message": "Fix ZSH transient prompt with Starship",
+      "author": "Jack Coy"
+    }
+  ]
+}

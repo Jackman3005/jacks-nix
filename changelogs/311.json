@@ -1,0 +1,22 @@
+{
+  "version": 311,
+  "timestamp": "2026-01-14T20:13:20Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1433040440,
+    "mac_arm64_bytes": 1353401704
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "b1fa714d6cd656e3105d1965637be6ab7541d7d7",
+      "to_rev": "85c83f70968516f571015e260fb21c774e586c0b",
+      "commit_count": 8
+    }
+  },
+  "manual_commits": []
+}

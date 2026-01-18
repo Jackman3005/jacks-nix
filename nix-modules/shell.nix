@@ -61,10 +61,6 @@
           "$character"
         ];
 
-        profiles = {
-          transient = "$directory $character";
-        };
-
         username = {
           style_user = "cyan";
           style_root = "black bg:yellow";
@@ -190,44 +186,6 @@
         # Tool completions
         command -v kubectl &>/dev/null && source <(kubectl completion zsh)
         command -v docker &>/dev/null && source <(docker completion zsh)
-
-        # Transient prompt for zsh + starship
-        # Based on: https://github.com/starship/starship/discussions/5950
-        function _transient_prompt_zle_line_finish {
-            local cmd="$BUFFER"
-
-            # Skip transient prompt for multi-line commands:
-            # - PREBUFFER non-empty means we're in a continuation
-            # - Buffer contains newlines (pasted multi-line)
-            # - Line ends with continuation characters
-            # - Heredocs (contains <<)
-            # - Unclosed quotes (odd number of unescaped quotes)
-            [[ -n "$PREBUFFER" ]] && return
-            [[ "$cmd" == *$'\n'* ]] && return
-            [[ "$cmd" == *$'\\' ]] && return
-            [[ "$cmd" == *'|' ]] && return
-            [[ "$cmd" == *'&&' ]] && return
-            [[ "$cmd" == *'||' ]] && return
-            [[ "$cmd" == *'<<'* ]] && return
-            # Check for unclosed quotes (remove escaped backslashes first, then escaped quotes)
-            local check="''${cmd//\\\\/}"
-            check="''${check//\\\"/}"
-            check="''${check//\\\'/}"
-            local dq="''${check//[^\"]/}"
-            local sq="''${check//[^\']/}"
-            (( ''${#dq} % 2 == 1 )) && return
-            (( ''${#sq} % 2 == 1 )) && return
-
-            # Our prompt has 2 lines (main info + $ on second line)
-            # Move cursor up 1 line, to column 0, then clear to end of screen
-            print -n '\e[1A\r\e[J'
-
-            # Print transient prompt (-P for zsh prompt expansion of %{%} sequences)
-            print -Pn -- "$(starship prompt --profile transient)"
-            # Print the command raw, no newline (shell adds one after zle-line-finish)
-            print -rn -- "$cmd"
-        }
-        zle -N zle-line-finish _transient_prompt_zle_line_finish
 
         ${lib.optionalString config.jacks-nix.enableNode ''
           # NVM manages installed node versions

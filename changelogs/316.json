@@ -1,0 +1,27 @@
+{
+  "version": 316,
+  "timestamp": "2026-01-18T23:27:57Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1433411392,
+    "mac_arm64_bytes": 1353390448
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "3626ae5",
+      "message": "Remove transient prompt for zsh. more hassle than value",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "f99c0e1",
+      "message": "fix multi-line transient prompts",
+      "author": "Jack Coy"
+    }
+  ]
+}

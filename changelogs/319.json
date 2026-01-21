@@ -1,0 +1,73 @@
+{
+  "version": 319,
+  "timestamp": "2026-01-21T20:20:05Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1434293784,
+    "mac_arm64_bytes": 1355207632
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "lua-language-server",
+        "from": "3.16.1",
+        "to": "3.17.0"
+      },
+      {
+        "name": "nix-cmd",
+        "from": "2.31.2+2",
+        "to": "2.31.3"
+      },
+      {
+        "name": "nix-expr",
+        "from": "2.31.2+2",
+        "to": "2.31.3"
+      },
+      {
+        "name": "nix-fetchers",
+        "from": "2.31.2+2",
+        "to": "2.31.3"
+      },
+      {
+        "name": "nix-flake",
+        "from": "2.31.2+2",
+        "to": "2.31.3"
+      },
+      {
+        "name": "nix-main",
+        "from": "2.31.2+2",
+        "to": "2.31.3"
+      },
+      {
+        "name": "nix-store",
+        "from": "2.31.2+2",
+        "to": "2.31.3"
+      },
+      {
+        "name": "nix-util",
+        "from": "2.31.2+2",
+        "to": "2.31.3"
+      },
+      {
+        "name": "uv",
+        "from": "0.9.25",
+        "to": "0.9.26"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "63a87808f5f9b6e4195a1d33f6ea25d23f4aa0df",
+      "to_rev": "ec0247a7a19f641595c24ac1ea4df6461d1cdb36",
+      "commit_count": 11
+    },
+    "nixpkgs": {
+      "from_rev": "e4bae1bd10c9c57b2cf517953ab70060a828ee6f",
+      "to_rev": "80e4adbcf8992d3fd27ad4964fbb84907f9478b0",
+      "commit_count": 2113
+    }
+  },
+  "manual_commits": []
+}

@@ -1,0 +1,22 @@
+{
+  "version": 322,
+  "timestamp": "2026-01-24T20:16:36Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1434296200,
+    "mac_arm64_bytes": 1355196880
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixvim": {
+      "from_rev": "5b138edcb2f1c3ed4b29eca3658f04f0639b98b3",
+      "to_rev": "34a7d94cdcd2b034eb06202992bed1345aa046c9",
+      "commit_count": 29
+    }
+  },
+  "manual_commits": []
+}

@@ -1,0 +1,183 @@
+{
+  "version": 323,
+  "timestamp": "2026-01-25T20:15:17Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1458887608,
+    "mac_arm64_bytes": 2611106224
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "bash",
+        "from": "5.3p3",
+        "to": "5.3p9"
+      },
+      {
+        "name": "bash-interactive",
+        "from": "5.3p3",
+        "to": "5.3p9"
+      },
+      {
+        "name": "coreutils",
+        "from": "9.8",
+        "to": "9.9"
+      },
+      {
+        "name": "cryptsetup",
+        "from": "2.8.1",
+        "to": "2.8.3"
+      },
+      {
+        "name": "fmt",
+        "from": "12.0.0",
+        "to": "12.1.0"
+      },
+      {
+        "name": "getent-glibc",
+        "from": "2.40-66",
+        "to": "2.42-47"
+      },
+      {
+        "name": "glibc-locales",
+        "from": "2.40-66",
+        "to": "2.42-47"
+      },
+      {
+        "name": "less",
+        "from": "679",
+        "to": "685"
+      },
+      {
+        "name": "libapparmor",
+        "from": "4.1.2",
+        "to": "4.1.3"
+      },
+      {
+        "name": "libsodium",
+        "from": "1.0.20",
+        "to": "1.0.20-unstable-2025-12-31"
+      },
+      {
+        "name": "libtasn1",
+        "from": "4.20.0",
+        "to": "4.21.0"
+      },
+      {
+        "name": "libtpms",
+        "from": "0.10.1",
+        "to": "0.10.2"
+      },
+      {
+        "name": "lvm2",
+        "from": "2.03.37-lib",
+        "to": "2.03.38-lib"
+      },
+      {
+        "name": "ncurses",
+        "from": "6.5",
+        "to": "6.6"
+      },
+      {
+        "name": "nodejs",
+        "from": "24.12.0",
+        "to": "24.13.0"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2025-11-14",
+        "to": "0-unstable-2025-12-28"
+      },
+      {
+        "name": "readline",
+        "from": "8.3p1",
+        "to": "8.3p3"
+      },
+      {
+        "name": "systemd",
+        "from": "258.2",
+        "to": "258.3"
+      },
+      {
+        "name": "systemd-minimal",
+        "from": "258.2",
+        "to": "258.3"
+      },
+      {
+        "name": "systemd-minimal-libs",
+        "from": "258.2",
+        "to": "258.3"
+      },
+      {
+        "name": "tzdata",
+        "from": "2025b",
+        "to": "2025c"
+      },
+      {
+        "name": "utf8proc",
+        "from": "2.11.2",
+        "to": "2.11.3"
+      },
+      {
+        "name": "xdg-user-dirs",
+        "from": "0.18",
+        "to": "0.19"
+      },
+      {
+        "name": "xz",
+        "from": "5.8.1",
+        "to": "5.8.2"
+      },
+      {
+        "name": "zlib-ng",
+        "from": "2.2.5",
+        "to": "2.3.2"
+      }
+    ],
+    "added": [
+      {
+        "name": "ada",
+        "version": "3.4.1"
+      },
+      {
+        "name": "c-ares",
+        "version": "1.34.6"
+      },
+      {
+        "name": "libev",
+        "version": "4.33"
+      },
+      {
+        "name": "simdjson",
+        "version": "4.2.4"
+      },
+      {
+        "name": "simdutf",
+        "version": "6.5.0"
+      },
+      {
+        "name": "uvwasi",
+        "version": "0.0.23"
+      }
+    ],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "082a4cd87c6089d1d9c58ebe52655f9e07245fcb",
+      "to_rev": "2539eba97a6df237d75617c25cd2dbef92df3d5b",
+      "commit_count": 1
+    },
+    "nixpkgs": {
+      "from_rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
+      "to_rev": "c5296fdd05cfa2c187990dd909864da9658df755",
+      "commit_count": 1939
+    },
+    "nixvim": {
+      "from_rev": "34a7d94cdcd2b034eb06202992bed1345aa046c9",
+      "to_rev": "acb045161f6a1db2d59edf90d764d85ebb028499",
+      "commit_count": 1
+    }
+  },
+  "manual_commits": []
+}

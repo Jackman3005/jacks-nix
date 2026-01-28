@@ -1,0 +1,33 @@
+{
+  "version": 326,
+  "timestamp": "2026-01-28T20:25:22Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1458928896,
+    "mac_arm64_bytes": 2611356896
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "lua-language-server",
+        "from": "3.17.0",
+        "to": "3.17.1"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "d505dc46dc9831d1db4e7d6e323b2c42d5eba3e6",
+      "to_rev": "02d763228d8aff317e6e5a319474b6d4d9d826a5",
+      "commit_count": 5
+    },
+    "nixpkgs": {
+      "from_rev": "c5296fdd05cfa2c187990dd909864da9658df755",
+      "to_rev": "bfc1b8a4574108ceef22f02bafcf6611380c100d",
+      "commit_count": 1798
+    }
+  },
+  "manual_commits": []
+}

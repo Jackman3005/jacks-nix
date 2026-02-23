@@ -1,0 +1,22 @@
+{
+  "version": 347,
+  "timestamp": "2026-02-23T04:38:23Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1459022256,
+    "mac_arm64_bytes": 2612552120
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "b2c692e",
+      "message": "fix: disable LazyVim news popup (read-only nix config prevents persisting seen state)",
+      "author": "Jack Coy"
+    }
+  ]
+}

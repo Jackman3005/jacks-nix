@@ -1,0 +1,182 @@
+{
+  "version": 349,
+  "timestamp": "2026-02-24T20:21:38Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1460928024,
+    "mac_arm64_bytes": 2619580416
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "ada",
+        "from": "3.4.1",
+        "to": "3.4.2"
+      },
+      {
+        "name": "boost",
+        "from": "1.87.0",
+        "to": "1.89.0"
+      },
+      {
+        "name": "coreutils",
+        "from": "9.9",
+        "to": "9.10"
+      },
+      {
+        "name": "cryptsetup",
+        "from": "2.8.3",
+        "to": "2.8.4"
+      },
+      {
+        "name": "expat",
+        "from": "2.7.3",
+        "to": "2.7.4"
+      },
+      {
+        "name": "getent-glibc",
+        "from": "2.42-47",
+        "to": "2.42-51"
+      },
+      {
+        "name": "gettext",
+        "from": "0.25.1",
+        "to": "0.26"
+      },
+      {
+        "name": "git-minimal",
+        "from": "2.52.0",
+        "to": "2.53.0"
+      },
+      {
+        "name": "glibc-locales",
+        "from": "2.42-47",
+        "to": "2.42-51"
+      },
+      {
+        "name": "gnutls",
+        "from": "3.8.11",
+        "to": "3.8.12"
+      },
+      {
+        "name": "iana-etc",
+        "from": "20250505",
+        "to": "20251215"
+      },
+      {
+        "name": "inetutils",
+        "from": "2.6",
+        "to": "2.7"
+      },
+      {
+        "name": "less",
+        "from": "685",
+        "to": "691"
+      },
+      {
+        "name": "libblake3",
+        "from": "1.8.2",
+        "to": "1.8.3"
+      },
+      {
+        "name": "libbpf",
+        "from": "1.6.2",
+        "to": "1.6.3"
+      },
+      {
+        "name": "libcap-ng",
+        "from": "0.8.5",
+        "to": "0.9"
+      },
+      {
+        "name": "libluv",
+        "from": "1.51.0-1",
+        "to": "1.51.0-2"
+      },
+      {
+        "name": "libsodium",
+        "from": "1.0.20-unstable-2025-12-31",
+        "to": "1.0.21-unstable-2026-01-22"
+      },
+      {
+        "name": "p11-kit",
+        "from": "0.25.10",
+        "to": "0.26.1"
+      },
+      {
+        "name": "pcsclite",
+        "from": "2.3.0-lib",
+        "to": "2.4.1-lib"
+      },
+      {
+        "name": "procps",
+        "from": "4.0.4",
+        "to": "4.0.6"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2025-12-28",
+        "to": "0-unstable-2026-01-25"
+      },
+      {
+        "name": "s2n-tls",
+        "from": "1.5.27",
+        "to": "1.6.4"
+      },
+      {
+        "name": "systemd",
+        "from": "258.3",
+        "to": "259"
+      },
+      {
+        "name": "systemd-minimal",
+        "from": "258.3",
+        "to": "259"
+      },
+      {
+        "name": "systemd-minimal-libs",
+        "from": "258.3",
+        "to": "259"
+      },
+      {
+        "name": "uv",
+        "from": "0.10.2",
+        "to": "0.10.4"
+      },
+      {
+        "name": "yaml-language-server",
+        "from": "1.19.2",
+        "to": "1.20.0"
+      },
+      {
+        "name": "zlib-ng",
+        "from": "2.3.2",
+        "to": "2.3.3"
+      }
+    ],
+    "added": [
+      {
+        "name": "nodejs-slim",
+        "version": "24.13.0"
+      }
+    ],
+    "removed": [
+      {
+        "name": "kexec-tools",
+        "version": "2.0.32"
+      },
+      {
+        "name": "libcap",
+        "version": "2.77-lib"
+      }
+    ]
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "0182a361324364ae3f436a63005877674cf45efb",
+      "to_rev": "2fc6539b481e1d2569f25f8799236694180c0993",
+      "commit_count": 5077
+    }
+  },
+  "manual_commits": []
+}

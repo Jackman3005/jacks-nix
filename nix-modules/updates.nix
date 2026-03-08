@@ -483,7 +483,7 @@ let
   # A script to pull changes and apply the Nix configuration.
   updater = let
     updateCommand = if pkgs.stdenv.isDarwin
-      then "sudo darwin-rebuild switch --flake \"${configRepoPath}#mac-arm64\""
+      then "sudo /nix/var/nix/profiles/system/sw/bin/darwin-rebuild switch --flake \"${configRepoPath}#mac-arm64\""
       else "home-manager switch --flake \"${configRepoPath}#linux-x64\"";
   in pkgs.writeShellScriptBin "jacks-nix-update" ''
     set -euo pipefail

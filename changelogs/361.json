@@ -1,0 +1,22 @@
+{
+  "version": 361,
+  "timestamp": "2026-03-08T22:44:02Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1461074352,
+    "mac_arm64_bytes": 2620536704
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "19272ea",
+      "message": "Use full path to darwin-rebuild",
+      "author": "Jack Coy"
+    }
+  ]
+}

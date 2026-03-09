@@ -1,0 +1,43 @@
+{
+  "version": 362,
+  "timestamp": "2026-03-09T20:20:08Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1461236512,
+    "mac_arm64_bytes": 2630673344
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "fd",
+        "from": "10.3.0",
+        "to": "10.4.0"
+      },
+      {
+        "name": "stylua",
+        "from": "2.3.1",
+        "to": "2.4.0"
+      },
+      {
+        "name": "uv",
+        "from": "0.10.6",
+        "to": "0.10.8"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nix-darwin": {
+      "from_rev": "52d061516108769656a8bd9c6e811c677ec5b462",
+      "to_rev": "da529ac9e46f25ed5616fd634079a5f3c579135f",
+      "commit_count": 0
+    },
+    "nixpkgs": {
+      "from_rev": "aca4d95fce4914b3892661bcb80b8087293536c6",
+      "to_rev": "9dcb002ca1690658be4a04645215baea8b95f31d",
+      "commit_count": 1438
+    }
+  },
+  "manual_commits": []
+}

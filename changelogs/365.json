@@ -1,0 +1,38 @@
+{
+  "version": 365,
+  "timestamp": "2026-03-12T20:39:32Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1461645344,
+    "mac_arm64_bytes": 2631052448
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "fd",
+        "from": "10.4.0",
+        "to": "10.4.1"
+      },
+      {
+        "name": "uv",
+        "from": "0.10.8",
+        "to": "0.10.9"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "3f98e2bbc661ec0aaf558d8a283d6955f05f1d09",
+      "to_rev": "4aeef1941f862fe3a70d1b8264b4e289358c2325",
+      "commit_count": 9
+    },
+    "nixpkgs": {
+      "from_rev": "9dcb002ca1690658be4a04645215baea8b95f31d",
+      "to_rev": "62dc67aa6a52b4364dd75994ec00b51fbf474e50",
+      "commit_count": 875
+    }
+  },
+  "manual_commits": []
+}

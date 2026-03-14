@@ -1,0 +1,22 @@
+{
+  "version": 367,
+  "timestamp": "2026-03-14T20:29:37Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1461661240,
+    "mac_arm64_bytes": 2631290424
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "fe416aaedd397cacb33a610b33d60ff2b431b127",
+      "to_rev": "c06b4ae3d6599a672a6210b7021d699c351eebda",
+      "commit_count": 551
+    }
+  },
+  "manual_commits": []
+}

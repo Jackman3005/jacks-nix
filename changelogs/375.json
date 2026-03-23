@@ -1,0 +1,43 @@
+{
+  "version": 375,
+  "timestamp": "2026-03-23T23:44:40Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444575280,
+    "mac_arm64_bytes": 2595427920
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": [
+      {
+        "name": "cyrus-sasl",
+        "version": "2.1.28"
+      },
+      {
+        "name": "libksba",
+        "version": "1.6.7"
+      },
+      {
+        "name": "libtool",
+        "version": "2.5.4-lib"
+      },
+      {
+        "name": "libusb",
+        "version": "1.0.29"
+      },
+      {
+        "name": "openldap",
+        "version": "2.6.9"
+      }
+    ]
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "08cc778",
+      "message": "Bump home manager state version: `23.11` -> `25.11`",
+      "author": "Jack Coy"
+    }
+  ]
+}

@@ -59,7 +59,6 @@ in
     # Configure homebrew settings
     global = {
       brewfile = true;
-      lockfiles = false;
     };
 
     # Add homebrew taps (repositories)

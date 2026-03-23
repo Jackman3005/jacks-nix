@@ -1,0 +1,113 @@
+{
+  "version": 374,
+  "timestamp": "2026-03-23T20:25:42Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1468102072,
+    "mac_arm64_bytes": 2629118752
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "ada",
+        "from": "3.4.2",
+        "to": "3.4.3"
+      },
+      {
+        "name": "boehm-gc",
+        "from": "8.2.8",
+        "to": "8.2.12"
+      },
+      {
+        "name": "hwloc",
+        "from": "2.12.2-lib",
+        "to": "2.13.0-lib"
+      },
+      {
+        "name": "less",
+        "from": "691",
+        "to": "692"
+      },
+      {
+        "name": "libgpg-error",
+        "from": "1.55",
+        "to": "1.58"
+      },
+      {
+        "name": "libselinux",
+        "from": "3.8.1",
+        "to": "3.10"
+      },
+      {
+        "name": "libsodium",
+        "from": "1.0.21-unstable-2026-01-22",
+        "to": "1.0.21-unstable-2026-02-11"
+      },
+      {
+        "name": "libx11",
+        "from": "1.8.12",
+        "to": "1.8.13"
+      },
+      {
+        "name": "nodejs",
+        "from": "24.13.0",
+        "to": "24.14.0"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2026-01-25",
+        "to": "0-unstable-2026-03-02"
+      },
+      {
+        "name": "simdjson",
+        "from": "4.2.4",
+        "to": "4.3.1"
+      },
+      {
+        "name": "systemd",
+        "from": "259",
+        "to": "259.3"
+      },
+      {
+        "name": "systemd-minimal",
+        "from": "259",
+        "to": "259.3"
+      },
+      {
+        "name": "systemd-minimal-libs",
+        "from": "259",
+        "to": "259.3"
+      },
+      {
+        "name": "tzdata",
+        "from": "2025c",
+        "to": "2026a"
+      },
+      {
+        "name": "uv",
+        "from": "0.10.10",
+        "to": "0.10.12"
+      }
+    ],
+    "added": [],
+    "removed": [
+      {
+        "name": "getent-glibc",
+        "version": "2.42-51"
+      }
+    ]
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "932ca46013acabbedd13c27dc278e3d043707e46",
+      "to_rev": "bc357c75e3142a31b849ba49c5299fb52c61cf59",
+      "commit_count": 6
+    },
+    "nixpkgs": {
+      "from_rev": "b40629efe5d6ec48dd1efba650c797ddbd39ace0",
+      "to_rev": "6c9a78c09ff4d6c21d0319114873508a6ec01655",
+      "commit_count": 2376
+    }
+  },
+  "manual_commits": []
+}

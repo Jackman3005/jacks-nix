@@ -131,12 +131,14 @@ load_config() {
 
   # 1. Snapshot env vars that were explicitly set BEFORE we source config.env.
   #    These take precedence over saved config (e.g. CI exports, shell profile).
-  declare -A _env_before
+  #    Uses _SNAP_ prefixed vars to avoid associative arrays (bash 3.2 compat).
   local entry _key _type _default _prompt
+  local _snapped_keys=""
   for entry in "${CONFIG_SCHEMA[@]}"; do
     _parse_schema_entry "$entry"
     if [[ -n "${!_key+x}" ]]; then
-      _env_before[$_key]="${!_key}"
+      eval "_SNAP_${_key}=\"\${!_key}\""
+      _snapped_keys="${_snapped_keys} ${_key}"
     fi
   done
 
@@ -146,8 +148,9 @@ load_config() {
   fi
 
   # 3. Restore env overrides (external env takes precedence over config.env).
-  for _key in "${!_env_before[@]}"; do
-    export "$_key=${_env_before[$_key]}"
+  for _key in ${_snapped_keys}; do
+    local _snap_var="_SNAP_${_key}"
+    export "$_key=${!_snap_var}"
   done
 
   # 4. Walk the schema. For each key:
@@ -171,7 +174,8 @@ load_config() {
       _prompt_for_value "$_key" "$_type" "$current" "$_prompt"
     elif [[ -n "${!_key+x}" && -n "${!_key}" ]]; then
       # Value is set — just display it
-      if [[ -n "${_env_before[$_key]+x}" ]]; then
+      local _snap_var="_SNAP_${_key}"
+      if [[ -n "${!_snap_var+x}" ]]; then
         printf "  %s: %s (from environment)\n" "$_prompt" "${!_key}"
       else
         printf "  %s: %s\n" "$_prompt" "${!_key}"

@@ -1,0 +1,27 @@
+{
+  "version": 378,
+  "timestamp": "2026-03-24T01:51:51Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444574936,
+    "mac_arm64_bytes": 2595427536
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "c6afea8",
+      "message": "Retry upgrade for home manager from `23.11` to `25.11`",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "4db4863",
+      "message": "Ask for password after showing changes with `update`",
+      "author": "Jack Coy"
+    }
+  ]
+}

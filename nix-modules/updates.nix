@@ -666,7 +666,7 @@ let
 
     # Auto-download the CLI binary if missing
     if [[ ! -x "$CLI_BIN" ]]; then
-      "$_REPO/bin/install.sh" --ensure-cli || true
+      "$_REPO/bin/install.sh" --cli-only || true
     fi
 
     if [[ -x "$CLI_BIN" ]]; then

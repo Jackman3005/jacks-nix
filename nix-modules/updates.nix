@@ -659,13 +659,20 @@ let
     "$config_repo/bin/switch.sh" "$config_repo" --skip-config
   '';
 
-  # CLI wrapper: delegates to the Bun binary if available, falls back to bash scripts.
+  # CLI wrapper: delegates to the Bun binary, auto-downloads if missing, falls back to bash.
   cliWrapper = pkgs.writeShellScriptBin "jacks-nix" ''
-    CLI_BIN="${configRepoPath}/local/jacks-nix"
+    _REPO="${configRepoPath}"
+    CLI_BIN="$_REPO/local/jacks-nix"
+
+    # Auto-download the CLI binary if missing
+    if [[ ! -x "$CLI_BIN" ]]; then
+      "$_REPO/bin/install.sh" --ensure-cli || true
+    fi
+
     if [[ -x "$CLI_BIN" ]]; then
       exec "$CLI_BIN" "$@"
     else
-      # Fallback to bash scripts during transition
+      # Fallback to bash scripts
       case "''${1:-}" in
         update)       exec jacks-nix-update "''${@:2}" ;;
         upgrade)      exec jacks-nix-upgrade "''${@:2}" ;;

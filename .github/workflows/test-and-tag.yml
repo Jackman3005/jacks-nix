@@ -22,8 +22,8 @@ jobs:
     - name: Cross-compile CLI binaries
       run: |
         cd cli
-        bun build --compile --minify --target=bun-darwin-arm64 src/index.tsx --outfile ../jacks-nix-darwin-arm64
-        bun build --compile --minify --target=bun-linux-x64 src/index.tsx --outfile ../jacks-nix-linux-x64
+        bun run build:darwin-arm64
+        bun run build:linux-x64
 
     - name: Upload darwin binary
       uses: actions/upload-artifact@v7

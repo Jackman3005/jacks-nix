@@ -1,7 +1,7 @@
 { pkgs, config, ... }:
 {
   # Set the state version for Home Manager
-  home.stateVersion = "23.11";
+  home.stateVersion = "25.11";
 
   # Set the username from shared config
   home.username = config.jacks-nix.username;

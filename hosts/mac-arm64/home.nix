@@ -2,7 +2,7 @@
 {
   # Set the state version for Home Manager
   # This is required to ensure configuration stability across updates.
-  home.stateVersion = "23.11";
+  home.stateVersion = "25.11";
 
   # Set the username from shared config
   home.username = config.jacks-nix.username;

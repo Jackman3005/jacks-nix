@@ -1,0 +1,32 @@
+{
+  "version": 376,
+  "timestamp": "2026-03-24T00:26:22Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444575280,
+    "mac_arm64_bytes": 2595428176
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "52db268",
+      "message": "Also fix `/etc/*rc` issues on `update`",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "3e00081",
+      "message": "Try to handle `.before-nix-darwin` files in install script",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "d450e83",
+      "message": "Bump GH Action versions to avoid deprecated node",
+      "author": "Jack Coy"
+    }
+  ]
+}

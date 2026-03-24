@@ -8,6 +8,7 @@ in
     programs.git = {
       enable = true;
       package = if pkgs.stdenv.isLinux then pkgs.gitMinimal else pkgs.git;
+      signing.format = null;
       settings = lib.mkMerge [
             {
               user = {

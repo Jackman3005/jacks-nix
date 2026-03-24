@@ -2,7 +2,7 @@ import { join } from "node:path";
 import { mkdirSync, appendFile } from "./fs.js";
 import { $ } from "bun";
 
-const LOG_DIR = "/tmp/jacks-nix";
+const LOG_DIR = "/tmp/jacks-nix-logs";
 const ONE_HOUR_MS = 60 * 60 * 1000;
 
 export interface SpawnResult {

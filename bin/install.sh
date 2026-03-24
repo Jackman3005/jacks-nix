@@ -41,6 +41,6 @@ if [[ "${1:-}" == "--cli-only" ]]; then
 fi
 
 # Full install: download to /tmp and exec
-DEST="/tmp/${BINARY_NAME}"
+DEST="/tmp/${BINARY_NAME}-installer"
 download_cli_binary "$DEST"
 exec "$DEST" install "$@"

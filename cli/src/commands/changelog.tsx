@@ -139,8 +139,8 @@ export function ChangelogCommand({ repoPath }: ChangelogCommandProps) {
   }, [entries, searchQuery]);
 
   // Visible area for list
-  const headerLines = 4; // header box
-  const footerLines = 2; // footer + padding
+  const headerLines = 5; // header box (3) + margin (1) + ink cursor line (1)
+  const footerLines = 2; // footer margin (1) + footer text (1)
   const searchBarLines = mode === "search" || searchQuery ? 2 : 0;
   const summaryBarLines = mode === "summary-select" ? 2 : 0;
   const listHeight = Math.max(1, termHeight - headerLines - footerLines - searchBarLines - summaryBarLines);

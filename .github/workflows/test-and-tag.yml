@@ -50,6 +50,15 @@ jobs:
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v13
 
+      - name: Move system config files for nix-darwin (temporary CI workaround)
+        if: matrix.os == 'macos-latest'
+        run: |
+          for f in /etc/bashrc /etc/zshrc /etc/zshenv /etc/zprofile /etc/nix/nix.conf; do
+            if [[ -e "$f" && ! -L "$f" ]]; then
+              sudo mv "$f" "${f}.before-nix-darwin"
+            fi
+          done
+
       - name: Run install script
         run: cd bin && ./install.sh
         env:

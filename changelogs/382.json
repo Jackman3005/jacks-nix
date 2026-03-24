@@ -1,0 +1,22 @@
+{
+  "version": 382,
+  "timestamp": "2026-03-24T11:56:19Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444577960,
+    "mac_arm64_bytes": 2595430976
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "a941f7f",
+      "message": "Ensure CLI is downloaded on first use",
+      "author": "Jack Coy"
+    }
+  ]
+}

@@ -482,20 +482,9 @@ let
 
   # A script to pull changes and apply the Nix configuration.
   updater = let
-    # nix-darwin manages /etc/{bashrc,zshrc,...} via symlinks to /etc/static/.
-    # If macOS restores the originals (e.g. after a system update), darwin-rebuild
-    # fails with "Unexpected files in /etc". Move non-symlink copies out of the way.
-    darwinPreFlight = ''
-      for f in /etc/bashrc /etc/zshrc /etc/zshenv /etc/zprofile /etc/nix/nix.conf; do
-        if [[ -e "$f" && ! -L "$f" ]]; then
-          echo "⚠️  Moving $f to ''${f}.before-nix-darwin (nix-darwin manages this file)"
-          sudo mv "$f" "''${f}.before-nix-darwin"
-        fi
-      done
-    '';
-    updateCommand = if pkgs.stdenv.isDarwin
-      then darwinPreFlight + "sudo /nix/var/nix/profiles/system/sw/bin/darwin-rebuild switch --flake \"${configRepoPath}#mac-arm64\""
-      else "home-manager switch --flake \"${configRepoPath}#linux-x64\"";
+    # Delegate to bin/switch.sh from the repo so that pre-flight fixes always
+    # come from the version being installed, not the currently active generation.
+    updateCommand = "\"${configRepoPath}/bin/switch.sh\" \"${configRepoPath}\"";
   in pkgs.writeShellScriptBin "jacks-nix-update" ''
     set -euo pipefail
 

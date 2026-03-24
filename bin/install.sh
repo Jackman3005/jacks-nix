@@ -7,7 +7,7 @@
 #
 # 1. Check for and install necessary dependencies (Git, Nix, Xcode Tools on macOS).
 # 2. Clone or update the repository in ~/.config/jacks-nix.
-# 3. Configure the 'origin' remote for HTTPS pulls and SSH pushes.
+# 3. Prompt for configuration values (or read from environment / saved config).
 # 4. Activate the appropriate Nix configuration for the host OS.
 
 set -euo pipefail
@@ -141,15 +141,22 @@ main() {
     info "Skipping git remote configuration (using existing repository from JACKS_NIX_CONFIG_REPO_PATH)..."
   fi
 
-  # 4. Activate Nix Configuration
+  # 4. Load configuration (prompts for values on first install, reads saved config on re-install)
+  source "$CLONE_DIR/bin/lib.sh"
+
+  local config_mode="install"
+  if [[ -f "$CLONE_DIR/local/config.env" ]]; then
+    config_mode="update"
+  fi
+  load_config "$CLONE_DIR" "$config_mode"
+
+  # 5. Activate Nix Configuration
   info "Activating Nix configuration for this system..."
   case "$(uname -s)" in
     Darwin)
       info "Detected macOS. Applying nix-darwin configuration..."
       info "This may require your password to modify system-wide symlinks."
 
-      # Run pre-flight fixes (handles /etc conflicts, old symlinks, etc.)
-      source "$CLONE_DIR/bin/lib.sh"
       darwin_preflight
 
       # First install uses `nix run nix-darwin` since darwin-rebuild isn't in PATH yet.
@@ -166,7 +173,9 @@ main() {
       ;;
   esac
 
-  # Record the applied version so update-check doesn't show stale changelog
+  # 6. Post-install: save config and record version (only after success)
+  save_config "$CLONE_DIR"
+
   local version_file="$CLONE_DIR/VERSION"
   local applied_version_file="$CLONE_DIR/local/applied-version.txt"
   if [[ -f "$version_file" ]]; then

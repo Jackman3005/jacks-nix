@@ -21,7 +21,7 @@ in
 
   users.users.${username} = {
     name = username;
-    home = "/Users/${username}";
+    home = if username == "root" then "/var/root" else "/Users/${username}";
   };
 
   # Home Manager configuration

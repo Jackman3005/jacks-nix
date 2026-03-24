@@ -3,6 +3,9 @@
 let
   inherit (lib) mkDefault mkIf strings;
 
+  # Single source of truth for default values.
+  defaults = builtins.fromJSON (builtins.readFile ./defaults.json);
+
   # Helper function to read environment variables with fallback
   envOr = envVar: fallback:
     let envValue = builtins.getEnv envVar;
@@ -18,16 +21,19 @@ in
 {
   imports = [ ./options.nix ];
 
-  # Default configuration values – fields can be overridden by environment variables.
+  # Configuration values sourced from environment variables (set by config.env
+  # via load_config in lib.sh) with fallbacks from defaults.json.
   config.jacks-nix = {
     configRepoPath = mkDefault (envOr "JACKS_NIX_CONFIG_REPO_PATH" "$HOME/.config/jacks-nix");
 
-    username = mkDefault (envOr "JACKS_NIX_USERNAME" "jack");
+    # Username: env var > $USER > defaults.json > "jack"
+    username = mkDefault (envOr "JACKS_NIX_USERNAME" (envOr "USER"
+      (if defaults.username != "" then defaults.username else "jack")));
 
     git = {
-      name       = mkDefault (envOr "JACKS_NIX_GIT_NAME" "Jack Coy");
-      email      = mkDefault (envOr "JACKS_NIX_GIT_EMAIL" "jackman3000@gmail.com");
-      signingKey = mkDefault (envOr "JACKS_NIX_GIT_SIGNING_KEY" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOEcs5x2/oZFdR9kamMj1FDjR5xN99UMen3PcSxHrYhL");
+      name       = mkDefault (envOr "JACKS_NIX_GIT_NAME" defaults.gitName);
+      email      = mkDefault (envOr "JACKS_NIX_GIT_EMAIL" defaults.gitEmail);
+      signingKey = mkDefault (envOr "JACKS_NIX_GIT_SIGNING_KEY" defaults.gitSigningKey);
     };
 
     mac = {
@@ -35,15 +41,15 @@ in
       nixbldGroupId    = mkDefault (strings.toInt (envOr "JACKS_NIX_MAC_NIXBLD_GROUP_ID" "350"));
     };
 
-    enableGit      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_GIT" true);
-    enableZsh      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_ZSH" true);
-    enableNvim     = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NVIM" true);
+    enableGit      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_GIT" defaults.enableGit);
+    enableZsh      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_ZSH" defaults.enableZsh);
+    enableNvim     = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NVIM" defaults.enableNvim);
     enableHomebrew = mkDefault (envBoolOr "JACKS_NIX_ENABLE_HOMEBREW" pkgs.stdenv.isDarwin);
 
-    enableNode   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NODE" false);
-    enableJava   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_JAVA" false);
-    enableRuby   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_RUBY" false);
-    enableBun    = mkDefault (envBoolOr "JACKS_NIX_ENABLE_BUN" false);
-    enableAsdf   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_ASDF" false);
+    enableNode   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NODE" defaults.enableNode);
+    enableJava   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_JAVA" defaults.enableJava);
+    enableRuby   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_RUBY" defaults.enableRuby);
+    enableBun    = mkDefault (envBoolOr "JACKS_NIX_ENABLE_BUN" defaults.enableBun);
+    enableAsdf   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_ASDF" defaults.enableAsdf);
   };
 }

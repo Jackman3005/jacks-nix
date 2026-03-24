@@ -6,7 +6,9 @@
 
   # Set the username from shared config
   home.username = config.jacks-nix.username;
-  home.homeDirectory = "/Users/${config.jacks-nix.username}";
+  home.homeDirectory = if config.jacks-nix.username == "root"
+    then "/var/root"
+    else "/Users/${config.jacks-nix.username}";
 
   imports = [
     ../../nix-modules

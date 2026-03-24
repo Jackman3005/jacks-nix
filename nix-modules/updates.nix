@@ -644,6 +644,21 @@ let
     )
   '';
 
+  # A script to reconfigure jacks-nix options interactively.
+  reconfigurer = pkgs.writeShellScriptBin "jacks-nix-reconfigure" ''
+    set -euo pipefail
+    config_repo="${configRepoPath}"
+    source "$config_repo/bin/lib.sh"
+    load_config "$config_repo" "reconfigure"
+
+    echo ""
+    echo -n "Press Enter to apply new configuration (Ctrl+C to cancel)... "
+    read -r < /dev/tty
+
+    echo "⏭️  Switching to nix flake configuration..."
+    "$config_repo/bin/switch.sh" "$config_repo" --skip-config
+  '';
+
 in
 {
   config = lib.mkIf config.jacks-nix.enableZsh {
@@ -654,6 +669,7 @@ in
       updateChecker
       updater
       upgrader
+      reconfigurer
       nvd
       gawk
       bc
@@ -664,6 +680,7 @@ in
       update = "jacks-nix-update";
       upgrade = "jacks-nix-upgrade";
       changelog = "jacks-nix-changelog";
+      reconfigure = "jacks-nix-reconfigure";
     };
   };
 }

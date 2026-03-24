@@ -1,0 +1,14 @@
+{
+  "username": "",
+  "gitName": "Jack Coy",
+  "gitEmail": "jackman3000@gmail.com",
+  "gitSigningKey": "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOEcs5x2/oZFdR9kamMj1FDjR5xN99UMen3PcSxHrYhL",
+  "enableGit": true,
+  "enableZsh": true,
+  "enableNvim": true,
+  "enableNode": false,
+  "enableJava": false,
+  "enableRuby": false,
+  "enableBun": true,
+  "enableAsdf": false
+}

@@ -148,6 +148,17 @@ main() {
       info "Detected macOS. Applying nix-darwin configuration..."
       info "This may require your password to modify system-wide symlinks."
 
+      # nix-darwin manages /etc/{bashrc,zshrc,nix/nix.conf} via symlinks to /etc/static/.
+      # Before first activation (or if macOS restored the originals), we must move
+      # any non-symlink copies out of the way. The activation script would do this
+      # itself after the hash check, but fails if the file's hash is unknown.
+      for f in /etc/bashrc /etc/zshrc /etc/zshenv /etc/zprofile /etc/nix/nix.conf; do
+        if [[ -e "$f" && ! -L "$f" ]]; then
+          info "Moving $f to ${f}.before-nix-darwin (nix-darwin will manage this file)"
+          sudo mv "$f" "${f}.before-nix-darwin"
+        fi
+      done
+
       # --preserve-env passes current shell environment into sudo environment.
       sudo --preserve-env nix run --impure --extra-experimental-features nix-command --extra-experimental-features flakes nix-darwin -- switch --impure --flake ".#mac-arm64"
 

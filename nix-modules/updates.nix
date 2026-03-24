@@ -549,10 +549,13 @@ let
         fi
       fi
 
-      # Prompt for password to confirm and proceed (Ctrl+C to cancel)
-      echo "Enter password to update (Ctrl+C to cancel):"
+      # Confirm before proceeding
+      echo ""
+      echo -n "Press Enter to update (Ctrl+C to cancel)... "
+      read -r < /dev/tty
+
+      # Prompt for password if needed and keep credentials fresh
       sudo -v
-      # Keep sudo credentials fresh in the background
       while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
       # Checkout latest if needed

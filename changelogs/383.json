@@ -1,0 +1,32 @@
+{
+  "version": 383,
+  "timestamp": "2026-03-24T12:31:01Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444577960,
+    "mac_arm64_bytes": 2595430976
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "4573acf",
+      "message": "Fix update not skipping when up-to-date",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "c488797",
+      "message": "Fix bun cli",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "a90fb0d",
+      "message": "Fix `--cli-only` install",
+      "author": "Jack Coy"
+    }
+  ]
+}

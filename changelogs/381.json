@@ -1,0 +1,32 @@
+{
+  "version": 381,
+  "timestamp": "2026-03-24T11:36:05Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444577840,
+    "mac_arm64_bytes": 2595430856
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [
+      {
+        "name": "jacks-nix",
+        "version": "<none>"
+      }
+    ],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "4f25141",
+      "message": "Fix CI builds",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "2adbb80",
+      "message": "Switch to a bun binary with ink cli for scripts",
+      "author": "Jack Coy"
+    }
+  ]
+}

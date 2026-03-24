@@ -501,10 +501,6 @@ let
       esac
     done
 
-    # Prompt for sudo password upfront and keep credentials fresh
-    sudo -v
-    while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
-
     (
       cd "$config_repo"
       LOG_FILE="$config_repo/local/update.log"
@@ -538,17 +534,10 @@ let
         exit 0
       fi
 
-      # Show changelog if there are version changes and not suppressed
+      # Show changelog if not suppressed
       if [[ "$show_changelog" == "true" ]]; then
         if [[ "$needs_git_update" == "true" && "$local_version" -lt "$remote_version" ]]; then
           jacks-nix-changelog "$local_version:$remote_version"
-          echo -n "Continue with update? (Y/n): "
-          read -n 1 -r response < /dev/tty
-          echo
-          if [[ "$response" =~ ^[Nn]$ ]]; then
-            echo "⏭️  Update cancelled."
-            exit 0
-          fi
         elif [[ "$needs_config_switch" == "true" && "$applied_version" -lt "$local_version" ]]; then
           echo ""
           echo "🔄 Configuration changes detected but not yet applied."
@@ -557,15 +546,14 @@ let
           echo "   Current: v$local_version"
           echo ""
           jacks-nix-changelog "$applied_version:$local_version"
-          echo -n "Apply configuration now? (Y/n): "
-          read -n 1 -r response < /dev/tty
-          echo
-          if [[ "$response" =~ ^[Nn]$ ]]; then
-            echo "⏭️  Configuration switch cancelled."
-            exit 0
-          fi
         fi
       fi
+
+      # Prompt for password to confirm and proceed (Ctrl+C to cancel)
+      echo "Enter password to update (Ctrl+C to cancel):"
+      sudo -v
+      # Keep sudo credentials fresh in the background
+      while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
       # Checkout latest if needed
       if [[ "$needs_git_update" == "true" ]]; then

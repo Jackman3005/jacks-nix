@@ -11,7 +11,7 @@ import { StepProgress, type Step } from "../components/StepProgress.js";
 import {
   loadSchema, loadDefaults, loadConfig, saveConfig, mergeConfig,
   exportConfigToEnv, findNewEntries, recordAppliedVersion, hasConfig,
-  type ConfigValues, type Schema,
+  getAppliedVersion, type ConfigValues, type Schema,
 } from "../lib/config.js";
 import {
   fetchLatestTag, checkoutLatest, getVersion, getRemoteVersion,
@@ -91,7 +91,10 @@ export function UpdateCommand({ repoPath, nonInteractive, verbose }: UpdateComma
         setLocalVersion(localVer);
         setRemoteVersion(remoteVer);
 
-        if (localHead === latestHash) {
+        const appliedVer = await getAppliedVersion(repoPath);
+
+        // Up to date if: same commit OR (same version AND already applied)
+        if (localHead === latestHash || (localVer === remoteVer && appliedVer === localVer)) {
           setPhase("upToDate");
           return;
         }

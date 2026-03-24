@@ -1,0 +1,32 @@
+{
+  "version": 377,
+  "timestamp": "2026-03-24T01:27:42Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444575280,
+    "mac_arm64_bytes": 2595424912
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "b4624c3",
+      "message": "Add a temp fix for CI",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "1b95e39",
+      "message": "Temporarily revert to 23.11 home manager",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "b7651f4",
+      "message": "Use latest update logic to allow handling newproblems",
+      "author": "Jack Coy"
+    }
+  ]
+}

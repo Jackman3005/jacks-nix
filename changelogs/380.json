@@ -1,0 +1,32 @@
+{
+  "version": 380,
+  "timestamp": "2026-03-24T05:53:08Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444576344,
+    "mac_arm64_bytes": 2595429088
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [
+      {
+        "name": "jacks-nix-reconfigure",
+        "version": "<none>"
+      }
+    ],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "e0bef58",
+      "message": "Try fix env var parsing",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "5b30dc4",
+      "message": "Try to add a configuration system to improve env vars",
+      "author": "Jack Coy"
+    }
+  ]
+}

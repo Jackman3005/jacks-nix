@@ -1,0 +1,88 @@
+{
+  "groups": [
+    {
+      "name": "Identity",
+      "entries": [
+        {
+          "key": "JACKS_NIX_USERNAME",
+          "type": "string",
+          "defaultSource": "eval:whoami",
+          "prompt": "System username",
+          "readOnlyInReconfigure": true
+        },
+        {
+          "key": "JACKS_NIX_GIT_NAME",
+          "type": "string",
+          "defaultKey": "gitName",
+          "prompt": "Full name (for Git commits)"
+        },
+        {
+          "key": "JACKS_NIX_GIT_EMAIL",
+          "type": "string",
+          "defaultKey": "gitEmail",
+          "prompt": "Email (for Git commits)"
+        },
+        {
+          "key": "JACKS_NIX_GIT_SIGNING_KEY",
+          "type": "string",
+          "defaultKey": "gitSigningKey",
+          "prompt": "SSH signing key (empty to disable)"
+        }
+      ]
+    },
+    {
+      "name": "Features",
+      "entries": [
+        {
+          "key": "JACKS_NIX_ENABLE_GIT",
+          "type": "bool",
+          "defaultKey": "enableGit",
+          "prompt": "Git configuration"
+        },
+        {
+          "key": "JACKS_NIX_ENABLE_ZSH",
+          "type": "bool",
+          "defaultKey": "enableZsh",
+          "prompt": "Zsh + Starship prompt",
+          "warning": "Disabling removes shell aliases and update tools"
+        },
+        {
+          "key": "JACKS_NIX_ENABLE_NVIM",
+          "type": "bool",
+          "defaultKey": "enableNvim",
+          "prompt": "Neovim"
+        },
+        {
+          "key": "JACKS_NIX_ENABLE_NODE",
+          "type": "bool",
+          "defaultKey": "enableNode",
+          "prompt": "Node.js (nvm)"
+        },
+        {
+          "key": "JACKS_NIX_ENABLE_JAVA",
+          "type": "bool",
+          "defaultKey": "enableJava",
+          "prompt": "Java (SDKMAN)"
+        },
+        {
+          "key": "JACKS_NIX_ENABLE_RUBY",
+          "type": "bool",
+          "defaultKey": "enableRuby",
+          "prompt": "Ruby"
+        },
+        {
+          "key": "JACKS_NIX_ENABLE_BUN",
+          "type": "bool",
+          "defaultKey": "enableBun",
+          "prompt": "Bun runtime"
+        },
+        {
+          "key": "JACKS_NIX_ENABLE_ASDF",
+          "type": "bool",
+          "defaultKey": "enableAsdf",
+          "prompt": "ASDF version manager"
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,36 @@ on:
     branches: [ main ]
 
 jobs:
+  build-cli:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+
+    - name: Install CLI dependencies
+      run: cd cli && bun install --frozen-lockfile
+
+    - name: Cross-compile CLI binaries
+      run: |
+        cd cli
+        bun build --compile --minify --target=bun-darwin-arm64 src/index.tsx --outfile ../jacks-nix-darwin-arm64
+        bun build --compile --minify --target=bun-linux-x64 src/index.tsx --outfile ../jacks-nix-linux-x64
+
+    - name: Upload darwin binary
+      uses: actions/upload-artifact@v7
+      with:
+        name: cli-darwin-arm64
+        path: jacks-nix-darwin-arm64
+
+    - name: Upload linux binary
+      uses: actions/upload-artifact@v7
+      with:
+        name: cli-linux-x64
+        path: jacks-nix-linux-x64
+
   checks:
     runs-on: ubuntu-latest
 
@@ -34,9 +64,16 @@ jobs:
         path: bin/test-flake.log
 
   installs:
+    needs: build-cli
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            artifact: cli-linux-x64
+            binary: jacks-nix-linux-x64
+          - os: macos-latest
+            artifact: cli-darwin-arm64
+            binary: jacks-nix-darwin-arm64
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
@@ -50,14 +87,19 @@ jobs:
       - name: Setup Nix cache
         uses: DeterminateSystems/magic-nix-cache-action@v13
 
-      - name: Run install script
-        run: cd bin && ./install.sh
+      - name: Download CLI binary
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}
+
+      - name: Run install via CLI binary
+        run: |
+          chmod +x ${{ matrix.binary }}
+          ./${{ matrix.binary }} install --non-interactive
         env:
           JACKS_NIX_CONFIG_REPO_PATH: "${{ github.workspace }}"
           JACKS_NIX_USERNAME: "runner"
-#          JACKS_NIX_MAC_NIXBLD_GROUP_ID: "30000"
-#          JACKS_NIX_MAC_NIXBLD_USER_ID: "300"
-          JACKS_NIX_ENABLE_HOMEBREW: "false" # Would be great to enable, but `system.primaryUser` is not working
+          JACKS_NIX_ENABLE_HOMEBREW: "false"
           NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
 
       - name: Calculate closure size
@@ -114,6 +156,9 @@ jobs:
     - name: Setup Nix cache
       uses: DeterminateSystems/magic-nix-cache-action@v13
 
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v2
+
     - name: Configure Git
       run: |
         git config --local user.email "action@github.com"
@@ -123,7 +168,7 @@ jobs:
       run: nix profile install nixpkgs#nvd
 
     - name: Download closure size artifacts
-      uses: actions/download-artifact@v6
+      uses: actions/download-artifact@v7
       with:
         pattern: closure-size-*
         path: size-artifacts
@@ -141,6 +186,15 @@ jobs:
           echo "macOS closure size: $mac_arm64_bytes bytes"
         fi
 
+    - name: Auto-bump CLI version if source changed
+      run: |
+        if git diff --name-only tags/latest..HEAD -- cli/src/ 2>/dev/null | grep -q .; then
+          cd cli && npm version patch --no-git-tag-version
+          echo "CLI version bumped to $(jq -r .version package.json)"
+        else
+          echo "No CLI source changes, skipping version bump"
+        fi
+
     - name: Generate changelog
       env:
         NIX_CONFIG: "access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}"
@@ -148,7 +202,7 @@ jobs:
 
     - name: Commit changelog and tag
       run: |
-        git add VERSION changelogs/
+        git add VERSION changelogs/ cli/package.json
 
         # Only commit if there are staged changes, use [skip ci] to prevent circular triggers
         if ! git diff --staged --quiet; then
@@ -168,3 +222,23 @@ jobs:
 
         git tag latest
         git push https://x-access-token:${{ secrets.JACKS_NIX_GH_PAT }}@github.com/${{ github.repository }}.git latest
+
+    - name: Download CLI binaries
+      uses: actions/download-artifact@v7
+      with:
+        pattern: cli-*
+        merge-multiple: true
+
+    - name: Create GitHub Release with CLI binaries
+      env:
+        GH_TOKEN: ${{ secrets.JACKS_NIX_GH_PAT }}
+      run: |
+        VERSION=$(cat VERSION)
+        # Delete existing release on latest tag if present
+        gh release delete latest -y 2>/dev/null || true
+        # Create new release with binaries
+        gh release create latest \
+          --title "v${VERSION}" \
+          --notes "Auto-generated release for v${VERSION}" \
+          jacks-nix-darwin-arm64 \
+          jacks-nix-linux-x64

@@ -4,3 +4,10 @@ bin/test-flake.log
 
 # Local machine-specific files
 local/
+
+# CLI build artifacts
+cli/node_modules/
+
+# Compiled binaries (distributed via GH releases, not git)
+jacks-nix-darwin-arm64
+jacks-nix-linux-x64

@@ -659,11 +659,32 @@ let
     "$config_repo/bin/switch.sh" "$config_repo" --skip-config
   '';
 
+  # CLI wrapper: delegates to the Bun binary if available, falls back to bash scripts.
+  cliWrapper = pkgs.writeShellScriptBin "jacks-nix" ''
+    CLI_BIN="${configRepoPath}/local/jacks-nix"
+    if [[ -x "$CLI_BIN" ]]; then
+      exec "$CLI_BIN" "$@"
+    else
+      # Fallback to bash scripts during transition
+      case "''${1:-}" in
+        update)       exec jacks-nix-update "''${@:2}" ;;
+        upgrade)      exec jacks-nix-upgrade "''${@:2}" ;;
+        reconfigure)  exec jacks-nix-reconfigure "''${@:2}" ;;
+        changelog)    exec jacks-nix-changelog "''${@:2}" ;;
+        update-check) exec jacks-nix-update-check ;;
+        *)            echo "Usage: jacks-nix {install|update|upgrade|reconfigure|changelog|uninstall}"; exit 1 ;;
+      esac
+    fi
+  '';
+
 in
 {
   config = lib.mkIf config.jacks-nix.enableZsh {
     home.packages = with pkgs; [
-      # Add update scripts to the user's PATH
+      # CLI entry point (delegates to Bun binary or bash fallback)
+      cliWrapper
+
+      # Bash scripts (kept as fallback during transition)
       declaredPackagesHelper
       changelogDisplay
       updateChecker
@@ -676,11 +697,24 @@ in
     ];
 
     home.shellAliases = {
-      # Create simpler aliases for our update scripts
-      update = "jacks-nix-update";
-      upgrade = "jacks-nix-upgrade";
-      changelog = "jacks-nix-changelog";
-      reconfigure = "jacks-nix-reconfigure";
+      jn = "jacks-nix";
+      update = "jacks-nix update";
+      upgrade = "jacks-nix upgrade";
+      reconfigure = "jacks-nix reconfigure";
+      changelog = "jacks-nix changelog";
     };
+
+    # Fast-path update check on shell startup (avoids loading 50MB binary every time)
+    programs.zsh.initContent = lib.mkAfter ''
+      if [ -z "$INTELLIJ_ENVIRONMENT_READER" ] && [ -t 0 ] && [ -t 1 ]; then
+        _jn_check_file="${configRepoPath}/local/last-update-check-timestamp.txt"
+        _jn_now=$(date +%s)
+        _jn_last=$(cat "$_jn_check_file" 2>/dev/null || echo 0)
+        if (( _jn_now - _jn_last > 86400 )); then
+          echo "$_jn_now" > "$_jn_check_file"
+          jacks-nix update-check &
+        fi
+      fi
+    '';
   };
 }

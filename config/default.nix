@@ -26,9 +26,8 @@ in
   config.jacks-nix = {
     configRepoPath = mkDefault (envOr "JACKS_NIX_CONFIG_REPO_PATH" "$HOME/.config/jacks-nix");
 
-    # Username: env var > $USER > defaults.json > "jack"
-    username = mkDefault (envOr "JACKS_NIX_USERNAME" (envOr "USER"
-      (if defaults.username != "" then defaults.username else "jack")));
+    # Username: env var > $USER > "jack" (runtime default is eval:whoami via schema.json)
+    username = mkDefault (envOr "JACKS_NIX_USERNAME" (envOr "USER" "jack"));
 
     git = {
       name       = mkDefault (envOr "JACKS_NIX_GIT_NAME" defaults.gitName);

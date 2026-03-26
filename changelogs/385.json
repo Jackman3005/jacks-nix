@@ -1,0 +1,43 @@
+{
+  "version": 385,
+  "timestamp": "2026-03-26T20:28:36Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444564560,
+    "mac_arm64_bytes": 2595552432
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "uv",
+        "from": "0.10.12",
+        "to": "0.11.0"
+      },
+      {
+        "name": "wl-clipboard",
+        "from": "2.2.1",
+        "to": "2.3.0"
+      },
+      {
+        "name": "zellij",
+        "from": "0.43.1",
+        "to": "0.44.0"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "1eb0549a1ab3fe3f5acf86668249be15fa0e64f7",
+      "to_rev": "7622882af88598b882436416bd74154826fcf742",
+      "commit_count": 3
+    },
+    "nixpkgs": {
+      "from_rev": "6c9a78c09ff4d6c21d0319114873508a6ec01655",
+      "to_rev": "46db2e09e1d3f113a13c0d7b81e2f221c63b8ce9",
+      "commit_count": 1961
+    }
+  },
+  "manual_commits": []
+}

@@ -1,0 +1,22 @@
+{
+  "version": 390,
+  "timestamp": "2026-03-31T12:32:50Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1444609464,
+    "mac_arm64_bytes": 2595734448
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "395d9c8",
+      "message": "Avoid installing packages less than a week old by default",
+      "author": "Jack Coy"
+    }
+  ]
+}

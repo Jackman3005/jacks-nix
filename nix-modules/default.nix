@@ -9,5 +9,6 @@
     ./nvim.nix
     ./homebrew.nix
     ./updates.nix
+    ./package-safety.nix
   ];
 }

@@ -1,0 +1,505 @@
+{
+  "version": 393,
+  "timestamp": "2026-07-15T11:42:27Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1454811632,
+    "mac_arm64_bytes": 2584685296
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "ada",
+        "from": "3.4.3",
+        "to": "3.4.4"
+      },
+      {
+        "name": "audit",
+        "from": "4.1.2-unstable-2025-09-06-lib",
+        "to": "4.1.4-lib"
+      },
+      {
+        "name": "aws-c-event-stream",
+        "from": "0.5.7",
+        "to": "0.7.0"
+      },
+      {
+        "name": "aws-c-http",
+        "from": "0.10.4",
+        "to": "0.11.0"
+      },
+      {
+        "name": "aws-c-io",
+        "from": "0.22.0",
+        "to": "0.27.2"
+      },
+      {
+        "name": "coreutils",
+        "from": "9.10",
+        "to": "9.11"
+      },
+      {
+        "name": "cryptsetup",
+        "from": "2.8.4",
+        "to": "2.8.6"
+      },
+      {
+        "name": "elfutils",
+        "from": "0.194",
+        "to": "0.195"
+      },
+      {
+        "name": "expat",
+        "from": "2.7.4",
+        "to": "2.8.2"
+      },
+      {
+        "name": "file",
+        "from": "5.45",
+        "to": "5.48"
+      },
+      {
+        "name": "gettext",
+        "from": "0.26",
+        "to": "1.0"
+      },
+      {
+        "name": "git-minimal",
+        "from": "2.53.0",
+        "to": "2.54.0"
+      },
+      {
+        "name": "glibc",
+        "from": "2.42-51",
+        "to": "2.42-67"
+      },
+      {
+        "name": "glibc-locales",
+        "from": "2.42-51",
+        "to": "2.42-67"
+      },
+      {
+        "name": "gnused",
+        "from": "4.9",
+        "to": "4.10"
+      },
+      {
+        "name": "gnutls",
+        "from": "3.8.12",
+        "to": "3.8.13"
+      },
+      {
+        "name": "groff",
+        "from": "1.23.0",
+        "to": "1.24.1"
+      },
+      {
+        "name": "hwloc",
+        "from": "2.13.0-lib",
+        "to": "2.14.0-lib"
+      },
+      {
+        "name": "jemalloc",
+        "from": "5.3.0-unstable-2025-09-12",
+        "to": "5.3.1"
+      },
+      {
+        "name": "krb5",
+        "from": "1.22.1-lib",
+        "to": "1.22.2-lib"
+      },
+      {
+        "name": "less",
+        "from": "692",
+        "to": "704"
+      },
+      {
+        "name": "libapparmor",
+        "from": "4.1.3",
+        "to": "5.0.0"
+      },
+      {
+        "name": "libarchive",
+        "from": "3.8.4-lib",
+        "to": "3.8.8-lib"
+      },
+      {
+        "name": "libblake3",
+        "from": "1.8.3",
+        "to": "1.8.5"
+      },
+      {
+        "name": "libbpf",
+        "from": "1.6.3",
+        "to": "1.7.0"
+      },
+      {
+        "name": "libcap-ng",
+        "from": "0.9",
+        "to": "0.9.3"
+      },
+      {
+        "name": "libcbor",
+        "from": "0.13.0",
+        "to": "0.14.0"
+      },
+      {
+        "name": "libfido2",
+        "from": "1.16.0",
+        "to": "1.17.0"
+      },
+      {
+        "name": "libgcrypt",
+        "from": "1.11.2-lib",
+        "to": "1.12.2-lib"
+      },
+      {
+        "name": "libgit2",
+        "from": "1.9.2-lib",
+        "to": "1.9.4-lib"
+      },
+      {
+        "name": "libgpg-error",
+        "from": "1.58",
+        "to": "1.61"
+      },
+      {
+        "name": "libluv",
+        "from": "1.51.0-2",
+        "to": "1.52.1-0"
+      },
+      {
+        "name": "libmicrohttpd",
+        "from": "1.0.2",
+        "to": "1.0.5"
+      },
+      {
+        "name": "libsodium",
+        "from": "1.0.21-unstable-2026-02-11",
+        "to": "1.0.22-unstable-2026-04-16"
+      },
+      {
+        "name": "libtpms",
+        "from": "0.10.2",
+        "to": "0.10.2-unstable-2026-05-06"
+      },
+      {
+        "name": "libunistring",
+        "from": "1.4.1",
+        "to": "1.4.2"
+      },
+      {
+        "name": "libxml2",
+        "from": "2.15.1",
+        "to": "2.15.3"
+      },
+      {
+        "name": "linux-pam",
+        "from": "1.7.1",
+        "to": "1.7.2"
+      },
+      {
+        "name": "lowdown",
+        "from": "2.0.4-lib",
+        "to": "3.0.1-lib"
+      },
+      {
+        "name": "lua-language-server",
+        "from": "3.17.1",
+        "to": "3.18.2"
+      },
+      {
+        "name": "lvm2",
+        "from": "2.03.38-lib",
+        "to": "2.03.41-lib"
+      },
+      {
+        "name": "neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "neovim-unwrapped",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "nix-cmd",
+        "from": "2.31.3",
+        "to": "2.34.8"
+      },
+      {
+        "name": "nix-direnv",
+        "from": "3.1.1",
+        "to": "3.1.2"
+      },
+      {
+        "name": "nix-expr",
+        "from": "2.31.3",
+        "to": "2.34.8"
+      },
+      {
+        "name": "nix-fetchers",
+        "from": "2.31.3",
+        "to": "2.34.8"
+      },
+      {
+        "name": "nix-flake",
+        "from": "2.31.3",
+        "to": "2.34.8"
+      },
+      {
+        "name": "nix-main",
+        "from": "2.31.3",
+        "to": "2.34.8"
+      },
+      {
+        "name": "nix-store",
+        "from": "2.31.3",
+        "to": "2.34.8"
+      },
+      {
+        "name": "nix-util",
+        "from": "2.31.3",
+        "to": "2.34.8"
+      },
+      {
+        "name": "nixfmt",
+        "from": "1.2.0",
+        "to": "1.4.0"
+      },
+      {
+        "name": "nodejs",
+        "from": "24.14.0",
+        "to": "24.18.0"
+      },
+      {
+        "name": "p11-kit",
+        "from": "0.26.1",
+        "to": "0.26.2"
+      },
+      {
+        "name": "prettier",
+        "from": "3.6.2",
+        "to": "3.8.3"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2026-03-02",
+        "to": "0-unstable-2026-05-13"
+      },
+      {
+        "name": "python3",
+        "from": "3.13.12",
+        "to": "3.14.6"
+      },
+      {
+        "name": "s2n-tls",
+        "from": "1.6.4",
+        "to": "1.7.2"
+      },
+      {
+        "name": "sd-switch",
+        "from": "0.6.2",
+        "to": "0.6.4"
+      },
+      {
+        "name": "shfmt",
+        "from": "3.13.0",
+        "to": "3.13.1"
+      },
+      {
+        "name": "simdjson",
+        "from": "4.3.1",
+        "to": "4.6.4"
+      },
+      {
+        "name": "starship",
+        "from": "1.24.2",
+        "to": "1.26.0"
+      },
+      {
+        "name": "stylua",
+        "from": "2.4.0",
+        "to": "2.5.2"
+      },
+      {
+        "name": "systemd",
+        "from": "259.3",
+        "to": "261"
+      },
+      {
+        "name": "systemd-minimal",
+        "from": "259.3",
+        "to": "261"
+      },
+      {
+        "name": "systemd-minimal-libs",
+        "from": "259.3",
+        "to": "261"
+      },
+      {
+        "name": "tree-sitter",
+        "from": "0.25.10",
+        "to": "0.26.9"
+      },
+      {
+        "name": "tree-sitter-c-neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "tree-sitter-lua-neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "tree-sitter-markdown-neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "tree-sitter-markdown_inline-neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "tree-sitter-query-neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "tree-sitter-vim-neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "tree-sitter-vimdoc-neovim",
+        "from": "0.11.6",
+        "to": "0.12.4"
+      },
+      {
+        "name": "typescript-language-server",
+        "from": "5.1.3",
+        "to": "5.3.0"
+      },
+      {
+        "name": "tzdata",
+        "from": "2026a",
+        "to": "2026b"
+      },
+      {
+        "name": "unbound",
+        "from": "1.24.2-lib",
+        "to": "1.25.1-lib"
+      },
+      {
+        "name": "uv",
+        "from": "0.11.2",
+        "to": "0.11.26"
+      },
+      {
+        "name": "wayland",
+        "from": "1.24.0",
+        "to": "1.25.0"
+      },
+      {
+        "name": "which",
+        "from": "2.23",
+        "to": "2.25"
+      },
+      {
+        "name": "xz",
+        "from": "5.8.2",
+        "to": "5.8.3"
+      },
+      {
+        "name": "yaml-language-server",
+        "from": "1.21.0",
+        "to": "1.24.0"
+      },
+      {
+        "name": "zellij",
+        "from": "0.44.0",
+        "to": "0.44.3"
+      }
+    ],
+    "added": [
+      {
+        "name": "gtest",
+        "version": "1.17.0"
+      },
+      {
+        "name": "hdrhistogram_c",
+        "version": "0.11.9"
+      },
+      {
+        "name": "kexec-tools",
+        "version": "2.0.32"
+      },
+      {
+        "name": "nbytes",
+        "version": "0.1.4"
+      },
+      {
+        "name": "nix-nswrapper",
+        "version": "2.34.8"
+      },
+      {
+        "name": "zellij-unwrapped",
+        "version": "0.44.3"
+      }
+    ],
+    "removed": [
+      {
+        "name": "aws-sdk-cpp",
+        "version": "1.11.647"
+      },
+      {
+        "name": "gnupg",
+        "version": "2.4.9"
+      },
+      {
+        "name": "gnutar",
+        "version": "1.35"
+      },
+      {
+        "name": "libassuan",
+        "version": "3.0.2"
+      },
+      {
+        "name": "npth",
+        "version": "1.8"
+      }
+    ]
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "1ce9e62690dfdd7e76bd266ccb9a887778410eb2",
+      "to_rev": "a45a7c451455a51ae740ec3bce4024b312809c29",
+      "commit_count": 621
+    },
+    "nix-darwin": {
+      "from_rev": "06648f4902343228ce2de79f291dd5a58ee12146",
+      "to_rev": "d5bd9cd77aea4c0a8f49e7fd85545671a208ed15",
+      "commit_count": 0
+    },
+    "nixpkgs": {
+      "from_rev": "8110df5ad7abf5d4c0f6fb0f8f978390e77f9685",
+      "to_rev": "18b9261cb3294b6d2a06d03f96872827b8fe2698",
+      "commit_count": 10000
+    },
+    "nixvim": {
+      "from_rev": "cbd8536a05d1aae2593cb5c9ace1010c8c5845cb",
+      "to_rev": "07180a087e4a00720dc0731cbcd8dec796974381",
+      "commit_count": 296
+    }
+  },
+  "manual_commits": [
+    {
+      "sha": "36e655d",
+      "message": "fix(nvim): use top-level prettier instead of removed nodePackages.prettier",
+      "author": "Jack Coy"
+    }
+  ]
+}

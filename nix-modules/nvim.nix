@@ -24,7 +24,7 @@
       stylua
       shellcheck
       shfmt
-      nodePackages.prettier
+      prettier
 
       # Python (for pynvim)
       python3

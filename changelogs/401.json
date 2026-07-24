@@ -1,0 +1,103 @@
+{
+  "version": 401,
+  "timestamp": "2026-07-24T21:10:22Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1466967240,
+    "mac_arm64_bytes": 2604790904
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "acl",
+        "from": "2.3.2",
+        "to": "2.4.0"
+      },
+      {
+        "name": "attr",
+        "from": "2.5.2",
+        "to": "2.6.0"
+      },
+      {
+        "name": "bash",
+        "from": "5.3p9",
+        "to": "5.3p15"
+      },
+      {
+        "name": "bash-interactive",
+        "from": "5.3p9",
+        "to": "5.3p15"
+      },
+      {
+        "name": "git-minimal",
+        "from": "2.54.0",
+        "to": "2.55.0"
+      },
+      {
+        "name": "hdrhistogram_c",
+        "from": "0.11.9",
+        "to": "0.11.10"
+      },
+      {
+        "name": "libapparmor",
+        "from": "5.0.0",
+        "to": "5.0.1"
+      },
+      {
+        "name": "libevent",
+        "from": "2.1.12",
+        "to": "2.1.13"
+      },
+      {
+        "name": "libffi",
+        "from": "3.5.2",
+        "to": "3.7.0"
+      },
+      {
+        "name": "libseccomp",
+        "from": "2.6.0-lib",
+        "to": "2.6.1-lib"
+      },
+      {
+        "name": "pcre2",
+        "from": "10.46",
+        "to": "10.47"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2026-05-13",
+        "to": "0-unstable-2026-06-24"
+      },
+      {
+        "name": "wayland",
+        "from": "1.25.0",
+        "to": "1.26.0"
+      },
+      {
+        "name": "xgcc",
+        "from": "15.2.0-libgcc",
+        "to": "15.3.0-libgcc"
+      }
+    ],
+    "added": [
+      {
+        "name": "merve",
+        "version": "1.2.2"
+      }
+    ],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "3b0e6bbd65869af1beadf5963a99befc179d209f",
+      "to_rev": "079a3b5d1aa6a719920a51316253b7d6dd22738d",
+      "commit_count": 3
+    },
+    "nixpkgs": {
+      "from_rev": "241313f4e8e508cb9b13278c2b0fa25b9ca27163",
+      "to_rev": "e2587caef70cea85dd97d7daab492899902dbf5d",
+      "commit_count": 2644
+    }
+  },
+  "manual_commits": []
+}

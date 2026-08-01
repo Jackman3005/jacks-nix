@@ -1,0 +1,88 @@
+{
+  "version": 408,
+  "timestamp": "2026-08-01T20:59:30Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1455275760,
+    "mac_arm64_bytes": 2592143576
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "audit",
+        "from": "4.1.4-lib",
+        "to": "4.2-lib"
+      },
+      {
+        "name": "findutils",
+        "from": "4.10.0",
+        "to": "4.11.0"
+      },
+      {
+        "name": "libapparmor",
+        "from": "5.0.1",
+        "to": "5.0.2"
+      },
+      {
+        "name": "libffi",
+        "from": "3.7.0",
+        "to": "3.7.1"
+      },
+      {
+        "name": "libmicrohttpd",
+        "from": "1.0.5",
+        "to": "1.0.6"
+      },
+      {
+        "name": "libsodium",
+        "from": "1.0.22-unstable-2026-04-16",
+        "to": "1.0.22-unstable-2026-07-08"
+      },
+      {
+        "name": "nodejs",
+        "from": "24.18.0",
+        "to": "24.18.1"
+      },
+      {
+        "name": "s2n-tls",
+        "from": "1.7.2",
+        "to": "1.7.6"
+      },
+      {
+        "name": "systemd",
+        "from": "261",
+        "to": "261.1"
+      },
+      {
+        "name": "systemd-minimal",
+        "from": "261",
+        "to": "261.1"
+      },
+      {
+        "name": "systemd-minimal-libs",
+        "from": "261",
+        "to": "261.1"
+      },
+      {
+        "name": "tzdata",
+        "from": "2026b",
+        "to": "2026c"
+      },
+      {
+        "name": "unbound",
+        "from": "1.25.1-lib",
+        "to": "1.25.2-lib"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "1559d3daa3ecc813a650b79375ea61b6741b8746",
+      "to_rev": "148bab9c1c3c53136ecb44a6ea356a0ed5b39b06",
+      "commit_count": 930
+    }
+  },
+  "manual_commits": []
+}

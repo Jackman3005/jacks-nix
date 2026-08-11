@@ -1,0 +1,33 @@
+{
+  "version": 415,
+  "timestamp": "2026-08-11T20:57:16Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1456977992,
+    "mac_arm64_bytes": 2593990344
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "lua-language-server",
+        "from": "3.18.2",
+        "to": "3.19.0"
+      },
+      {
+        "name": "nix-direnv",
+        "from": "3.1.2",
+        "to": "3.2.0"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "f13ff45afd1bb73e640eaa08a7066dbed07e3238",
+      "to_rev": "2fcb964de67fcf60b43471c55d5d99e61a9ccb5a",
+      "commit_count": 2051
+    }
+  },
+  "manual_commits": []
+}

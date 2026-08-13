@@ -1,0 +1,73 @@
+{
+  "version": 417,
+  "timestamp": "2026-08-13T20:58:44Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1457480832,
+    "mac_arm64_bytes": 2594749704
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "audit",
+        "from": "4.2-lib",
+        "to": "4.2.1-lib"
+      },
+      {
+        "name": "fmt",
+        "from": "12.1.0",
+        "to": "12.2.0"
+      },
+      {
+        "name": "nodejs",
+        "from": "24.18.1",
+        "to": "24.19.0"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2026-06-24",
+        "to": "0-unstable-2026-07-25"
+      },
+      {
+        "name": "python3",
+        "from": "3.14.6",
+        "to": "3.14.7"
+      },
+      {
+        "name": "simdjson",
+        "from": "4.6.4",
+        "to": "4.6.5"
+      },
+      {
+        "name": "tpm2-tss",
+        "from": "4.1.3",
+        "to": "4.2.0"
+      },
+      {
+        "name": "uv",
+        "from": "0.12.1",
+        "to": "0.12.3"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "e13ba5e5abbd9b912fa8c6979bd119e87ca7fdd9",
+      "to_rev": "2d1bac51b2513914ace47797765c3265164de78e",
+      "commit_count": 2
+    },
+    "nixpkgs": {
+      "from_rev": "2fcb964de67fcf60b43471c55d5d99e61a9ccb5a",
+      "to_rev": "0e251e24a4f24e036a084b6b4b2d2491af4167f4",
+      "commit_count": 1844
+    },
+    "nixvim": {
+      "from_rev": "902dd3995bd830f824ca146796743e3baf587d4c",
+      "to_rev": "738351a7813be094fb00fce1a149bcc25e936c36",
+      "commit_count": 2
+    }
+  },
+  "manual_commits": []
+}

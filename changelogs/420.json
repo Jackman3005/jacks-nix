@@ -1,0 +1,43 @@
+{
+  "version": 420,
+  "timestamp": "2026-08-16T20:34:53Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1457552472,
+    "mac_arm64_bytes": 2595000776
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "lua-language-server",
+        "from": "3.19.0",
+        "to": "3.19.1"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "58405b3b0ce13e9cd4af7dc697687b4d9b74e56d",
+      "to_rev": "5bd505963717a894b02a57cdbcc00db28d9b029f",
+      "commit_count": 2
+    },
+    "nix-darwin": {
+      "from_rev": "15abb8c98f336cd8bd840d71059adebabe60bf04",
+      "to_rev": "4cff07de74b50e64bdd68cd4e722ab5b6b35ee48",
+      "commit_count": 0
+    },
+    "nixpkgs": {
+      "from_rev": "0e251e24a4f24e036a084b6b4b2d2491af4167f4",
+      "to_rev": "e5bdc4a41d4c072fe1e3787eaa0320a384741d44",
+      "commit_count": 2018
+    },
+    "nixvim": {
+      "from_rev": "738351a7813be094fb00fce1a149bcc25e936c36",
+      "to_rev": "b5d9e7d2cf02e322ff6ef780862951c2d8f22f1b",
+      "commit_count": 3
+    }
+  },
+  "manual_commits": []
+}

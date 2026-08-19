@@ -1,0 +1,32 @@
+{
+  "version": 423,
+  "timestamp": "2026-08-19T20:44:36Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1457599640,
+    "mac_arm64_bytes": 2595240976
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "353742587cbaf079b3caee743115d037bc51fea6",
+      "to_rev": "152b9dcad099ed3d85d4f90152a110dd8b84c73f",
+      "commit_count": 6
+    },
+    "nixpkgs": {
+      "from_rev": "ec2d622de0773551768cf98f3fc50cbcc003b9c5",
+      "to_rev": "0ae2bc1419c3f345984c2629e72e7a631820fa4d",
+      "commit_count": 520
+    },
+    "nixvim": {
+      "from_rev": "fe68d88884ac91ce1d17e955ac0ae486ff8bcdf0",
+      "to_rev": "d0d62a2b5027da689b4e8d5ee43f1cf83f2e975d",
+      "commit_count": 2
+    }
+  },
+  "manual_commits": []
+}

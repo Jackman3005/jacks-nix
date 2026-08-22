@@ -1,0 +1,48 @@
+{
+  "version": 426,
+  "timestamp": "2026-08-22T20:32:48Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1463076120,
+    "mac_arm64_bytes": 2599656440
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "libgit2",
+        "from": "1.9.4-lib",
+        "to": "1.9.7-lib"
+      },
+      {
+        "name": "uv",
+        "from": "0.12.3",
+        "to": "0.12.5"
+      },
+      {
+        "name": "zellij",
+        "from": "0.44.3",
+        "to": "0.45.0"
+      },
+      {
+        "name": "zellij-unwrapped",
+        "from": "0.44.3",
+        "to": "0.45.0"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "c53d643b3737e2fcd04e6cb3b3580ef50b2087a0",
+      "to_rev": "ec1a8fdf74ed3f276148ee106299a2ba0e65d51f",
+      "commit_count": 4
+    },
+    "nixpkgs": {
+      "from_rev": "ffb3c9b700e759be2ef13237c9d8f953b32a1e46",
+      "to_rev": "2c423e03bbafcff28bfadc6781a4a8257f205cb5",
+      "commit_count": 1479
+    }
+  },
+  "manual_commits": []
+}

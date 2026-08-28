@@ -1,0 +1,163 @@
+{
+  "version": 431,
+  "timestamp": "2026-08-28T04:09:40Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1463278520,
+    "mac_arm64_bytes": 2587462448
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "ada",
+        "from": "3.4.4",
+        "to": "4.0.0"
+      },
+      {
+        "name": "cryptsetup",
+        "from": "2.8.6",
+        "to": "2.8.7"
+      },
+      {
+        "name": "expat",
+        "from": "2.8.2",
+        "to": "2.8.3"
+      },
+      {
+        "name": "glibc",
+        "from": "2.42-67",
+        "to": "2.42-84"
+      },
+      {
+        "name": "glibc-locales",
+        "from": "2.42-67",
+        "to": "2.42-84"
+      },
+      {
+        "name": "libarchive",
+        "from": "3.8.8-lib",
+        "to": "3.8.9-lib"
+      },
+      {
+        "name": "libblake3",
+        "from": "1.8.5",
+        "to": "1.8.6"
+      },
+      {
+        "name": "libffi",
+        "from": "3.7.1",
+        "to": "3.8.0"
+      },
+      {
+        "name": "libsodium",
+        "from": "1.0.22-unstable-2026-07-08",
+        "to": "1.0.22-unstable-2026-07-31"
+      },
+      {
+        "name": "neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "neovim-unwrapped",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "perl",
+        "from": "5.42.0",
+        "to": "5.42.3"
+      },
+      {
+        "name": "procps",
+        "from": "4.0.6",
+        "to": "4.0.7"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2026-07-25",
+        "to": "0-unstable-2026-08-14"
+      },
+      {
+        "name": "systemd",
+        "from": "261.1",
+        "to": "261.2"
+      },
+      {
+        "name": "systemd-minimal",
+        "from": "261.1",
+        "to": "261.2"
+      },
+      {
+        "name": "systemd-minimal-libs",
+        "from": "261.1",
+        "to": "261.2"
+      },
+      {
+        "name": "tree-sitter",
+        "from": "0.26.9",
+        "to": "0.26.11"
+      },
+      {
+        "name": "tree-sitter-c-neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "tree-sitter-lua-neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "tree-sitter-markdown-neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "tree-sitter-markdown_inline-neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "tree-sitter-query-neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "tree-sitter-vim-neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "tree-sitter-vimdoc-neovim",
+        "from": "0.12.4",
+        "to": "0.12.5"
+      },
+      {
+        "name": "unbound",
+        "from": "1.25.2-lib",
+        "to": "1.26.0-lib"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "6b449e35980e1b75dd17da2d6d9b66e757194f1c",
+      "to_rev": "99c9ec63390f1d8c14d95d9e8b17cc29cfbd4e11",
+      "commit_count": 2
+    },
+    "nixpkgs": {
+      "from_rev": "56c02bc00adcf003215cc4bd996d6efaf4cff188",
+      "to_rev": "9fbb54b33e91ee4ca368e35a78e0613c720600b3",
+      "commit_count": 1946
+    },
+    "nixvim": {
+      "from_rev": "ebec1ae277a50b16e7d6682edd009ef585d68261",
+      "to_rev": "8c096abcf376137527c134da4ee210332b08ccc0",
+      "commit_count": 5
+    }
+  },
+  "manual_commits": []
+}

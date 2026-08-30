@@ -1,0 +1,38 @@
+{
+  "version": 432,
+  "timestamp": "2026-08-30T22:36:09Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1464631296,
+    "mac_arm64_bytes": 2589409560
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "fd",
+        "from": "10.4.2",
+        "to": "10.5.0"
+      },
+      {
+        "name": "prettier",
+        "from": "3.8.3",
+        "to": "3.9.6"
+      },
+      {
+        "name": "shfmt",
+        "from": "3.13.1",
+        "to": "3.14.0"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "9fbb54b33e91ee4ca368e35a78e0613c720600b3",
+      "to_rev": "d2f67949798825fe853f7c5d0492b8bf016d3f88",
+      "commit_count": 1753
+    }
+  },
+  "manual_commits": []
+}

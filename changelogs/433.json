@@ -1,0 +1,43 @@
+{
+  "version": 433,
+  "timestamp": "2026-08-31T23:59:01Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1464746744,
+    "mac_arm64_bytes": 2589604120
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "zellij",
+        "from": "0.45.0",
+        "to": "0.45.1"
+      },
+      {
+        "name": "zellij-unwrapped",
+        "from": "0.45.0",
+        "to": "0.45.1"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "99c9ec63390f1d8c14d95d9e8b17cc29cfbd4e11",
+      "to_rev": "f772b7f968365e7b2b70a860c509d214639556fe",
+      "commit_count": 4
+    },
+    "nixpkgs": {
+      "from_rev": "d2f67949798825fe853f7c5d0492b8bf016d3f88",
+      "to_rev": "34ab99075ac4f7e40cf037eef32cb1c360bb85e9",
+      "commit_count": 799
+    },
+    "nixvim": {
+      "from_rev": "8c096abcf376137527c134da4ee210332b08ccc0",
+      "to_rev": "41844750e55f17b1385d5b09ca7ade5f11f49506",
+      "commit_count": 1
+    }
+  },
+  "manual_commits": []
+}

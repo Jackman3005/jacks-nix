@@ -1,0 +1,33 @@
+{
+  "version": 441,
+  "timestamp": "2026-09-09T22:28:15Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1464847744,
+    "mac_arm64_bytes": 2590112856
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "shfmt",
+        "from": "3.14.0",
+        "to": "3.14.1"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "2c0350c759688177331b8f5242311fae8877bdb3",
+      "to_rev": "448c15a7fe6aa7693f63b9e8d1803bdc3dd6368d",
+      "commit_count": 12
+    },
+    "nixpkgs": {
+      "from_rev": "dc5d91f840324650bac8c379428c7037a416959a",
+      "to_rev": "d6524aaca2ff07876657ae2b323f24be4874944b",
+      "commit_count": 907
+    }
+  },
+  "manual_commits": []
+}

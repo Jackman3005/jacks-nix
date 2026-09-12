@@ -1,0 +1,83 @@
+{
+  "version": 444,
+  "timestamp": "2026-09-12T22:10:29Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1463737864,
+    "mac_arm64_bytes": 2589783976
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "expat",
+        "from": "2.8.3",
+        "to": "2.8.4"
+      },
+      {
+        "name": "libblake3",
+        "from": "1.8.6",
+        "to": "1.8.7"
+      },
+      {
+        "name": "libcap-ng",
+        "from": "0.9.3",
+        "to": "0.9.5"
+      },
+      {
+        "name": "libsodium",
+        "from": "1.0.22-unstable-2026-07-31",
+        "to": "1.0.22-unstable-2026-08-13"
+      },
+      {
+        "name": "libxml2",
+        "from": "2.15.3",
+        "to": "2.15.4"
+      },
+      {
+        "name": "nixfmt",
+        "from": "1.4.0",
+        "to": "1.5.0"
+      },
+      {
+        "name": "nodejs",
+        "from": "24.19.0",
+        "to": "24.20.0"
+      },
+      {
+        "name": "pcre2",
+        "from": "10.47",
+        "to": "10.48"
+      },
+      {
+        "name": "publicsuffix-list",
+        "from": "0-unstable-2026-08-14",
+        "to": "0-unstable-2026-09-02"
+      },
+      {
+        "name": "s2n-tls",
+        "from": "1.7.6",
+        "to": "1.7.8"
+      },
+      {
+        "name": "simdjson",
+        "from": "4.6.5",
+        "to": "4.6.8"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "e4345d5ae8aa1def34378d2a60ac5e6e4c8fd7c1",
+      "to_rev": "fe48612c5321a2cc09b0f563757a9c9733d641f8",
+      "commit_count": 9
+    },
+    "nixpkgs": {
+      "from_rev": "8ce4ef6cb6f871616146b9fe26d2a5ae594e94fe",
+      "to_rev": "eaad089433ca2bb662274377d33df3d0e51ef28b",
+      "commit_count": 1627
+    }
+  },
+  "manual_commits": []
+}

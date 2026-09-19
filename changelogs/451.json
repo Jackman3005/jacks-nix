@@ -1,0 +1,28 @@
+{
+  "version": 451,
+  "timestamp": "2026-09-19T22:17:47Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1464715432,
+    "mac_arm64_bytes": 2591037320
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "uv",
+        "from": "0.12.11",
+        "to": "0.12.16"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "e554fab72f81915600f3f449b786fd9af40439a5",
+      "to_rev": "20b1ddd1aa5ace70c9468305030aa4f9ef79671b",
+      "commit_count": 601
+    }
+  },
+  "manual_commits": []
+}

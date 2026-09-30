@@ -1,0 +1,113 @@
+{
+  "version": 461,
+  "timestamp": "2026-09-30T23:38:07Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1480808400,
+    "mac_arm64_bytes": 2565756880
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "cryptsetup",
+        "from": "2.8.7",
+        "to": "2.8.8"
+      },
+      {
+        "name": "expat",
+        "from": "2.8.4",
+        "to": "2.8.5"
+      },
+      {
+        "name": "glibc",
+        "from": "2.42-84",
+        "to": "2.44-25"
+      },
+      {
+        "name": "glibc-locales",
+        "from": "2.42-84",
+        "to": "2.44-25"
+      },
+      {
+        "name": "less",
+        "from": "704",
+        "to": "710"
+      },
+      {
+        "name": "libcap-ng",
+        "from": "0.9.5",
+        "to": "0.9.6"
+      },
+      {
+        "name": "libgcrypt",
+        "from": "1.12.2-lib",
+        "to": "1.12.4-lib"
+      },
+      {
+        "name": "libmicrohttpd",
+        "from": "1.0.6",
+        "to": "1.0.10"
+      },
+      {
+        "name": "nodejs",
+        "from": "24.20.0",
+        "to": "24.21.0"
+      },
+      {
+        "name": "shared-mime-info",
+        "from": "2.4",
+        "to": "2.5.1"
+      },
+      {
+        "name": "systemd",
+        "from": "261.2",
+        "to": "261.3"
+      },
+      {
+        "name": "systemd-minimal",
+        "from": "261.2",
+        "to": "261.3"
+      },
+      {
+        "name": "systemd-minimal-libs",
+        "from": "261.2",
+        "to": "261.3"
+      },
+      {
+        "name": "tzdata",
+        "from": "2026c",
+        "to": "2026d"
+      },
+      {
+        "name": "unbound",
+        "from": "1.26.0-lib",
+        "to": "1.26.1-lib"
+      },
+      {
+        "name": "xgcc",
+        "from": "15.3.0-libgcc",
+        "to": "16.2.0-libgcc"
+      },
+      {
+        "name": "xz",
+        "from": "5.8.3",
+        "to": "5.8.4"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "7b4c5ec4bedaf1e062bbc1bcaeddbc6bd242aa1b",
+      "to_rev": "e4122ec2a3cf7fede335e5c9975639d1e84dc04d",
+      "commit_count": 23
+    },
+    "nixpkgs": {
+      "from_rev": "7a0f122f5090cf4c2ade2a13a0e229d4e19ba71f",
+      "to_rev": "b4fd65b198c599cbe814fcb9f42d25d021595ec9",
+      "commit_count": 1572
+    }
+  },
+  "manual_commits": []
+}

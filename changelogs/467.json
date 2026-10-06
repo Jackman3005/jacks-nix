@@ -1,0 +1,33 @@
+{
+  "version": 467,
+  "timestamp": "2026-10-06T23:43:46Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1481355056,
+    "mac_arm64_bytes": 2566395128
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "bash-language-server",
+        "from": "5.6.0",
+        "to": "5.8.1"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "aa23f720d022187228bc264f759aef6b80233bcf",
+      "to_rev": "fae6e9e42c3b762ab47635cddcfaf6f52374a61b",
+      "commit_count": 2
+    },
+    "nixpkgs": {
+      "from_rev": "494ce7fd23ff6a5dff39e1fb11e9b6f2ac74bf25",
+      "to_rev": "151fa4e8ddfdd8dd25d945ad94ed54a13de9f6e4",
+      "commit_count": 614
+    }
+  },
+  "manual_commits": []
+}

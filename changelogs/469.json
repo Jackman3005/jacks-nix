@@ -1,0 +1,33 @@
+{
+  "version": 469,
+  "timestamp": "2026-10-09T00:16:46Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1479816832,
+    "mac_arm64_bytes": 2565183472
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "prettier",
+        "from": "3.9.6",
+        "to": "3.9.9"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "fae6e9e42c3b762ab47635cddcfaf6f52374a61b",
+      "to_rev": "dfadbe5162d5e86bc0808badec8f346f81b4b3f0",
+      "commit_count": 3
+    },
+    "nixpkgs": {
+      "from_rev": "151fa4e8ddfdd8dd25d945ad94ed54a13de9f6e4",
+      "to_rev": "e7439b6b14ad3cc35d05608ebca9bce01a25f5f8",
+      "commit_count": 1364
+    }
+  },
+  "manual_commits": []
+}

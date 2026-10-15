@@ -1,0 +1,143 @@
+{
+  "version": 472,
+  "timestamp": "2026-10-15T23:00:08Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1467100656,
+    "mac_arm64_bytes": 2555307144
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "lua-language-server",
+        "from": "3.19.1",
+        "to": "3.19.2"
+      },
+      {
+        "name": "neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "neovim-unwrapped",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "nix-cmd",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "nix-expr",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "nix-fetchers",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "nix-flake",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "nix-main",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "nix-nswrapper",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "nix-store",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "nix-util",
+        "from": "2.34.8",
+        "to": "2.34.9"
+      },
+      {
+        "name": "prettier",
+        "from": "3.9.9",
+        "to": "3.9.10"
+      },
+      {
+        "name": "tree-sitter-c-neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "tree-sitter-lua-neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "tree-sitter-markdown-neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "tree-sitter-markdown_inline-neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "tree-sitter-query-neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "tree-sitter-vim-neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "tree-sitter-vimdoc-neovim",
+        "from": "0.12.5",
+        "to": "0.12.6"
+      },
+      {
+        "name": "typescript-language-server",
+        "from": "5.3.0",
+        "to": "6.0.2"
+      },
+      {
+        "name": "uv",
+        "from": "0.12.22",
+        "to": "0.13.0"
+      },
+      {
+        "name": "yaml-language-server",
+        "from": "1.24.0",
+        "to": "1.25.0"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "c58f54c733a7894d84fa2fdff26cc12088c4b78c",
+      "to_rev": "640725978b99076e18e069f6e7d2959124584f8f",
+      "commit_count": 69
+    },
+    "nixpkgs": {
+      "from_rev": "6510408d147d8c5e6d76043e899e9251756f6a75",
+      "to_rev": "55bfb4d7437bd4e09ab7cba58a43bd68eb310044",
+      "commit_count": 2979
+    },
+    "nixvim": {
+      "from_rev": "2c6d56d2df7c159ef629871cfd673de237e1fc38",
+      "to_rev": "8485794923eb406ce3728af320392226608f724b",
+      "commit_count": 6
+    }
+  },
+  "manual_commits": []
+}

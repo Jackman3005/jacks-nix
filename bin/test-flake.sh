@@ -245,6 +245,15 @@ fi
 
 echo ""
 
+# The build must refuse a placeholder Git email (assertion in nix-modules/git.nix).
+echo "🛡️  Testing Git email guard..."
+echo "------------------------------"
+
+run_test "Placeholder Git email is rejected" \
+    "! JACKS_NIX_GIT_EMAIL='test\$special@example.com' nix eval --impure --no-write-lock-file --raw .#homeConfigurations.linux-x64.activationPackage.drvPath"
+
+echo ""
+
 # Summary
 echo "📋 Test Summary"
 echo "==============="

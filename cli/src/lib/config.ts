@@ -61,13 +61,71 @@ export async function loadConfig(repoPath: string): Promise<ConfigValues> {
   return (await file.exists()) ? file.json() : {};
 }
 
-/** Save config as JSON. Only writes current schema keys (drops deprecated). */
-export async function saveConfig(repoPath: string, values: ConfigValues, schema: Schema): Promise<void> {
-  mkdirSync(join(repoPath, "local"), { recursive: true });
+// Domains reserved for documentation and testing (RFC 2606 / RFC 6761).
+const PLACEHOLDER_DOMAINS = ["example.com", "example.org", "example.net"];
+const RESERVED_TLDS = ["test", "example", "invalid", "localhost"];
+
+/**
+ * Why an email can't be used for Git commits, or null if it's fine.
+ * Mirrors the assertion in nix-modules/git.nix.
+ */
+export function gitEmailProblem(email: string): string | null {
+  const match = /^[^@\s]+@([^@\s]+\.[^@\s]+)$/.exec(email);
+  if (!match) return "is not a valid email address";
+  const domain = match[1].toLowerCase();
+  const tld = domain.split(".").pop() ?? "";
+  if (PLACEHOLDER_DOMAINS.includes(domain) || RESERVED_TLDS.includes(tld)) {
+    return `uses a reserved test domain (${domain})`;
+  }
+  return null;
+}
+
+export interface SaveOptions {
+  /**
+   * Save values that came from the environment even when a different value is
+   * already saved. Only `reconfigure` sets this, after the user confirms.
+   */
+  persistEnvOverrides?: boolean;
+}
+
+/**
+ * Save config as JSON. Only writes current schema keys (drops deprecated).
+ *
+ * A value taken from a JACKS_NIX_* environment variable applies to this run
+ * only: if a different value is already saved, the saved one is kept. A test
+ * email once leaked into the saved config this way and was used for every commit
+ * for months. A placeholder Git email is never saved.
+ */
+export async function saveConfig(
+  repoPath: string,
+  values: ConfigValues,
+  schema: Schema,
+  options: SaveOptions = {},
+): Promise<void> {
+  const saved = await loadConfig(repoPath);
   const filtered: ConfigValues = {};
   for (const entry of getAllEntries(schema)) {
-    if (entry.key in values) filtered[entry.key] = values[entry.key];
+    if (!(entry.key in values)) continue;
+    let value = values[entry.key];
+    const envValue = process.env[entry.key];
+    const savedValue = saved[entry.key];
+    if (
+      !options.persistEnvOverrides &&
+      envValue && value === envValue &&
+      savedValue && savedValue !== value
+    ) {
+      value = savedValue;
+    }
+    filtered[entry.key] = value;
   }
+
+  const email = filtered.JACKS_NIX_GIT_EMAIL;
+  const problem = email === undefined ? null : gitEmailProblem(email);
+  if (problem) {
+    throw new Error(`Not saving config: Git email "${email}" ${problem}`);
+  }
+
+  mkdirSync(join(repoPath, "local"), { recursive: true });
   await Bun.write(configPath(repoPath), JSON.stringify(filtered, null, 2) + "\n");
 }
 

@@ -1,10 +1,33 @@
 { config, pkgs, lib, ... }:
 let
   signingEnabled = config.jacks-nix.git.signingKey != "";
+
+  # Refuse to build with a malformed or placeholder commit email. A test value
+  # (test$special@example.com) once leaked into local/config.env and every
+  # commit for months used it. Reserved domains per RFC 2606 / RFC 6761.
+  email = config.jacks-nix.git.email;
+  emailMatch = builtins.match "[^@[:space:]]+@([^@[:space:]]+\\.[^@[:space:]]+)" email;
+  emailDomain = if emailMatch == null then "" else lib.toLower (builtins.head emailMatch);
+  emailTld = lib.last (lib.splitString "." emailDomain);
+  emailIsPlaceholder =
+    builtins.elem emailDomain [ "example.com" "example.org" "example.net" ]
+    || builtins.elem emailTld [ "test" "example" "invalid" "localhost" ];
 in
 {
 
   config = lib.mkIf config.jacks-nix.enableGit {
+    assertions = [
+      {
+        assertion = emailMatch != null && !emailIsPlaceholder;
+        message = ''
+          jacks-nix: refusing to configure Git with commit email "${email}" —
+          it is ${if emailMatch == null then "not a valid email address" else "a reserved test/placeholder domain (${emailDomain})"}.
+          Fix it with `jacks-nix reconfigure`, or check for a stray JACKS_NIX_GIT_EMAIL
+          in your environment or local/config.env.
+        '';
+      }
+    ];
+
     programs.git = {
       enable = true;
       package = if pkgs.stdenv.hostPlatform.isLinux then pkgs.gitMinimal else pkgs.git;

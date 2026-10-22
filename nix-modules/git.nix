@@ -7,7 +7,7 @@ in
   config = lib.mkIf config.jacks-nix.enableGit {
     programs.git = {
       enable = true;
-      package = if pkgs.stdenv.isLinux then pkgs.gitMinimal else pkgs.git;
+      package = if pkgs.stdenv.hostPlatform.isLinux then pkgs.gitMinimal else pkgs.git;
       settings = lib.mkMerge [
             {
               user = {
@@ -58,11 +58,11 @@ in
               gpg.format      = "ssh";
               commit.gpgsign  = true;
             })
-            (lib.mkIf (signingEnabled && pkgs.stdenv.isDarwin) {
+            (lib.mkIf (signingEnabled && pkgs.stdenv.hostPlatform.isDarwin) {
               gpg."ssh".program =
                 "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
             })
-            (lib.mkIf (signingEnabled && !pkgs.stdenv.isDarwin) {
+            (lib.mkIf (signingEnabled && !pkgs.stdenv.hostPlatform.isDarwin) {
               gpg."ssh".program = "ssh-keygen";
             })
           ];

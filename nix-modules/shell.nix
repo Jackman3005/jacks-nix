@@ -36,7 +36,7 @@
       scripts = ''cat package.json | jq ".scripts"'';
       sshpw = "ssh -o PubkeyAuthentication=no";
       myip =
-        if pkgs.stdenv.isDarwin then "ipconfig getifaddr $(route get default | grep interface | cut -d' ' -f4)"
+        if pkgs.stdenv.hostPlatform.isDarwin then "ipconfig getifaddr $(route get default | grep interface | cut -d' ' -f4)"
         else "ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++) if ($i==\"src\") print $(i+1)}'";
     };
 
@@ -151,7 +151,7 @@
       enable = true;
       enableZshIntegration = true;
       defaultCommand = "fd --type f --hidden --follow --exclude .git";
-      fileWidgetCommand = "fd --type f --hidden --follow --exclude .git";
+      fileWidget.command = "fd --type f --hidden --follow --exclude .git";
       defaultOptions = [ "--height 40%" "--layout=reverse" "--border" ];
     };
 

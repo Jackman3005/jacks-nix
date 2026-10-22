@@ -1,0 +1,32 @@
+{
+  "version": 479,
+  "timestamp": "2026-10-22T13:18:56Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1411698344,
+    "mac_arm64_bytes": 2524321208
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "4c06ec3",
+      "message": "Merge pull request #2 from Jackman3005/config-guards",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "3c19e29",
+      "message": "test-flake: use a non-reserved domain for the email override test",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "9be9f48",
+      "message": "Guard against placeholder Git emails and one-off env overrides",
+      "author": "Jack Coy"
+    }
+  ]
+}

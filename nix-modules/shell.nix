@@ -190,6 +190,8 @@
         bindkey -M viins '^K' kill-line
         bindkey -M viins '^W' backward-kill-word
         bindkey -M viins '^Y' yank
+        # Literal newline: Ghostty Shift+Enter sends \n (^J); Enter is ^M and still submits
+        bindkey -M viins '^J' self-insert-unmeta '^[^M' self-insert-unmeta  # also Alt+Enter
         bindkey -M viins '^?' backward-delete-char '^H' backward-delete-char  # past the insert point
         bindkey -M viins '^[b' backward-word '^[f' forward-word    # also Ghostty Option+←/→
         bindkey -M viins '^[d' kill-word '^[^?' backward-kill-word

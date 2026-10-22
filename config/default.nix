@@ -43,7 +43,7 @@ in
     enableGit      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_GIT" defaults.enableGit);
     enableZsh      = mkDefault (envBoolOr "JACKS_NIX_ENABLE_ZSH" defaults.enableZsh);
     enableNvim     = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NVIM" defaults.enableNvim);
-    enableHomebrew = mkDefault (envBoolOr "JACKS_NIX_ENABLE_HOMEBREW" pkgs.stdenv.isDarwin);
+    enableHomebrew = mkDefault (envBoolOr "JACKS_NIX_ENABLE_HOMEBREW" pkgs.stdenv.hostPlatform.isDarwin);
 
     enableNode   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_NODE" defaults.enableNode);
     enableJava   = mkDefault (envBoolOr "JACKS_NIX_ENABLE_JAVA" defaults.enableJava);

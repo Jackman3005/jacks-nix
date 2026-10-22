@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 {
-  config = lib.mkIf (config.jacks-nix.enableHomebrew && pkgs.stdenv.isDarwin) {
+  config = lib.mkIf (config.jacks-nix.enableHomebrew && pkgs.stdenv.hostPlatform.isDarwin) {
     # Set up homebrew paths in user environment
     home.sessionPath = [
       "/opt/homebrew/bin"

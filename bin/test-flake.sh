@@ -147,10 +147,11 @@ run_env_test "JACKS_NIX_GIT_NAME override" \
     "git.name" \
     '"Test User"'
 
+# Not a reserved test domain: the build rejects those (see the email guard below).
 run_env_test "JACKS_NIX_GIT_EMAIL override" \
-    'JACKS_NIX_GIT_EMAIL="test@example.com"' \
+    'JACKS_NIX_GIT_EMAIL="ci-override@users.noreply.github.com"' \
     "git.email" \
-    '"test@example.com"'
+    '"ci-override@users.noreply.github.com"'
 
 run_env_test "JACKS_NIX_USERNAME override" \
     'JACKS_NIX_USERNAME="testuser"' \

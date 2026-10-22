@@ -167,6 +167,8 @@
       autosuggestion.enable = true;
       syntaxHighlighting.enable = true;
       enableCompletion = true;
+      # Explicit, rather than zsh inferring vi mode from EDITOR=vi
+      defaultKeymap = "viins";
 
       history = {
         size = 100000;
@@ -176,6 +178,32 @@
 
       initContent = ''
         export EDITOR=vi
+
+        # Vi mode, keeping the familiar emacs/macOS keys working in insert mode.
+        # 200ms to assemble an escape sequence (Esc b, Esc [3~) — local is instant,
+        # but SSH can split a sequence across packets. Default 400ms makes Esc feel laggy.
+        KEYTIMEOUT=20
+        # Without these, unbound keys either type a literal ^X or start with Esc,
+        # which drops you into command mode.
+        bindkey -M viins '^A' beginning-of-line '^E' end-of-line   # also Ghostty Cmd+←/→
+        bindkey -M viins '^U' backward-kill-line                   # also Ghostty Cmd+Backspace
+        bindkey -M viins '^K' kill-line
+        bindkey -M viins '^W' backward-kill-word
+        bindkey -M viins '^Y' yank
+        bindkey -M viins '^?' backward-delete-char '^H' backward-delete-char  # past the insert point
+        bindkey -M viins '^[b' backward-word '^[f' forward-word    # also Ghostty Option+←/→
+        bindkey -M viins '^[d' kill-word '^[^?' backward-kill-word
+        for keymap in viins vicmd; do
+          bindkey -M $keymap '^[[H' beginning-of-line '^[OH' beginning-of-line  # Home
+          bindkey -M $keymap '^[[F' end-of-line       '^[OF' end-of-line        # End
+          bindkey -M $keymap '^[[1;3D' backward-word  '^[[1;3C' forward-word   # Option+←/→ (CSI form)
+          bindkey -M $keymap '^[[1;5D' backward-word  '^[[1;5C' forward-word   # Ctrl+←/→
+        done
+        bindkey -M viins '^[[3~' delete-char                        # Delete
+        bindkey -M vicmd '^[[3~' vi-delete-char
+        # vv in command mode opens the line in $EDITOR
+        autoload -U edit-command-line && zle -N edit-command-line
+        bindkey -M vicmd 'vv' edit-command-line
 
         # Tool completions
         command -v kubectl &>/dev/null && source <(kubectl completion zsh)

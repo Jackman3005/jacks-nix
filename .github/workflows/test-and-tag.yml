@@ -19,6 +19,15 @@ jobs:
     - name: Install CLI dependencies
       run: cd cli && bun install --frozen-lockfile
 
+    - name: Typecheck and test CLI
+      run: |
+        cd cli
+        bun run typecheck
+        bun test
+
+    - name: Test config save/load (bash)
+      run: bin/test-config.sh
+
     - name: Cross-compile CLI binaries
       run: |
         cd cli

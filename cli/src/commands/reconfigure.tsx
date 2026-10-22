@@ -160,7 +160,7 @@ export function ReconfigureCommand({ repoPath, nonInteractive, verbose }: Reconf
       setSteps([...switchSteps]);
 
       // Save config after success
-      if (s) await saveConfig(repoPath, values, s);
+      if (s) await saveConfig(repoPath, values, s, { persistEnvOverrides: true });
       setPhase("done");
     } catch (e) {
       stopRefresh();

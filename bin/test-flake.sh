@@ -147,10 +147,11 @@ run_env_test "JACKS_NIX_GIT_NAME override" \
     "git.name" \
     '"Test User"'
 
+# Not a reserved test domain: the build rejects those (see the email guard below).
 run_env_test "JACKS_NIX_GIT_EMAIL override" \
-    'JACKS_NIX_GIT_EMAIL="test@example.com"' \
+    'JACKS_NIX_GIT_EMAIL="ci-override@users.noreply.github.com"' \
     "git.email" \
-    '"test@example.com"'
+    '"ci-override@users.noreply.github.com"'
 
 run_env_test "JACKS_NIX_USERNAME override" \
     'JACKS_NIX_USERNAME="testuser"' \
@@ -242,6 +243,15 @@ else
     print_status "ERROR" "Multiple environment variables test failed to execute"
     echo "$multi_env_command" >> "$LOG_FILE"
 fi
+
+echo ""
+
+# The build must refuse a placeholder Git email (assertion in nix-modules/git.nix).
+echo "🛡️  Testing Git email guard..."
+echo "------------------------------"
+
+run_test "Placeholder Git email is rejected" \
+    "! JACKS_NIX_GIT_EMAIL='test\$special@example.com' nix eval --impure --no-write-lock-file --raw .#homeConfigurations.linux-x64.activationPackage.drvPath"
 
 echo ""
 

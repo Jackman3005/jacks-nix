@@ -1,0 +1,37 @@
+{
+  "version": 478,
+  "timestamp": "2026-10-22T05:44:55Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1411698344,
+    "mac_arm64_bytes": 2524321208
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {},
+  "manual_commits": [
+    {
+      "sha": "c8d6d6e",
+      "message": "Merge pull request #1 from Jackman3005/zsh-vi-keys",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "b220cde",
+      "message": "Fix evaluation deprecations; magic-nix-cache-action v15",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "7212f68",
+      "message": "zsh: Shift+Enter / Alt+Enter insert a newline in vi insert mode",
+      "author": "Jack Coy"
+    },
+    {
+      "sha": "07d0fd2",
+      "message": "zsh: explicit vi mode with emacs/macOS keys kept working in insert mode",
+      "author": "Jack Coy"
+    }
+  ]
+}

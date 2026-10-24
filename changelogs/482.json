@@ -1,0 +1,38 @@
+{
+  "version": 482,
+  "timestamp": "2026-10-24T22:21:34Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1411005024,
+    "mac_arm64_bytes": 2523496712
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "libx11",
+        "from": "1.8.13",
+        "to": "1.8.14"
+      },
+      {
+        "name": "uv",
+        "from": "0.13.1",
+        "to": "0.13.4"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "6d9655f76459099b0db2f57b13563729c7022aa7",
+      "to_rev": "2cd3234928f60bbff695a7ee56115ef7799c47cd",
+      "commit_count": 3
+    },
+    "nixpkgs": {
+      "from_rev": "02c087f3fe673c9e317f206a627cb6b910336dbe",
+      "to_rev": "3ec636362e1816bc2f0888fa0fa2c69f1bc9e504",
+      "commit_count": 2598
+    }
+  },
+  "manual_commits": []
+}

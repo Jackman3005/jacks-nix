@@ -1,0 +1,33 @@
+{
+  "version": 490,
+  "timestamp": "2026-11-05T01:00:27Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1408004968,
+    "mac_arm64_bytes": 2522975944
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "typescript-language-server",
+        "from": "6.0.2",
+        "to": "6.0.3"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "095fef2f265c3c0da4fe315efba8f8a04495ab34",
+      "to_rev": "b787c48e2ec57a9d098f5c2721882a3bc1e16f97",
+      "commit_count": 1
+    },
+    "nixpkgs": {
+      "from_rev": "0bb2eedc20e4739f29e8045034f2828ad7054f8f",
+      "to_rev": "1d060086d60cb76a40cf37109f979d88a5bd6396",
+      "commit_count": 1433
+    }
+  },
+  "manual_commits": []
+}

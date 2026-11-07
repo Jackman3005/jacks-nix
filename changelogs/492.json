@@ -1,0 +1,33 @@
+{
+  "version": 492,
+  "timestamp": "2026-11-07T23:33:15Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1408109696,
+    "mac_arm64_bytes": 2522749720
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "fd",
+        "from": "10.5.0",
+        "to": "10.5.1"
+      },
+      {
+        "name": "vscode-langservers-extracted",
+        "from": "1.140.06880",
+        "to": "1.143.17183"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "1d060086d60cb76a40cf37109f979d88a5bd6396",
+      "to_rev": "f9a75f41be3a74eab55d3a7679d34ad6cc0da977",
+      "commit_count": 1190
+    }
+  },
+  "manual_commits": []
+}

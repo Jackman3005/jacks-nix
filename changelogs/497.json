@@ -1,0 +1,68 @@
+{
+  "version": 497,
+  "timestamp": "2026-11-13T01:02:51Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1407938720,
+    "mac_arm64_bytes": 2526623776
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "nix-cmd",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      },
+      {
+        "name": "nix-expr",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      },
+      {
+        "name": "nix-fetchers",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      },
+      {
+        "name": "nix-flake",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      },
+      {
+        "name": "nix-main",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      },
+      {
+        "name": "nix-nswrapper",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      },
+      {
+        "name": "nix-store",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      },
+      {
+        "name": "nix-util",
+        "from": "2.34.9",
+        "to": "2.35.6"
+      }
+    ],
+    "added": [
+      {
+        "name": "mimalloc",
+        "version": "3.5.3"
+      }
+    ],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "177d0540942fb205af6993b1d5fa0b57799e09f8",
+      "to_rev": "d4f25a3e562008648d45bcf2d70bcc7422cad84e",
+      "commit_count": 2712
+    }
+  },
+  "manual_commits": []
+}

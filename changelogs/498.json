@@ -1,0 +1,38 @@
+{
+  "version": 498,
+  "timestamp": "2026-11-16T00:03:39Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1446955208,
+    "mac_arm64_bytes": 2561772824
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "zellij",
+        "from": "0.45.1",
+        "to": "0.46.0"
+      },
+      {
+        "name": "zellij-unwrapped",
+        "from": "0.45.1",
+        "to": "0.46.0"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "home-manager": {
+      "from_rev": "82ce401aa350502897c3f2e85f384d61cd3b0b6d",
+      "to_rev": "a1293da7dd8e497e08d26173f97e2976b36a31ea",
+      "commit_count": 1
+    },
+    "nixpkgs": {
+      "from_rev": "d4f25a3e562008648d45bcf2d70bcc7422cad84e",
+      "to_rev": "d5cc6833999746cffdfe0598f7bc801a57b887a9",
+      "commit_count": 1891
+    }
+  },
+  "manual_commits": []
+}

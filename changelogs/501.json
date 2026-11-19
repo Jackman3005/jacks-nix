@@ -1,0 +1,28 @@
+{
+  "version": 501,
+  "timestamp": "2026-11-19T01:57:35Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1447031224,
+    "mac_arm64_bytes": 2562397808
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "typescript-language-server",
+        "from": "6.0.3",
+        "to": "6.1.0"
+      }
+    ],
+    "added": [],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "d5cc6833999746cffdfe0598f7bc801a57b887a9",
+      "to_rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
+      "commit_count": 3274
+    }
+  },
+  "manual_commits": []
+}

@@ -1,0 +1,77 @@
+{
+  "version": 502,
+  "timestamp": "2026-11-21T01:17:19Z",
+  "closure_sizes": {
+    "linux_x64_bytes": 1468213928,
+    "mac_arm64_bytes": 2563745576
+  },
+  "package_changes": {
+    "nvd_available": true,
+    "upgraded": [
+      {
+        "name": "uv",
+        "from": "0.13.7",
+        "to": "0.13.9"
+      }
+    ],
+    "added": [
+      {
+        "name": "dejavu-fonts-minimal",
+        "version": "2.37"
+      },
+      {
+        "name": "fontconfig",
+        "version": "2.18.3"
+      },
+      {
+        "name": "freetype",
+        "version": "2.14.3"
+      },
+      {
+        "name": "libglvnd",
+        "version": "1.7.0"
+      },
+      {
+        "name": "libpng-apng",
+        "version": "1.6.59"
+      },
+      {
+        "name": "libxcursor",
+        "version": "1.2.3"
+      },
+      {
+        "name": "libxext",
+        "version": "1.3.7"
+      },
+      {
+        "name": "libxfixes",
+        "version": "6.0.2"
+      },
+      {
+        "name": "libxi",
+        "version": "1.8.4"
+      },
+      {
+        "name": "libxkbcommon",
+        "version": "1.13.2"
+      },
+      {
+        "name": "libxrender",
+        "version": "0.9.13"
+      },
+      {
+        "name": "xkeyboard-config",
+        "version": "2.49"
+      }
+    ],
+    "removed": []
+  },
+  "inputs_changed": {
+    "nixpkgs": {
+      "from_rev": "04906337b6d53e8bb0eaf0470ae9f070a4d4eb55",
+      "to_rev": "0bb8272318b4ca41bf0edc6224df3e3e3046b70d",
+      "commit_count": 0
+    }
+  },
+  "manual_commits": []
+}
